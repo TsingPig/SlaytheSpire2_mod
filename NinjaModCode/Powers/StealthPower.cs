@@ -1,21 +1,24 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
+using MegaCrit.Sts2.Core.Nodes.Rooms;
 using MegaCrit.Sts2.Core.ValueProps;
 
 namespace NinjaMod.NinjaModCode.Powers;
 
 /// <summary>
 /// 隐身（Stealth）Power。
-/// 实现“敌人无法攻击你”：当本体受到敌人攻击伤害时，通过 <see cref="ModifyDamageAdditive"/>
-/// 将该次攻击伤害完全抵消（等价于敌人攻击落空）。
-/// 当本体攻击敌人时（造成攻击伤害后），立即失去隐身。
-/// 注：采用伤害抵消的等价实现，避免直接改写敌人意图系统的复杂 patch。
+/// 敌人的攻击目标会排除隐身玩家；当所有玩家都处于隐身时，攻击意图显示为眩晕并跳过攻击。
+/// 当本体主动打出攻击牌后，立即失去隐身并刷新敌人的原始意图。
+/// <see cref="ModifyDamageAdditive"/> 仅作为不经过标准攻击指令的怪物伤害的安全兜底。
 /// </summary>
 public class StealthPower : NinjaModPower
 {
@@ -32,25 +35,35 @@ public class StealthPower : NinjaModPower
         return -amount;                                   // 抵消全部攻击伤害
     }
 
-    // ── 攻击敌人后失去隐身 ──
-    private bool _removing;
-
-    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? target,
-        DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
+    public override async Task AfterCardPlayed(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        if (_removing) return;
-        if (dealer != Owner) return;
-        if (target == Owner) return;
-        if (!props.IsCardOrMonsterMove()) return; // 只有主动攻击才会脱离隐身
+        if (cardPlay.Card.Owner?.Creature != Owner) return;
+        if (cardPlay.Card.Type != CardType.Attack) return;
 
-        _removing = true;
-        try
+        await PowerCmd.Remove(this);
+    }
+
+    public override Task AfterApplied(Creature? applier, CardModel? cardSource)
+    {
+        return RefreshEnemyIntents(Owner.CombatState);
+    }
+
+    public override Task AfterRemoved(Creature oldOwner)
+    {
+        return RefreshEnemyIntents(oldOwner.CombatState);
+    }
+
+    private static async Task RefreshEnemyIntents(ICombatState? combatState)
+    {
+        if (combatState == null || !combatState.IsLiveCombat() || NCombatRoom.Instance == null) return;
+
+        foreach (var enemy in combatState.Enemies.Where(enemy => enemy.IsAlive && enemy.Monster != null))
         {
-            await PowerCmd.Remove(this);
-        }
-        finally
-        {
-            _removing = false;
+            var node = NCombatRoom.Instance.GetCreatureNode(enemy);
+            if (node != null)
+            {
+                await node.RefreshIntents();
+            }
         }
     }
 
