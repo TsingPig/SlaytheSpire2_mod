@@ -2,12 +2,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using NinjaMod.NinjaModCode.Cards;
-using MegaCrit.Sts2.Core.Commands;
-using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Models;
 
 namespace NinjaMod.NinjaModCode.Relics;
 
@@ -15,17 +13,18 @@ namespace NinjaMod.NinjaModCode.Relics;
 /// Hidden Blade (藏刃) - the Ninja's starting relic. It also carries the Ninja core passive:
 /// at the start of each of your turns, add a temporary Kunai to your hand.
 ///
-/// The passive lives on the relic (rather than a separate invisible power) because relics are
-/// reliably part of the combat hook loop; this keeps the implementation simple and robust.
+/// Implemented on the relic via <see cref="BeforeHandDraw"/> - the exact hook and pattern the base
+/// game uses for Infinite Blades / Shiv. Relics are reliably part of the combat hook loop.
 /// </summary>
 public class HiddenBlade : NinjaModRelic
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
 
-    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
     {
-        var kunai = ModelDb.Card<Kunai>().ToMutable();
-        await CardPileCmd.AddGeneratedCardToCombat(kunai, PileType.Hand, player);
+        if (player != Owner) return; // only react for the relic's owning player
+        Flash();
+        await Kunai.CreateInHand(player, combatState);
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

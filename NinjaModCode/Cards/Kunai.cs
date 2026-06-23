@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
-using BaseLib.Extensions;
-using BaseLib.Utils;
-using NinjaMod.NinjaModCode.Extensions;
 using NinjaMod.NinjaModCode.Powers;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.ValueProps;
@@ -16,28 +15,21 @@ using MegaCrit.Sts2.Core.ValueProps;
 namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
-/// Kunai (飞刀) - a generated TEMPORARY attack added to hand by the Ninja passive.
+/// Kunai (飞刀) - a generated TEMPORARY attack added to hand by the Ninja passive (Hidden Blade).
 /// Retain + Exhaust. Deal 5 (7) damage; if not fully blocked, apply 1 Bleed.
 ///
-/// It inherits <see cref="CustomCardModel"/> directly (not <see cref="NinjaModCard"/>) and is
-/// created with autoAdd:false so it is never added to the Ninja reward pool. It is still
-/// registered in the model database (BaseLib auto-registers every model type), so it can be
-/// generated at runtime. It is hidden from the card library.
+/// It is a normal registered <see cref="NinjaModCard"/> with <see cref="CardRarity.Token"/> rarity.
+/// Token cards are never offered in card rewards (rewards only roll Common/Uncommon/Rare), so it
+/// does not pollute the reward pool, yet it IS registered in the model database so it can be
+/// generated at runtime via <see cref="CreateInHand"/> (the same pattern the base game uses for Shiv).
 /// </summary>
-#pragma warning disable STS004 // Intentionally not in any pool: Kunai is a generated temporary card.
-public class Kunai : CustomCardModel
+public class Kunai : NinjaModCard
 {
-    public Kunai() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy,
-        showInCardLibrary: false, autoAdd: false)
-    { }
+    public Kunai() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Move)];
-
-    // Card art (falls back to the placeholder card.png if kunai.png is absent).
-    public override string CustomPortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".BigCardImagePath();
-    public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -56,8 +48,18 @@ public class Kunai : CustomCardModel
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m);
 
+    /// <summary>
+    /// Create a fresh temporary Kunai directly into the owner's hand.
+    /// Mirrors the base game's <c>Shiv.CreateInHand</c> (CreateCard + AddGeneratedCardToCombat).
+    /// </summary>
+    public static async Task CreateInHand(Player owner, ICombatState combatState)
+    {
+        if (CombatManager.Instance.IsOverOrEnding) return;
+        var kunai = combatState.CreateCard<Kunai>(owner);
+        await CardPileCmd.AddGeneratedCardToCombat(kunai, PileType.Hand, owner);
+    }
+
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("飞刀", "保留。消耗。造成 5 点伤害。如果未被完全格挡，施加 1 层流血。")
         : new CardLoc("Kunai", "Retain. Exhaust. Deal 5 damage. If unblocked, apply 1 Bleed.");
 }
-#pragma warning restore STS004
