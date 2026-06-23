@@ -22,8 +22,8 @@ public class Shuriken : NinjaModCard
     // 施加的流血层数，升级后提升到 3。
     private int _bleed = 2;
 
-    // 费用 2、攻击、基础稀有度、指向任意敌人。
-    public Shuriken() : base(2, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
+    // 费用 1、攻击、基础稀有度、指向任意敌人。
+    public Shuriken() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
 
     // 伤害变量：10 点 Move（攻击）伤害。
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Move)];
@@ -53,6 +53,6 @@ public class Shuriken : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("手里剑", $"造成 10 点伤害。如果未被完全格挡，施加 {_bleed} 层流血。")
-        : new CardLoc("Shuriken", $"Deal 10 damage. If unblocked, apply {_bleed} Bleed.");
+        ? new CardLoc("手里剑", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。如果未被完全格挡，施加 {_bleed} 层流血。")
+        : new CardLoc("Shuriken", $"Deal {DynamicVars.Damage.BaseValue} damage. If unblocked, apply {_bleed} Bleed.");
 }
