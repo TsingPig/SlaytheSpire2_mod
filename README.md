@@ -1,0 +1,2 @@
+# SlaytheSpire2_mod
+
