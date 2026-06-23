@@ -1,0 +1,35 @@
+[gd_scene load_steps=2 format=3]
+
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/ninja_battle.png" id="1_battle"]
+
+[node name="NinjaVisualRoot" type="Node2D"]
+
+[node name="Visuals" type="Sprite2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -292)
+scale = Vector2(0.48, 0.48)
+texture = ExtResource("1_battle")
+
+[node name="PhobiaModeVisuals" type="Node2D" parent="."]
+unique_name_in_owner = true
+visible = false
+
+[node name="Bounds" type="Control" parent="."]
+offset_left = -190.0
+offset_top = -584.0
+offset_right = 190.0
+
+[node name="CenterPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -285)
+
+[node name="IntentPos" type="Marker2D" parent="."]
+position = Vector2(0, -650)
+
+[node name="OrbPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(170, -315)
+
+[node name="TalkPos" type="Marker2D" parent="."]
+unique_name_in_owner = true
+position = Vector2(0, -540)

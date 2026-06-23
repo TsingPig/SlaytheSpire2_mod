@@ -10,6 +10,11 @@ public static class StringExtensions
         return Path.Join(MainFile.ResPath, "images", path);
     }
 
+    public static string ScenePath(this string path)
+    {
+        return Path.Join(MainFile.ResPath, "scenes", path);
+    }
+
     public static string CardImagePath(this string path)
     {
         path = Path.Join(MainFile.ResPath, "images", "card_portraits", path);

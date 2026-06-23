@@ -12,8 +12,8 @@ using MegaCrit.Sts2.Core.Models.Cards;
 namespace NinjaMod.NinjaModCode.Character;
 
 /// <summary>
-/// The playable Ninja character. Uses the Ironclad as a visual placeholder (via
-/// <see cref="PlaceholderCharacterModel"/>) until custom art/animations are added.
+/// The playable Ninja character. Base-game animation-only assets still come from the
+/// placeholder model, while combat and character-select visuals use Ninja art.
 /// </summary>
 public class Ninja : PlaceholderCharacterModel
 {
@@ -55,6 +55,11 @@ public class Ninja : PlaceholderCharacterModel
     public override RelicPoolModel RelicPool => ModelDb.RelicPool<NinjaModRelicPool>();
     public override PotionPoolModel PotionPool => ModelDb.PotionPool<NinjaModPotionPool>();
 
+    // 战斗中人物视觉场景（使用 ninja.tscn 中的 ninja_battle.png 静态贴图）
+    public override string CustomVisualPath => "creature_visuals/ninja.tscn".ScenePath();
+    // 选中角色时展开的背景海报场景
+    public override string CustomCharacterSelectBg => "screens/char_select/char_select_bg_ninja.tscn".ScenePath();
+
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CharacterLoc(
             Title: "忍者",
@@ -87,9 +92,8 @@ public class Ninja : PlaceholderCharacterModel
             CardsModifierTitle: "Ninja",
             CardsModifierDescription: "Ninja cards");
 
-    /*  PlaceholderCharacterModel uses placeholder basegame assets for most character assets.
-        The simplest UI icons are overridden below to differentiate the Ninja. Replace the PNGs
-        under NinjaMod/images/charui/ to customise. */
+    /* PlaceholderCharacterModel still supplies animation-only assets such as rest-site and
+       merchant animations. The combat sprite, poster, and simple UI icons are overridden here. */
     public override Control CustomIcon
     {
         get

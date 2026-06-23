@@ -60,7 +60,8 @@
         <None Include=".gitignore" />
         <None Include="NinjaMod.json" />
         <None Include="project.godot"/>
-        <None Include="NinjaMod/**" />
+        <!-- PckPacker 只支持 PNG/JSON；.tscn 场景文件需要通过 MegaDot 的 dotnet publish 导出，暂时排除以允许 PckPacker 正常工作 -->
+        <None Include="NinjaMod/**" Exclude="**/*.tscn" />
     </ItemGroup>
 
     <ItemGroup>
