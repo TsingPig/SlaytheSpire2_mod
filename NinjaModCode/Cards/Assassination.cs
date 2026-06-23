@@ -18,6 +18,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Assassination : NinjaModCard
 {
+    private int _damage = 7;
     public Assassination() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move)];
@@ -30,9 +31,13 @@ public class Assassination : NinjaModCard
             ValueProp.Move | ValueProp.Unblockable, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
+    protected override void OnUpgrade()
+    {
+        DynamicVars.Damage.UpgradeValueBy(3m);
+        _damage = 10;
+    }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("暗杀", "无视格挡，造成 7 点伤害。")
-        : new CardLoc("Assassination", "Deal 7 damage ignoring Block.");
+        ? new CardLoc("暗杀", $"无视格挡，造成 {_damage} 点伤害。")
+        : new CardLoc("Assassination", $"Deal {_damage} damage ignoring Block.");
 }
