@@ -16,6 +16,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class BladeEdge : NinjaModCard
 {
+    // 降低的能量数量（常量）。
+    private const int CostReduction = 1;
+
     public BladeEdge() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
@@ -29,7 +32,7 @@ public class BladeEdge : NinjaModCard
         {
             if (card is Shuriken || card is Kunai || card is FlameShuriken)
             {
-                card.EnergyCost.AddThisCombat(-1, false);
+                card.EnergyCost.AddThisCombat(-CostReduction, false);
             }
         }
         await Task.CompletedTask;
@@ -38,6 +41,6 @@ public class BladeEdge : NinjaModCard
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("锋刃", "本场战斗中，所有牌堆里的手里剑与飞刀的能量消耗降低 1。消耗。")
-        : new CardLoc("Blade Edge", "This combat, Shurikens and Kunai in all piles cost 1 less Energy. Exhaust.");
+        ? new CardLoc("锋刃", $"本场战斗中，所有牌堆里的手里剑、飞刀与火焰手里剑的能量消耗降低 {CostReduction}。消耗。")
+        : new CardLoc("Blade Edge", $"This combat, Shurikens, Kunai, and Flame Shurikens in all piles cost {CostReduction} less Energy. Exhaust.");
 }

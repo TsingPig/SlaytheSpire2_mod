@@ -42,6 +42,6 @@ public class EightTechniques : NinjaModCard
     protected override void OnUpgrade() => _exhaust = false; // 升级移除消耗
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("忍者八法", "获得 1 点力量、1 点抵抗、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。消耗。")
-        : new CardLoc("Eight Techniques", "Gain 1 Strength, 1 Resist, 1 Vigor, 1 Energy, 1 Block, 1 Kunai, 1 Max HP, and heal 1 HP. Exhaust.");
+        ? new CardLoc("忍者八法", "获得 1 点力量、1 点抵抗、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。" + (_exhaust ? "消耗。" : ""))
+        : new CardLoc("Eight Techniques", "Gain 1 Strength, 1 Resist, 1 Vigor, 1 Energy, 1 Block, 1 Kunai, 1 Max HP, and heal 1 HP." + (_exhaust ? " Exhaust." : ""));
 }

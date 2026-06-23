@@ -64,7 +64,14 @@ if (Test-Path -LiteralPath $json) {
 foreach ($ext in @('pck', 'pdb')) {
     $f = Join-Path $binDir "$ProjectName.$ext"
     if (Test-Path -LiteralPath $f) {
-        Copy-Item -LiteralPath $f -Destination $destDir -Force
+        $destination = Join-Path $destDir "$ProjectName.$ext"
+        if ($ext -eq 'pck' -and
+            (Test-Path -LiteralPath $destination) -and
+            (Get-Item -LiteralPath $destination).LastWriteTimeUtc -gt (Get-Item -LiteralPath $f).LastWriteTimeUtc) {
+            Write-Host "  skipped older $ProjectName.pck (run dotnet publish after changing assets)"
+            continue
+        }
+        Copy-Item -LiteralPath $f -Destination $destination -Force
         Write-Host "  copied $ProjectName.$ext"
     }
 }

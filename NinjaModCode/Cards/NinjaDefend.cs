@@ -29,6 +29,6 @@ public class NinjaDefend : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(3m);
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("忍者防御", "获得 5 点格挡。")
-        : new CardLoc("Ninja Defend", "Gain 5 Block.");
+        ? new CardLoc("忍者防御", $"获得 {DynamicVars.Block.BaseValue} 点格挡。")
+        : new CardLoc("Ninja Defend", $"Gain {DynamicVars.Block.BaseValue} Block.");
 }

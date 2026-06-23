@@ -16,6 +16,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class ShadowClone : NinjaModCard
 {
+    // 与 ShadowClonePower 中的伤害减少比例保持一致。
+    private const int DamageReductionPct = 40;
+
     public ShadowClone() : base(3, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -31,6 +34,6 @@ public class ShadowClone : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("影分身", "本回合及下回合：①每张非影分身卡额外结算一次；②受到的攻击伤害减少40%；③若你有荆棘，克隆体对攻击者造成等量反击。")
-        : new CardLoc("Shadow Clone", "This turn and next: ① Each non-Shadow-Clone card resolves once more. ② Incoming attack damage -40%. ③ If you have Thorns, the clone retaliates with equal damage.");
+        ? new CardLoc("影分身", $"本回合及下回合：①每张非影分身卡额外结算一次；②受到的攻击伤害减少 {DamageReductionPct}%；③若你有荆棘，克隆体对攻击者造成等量反击。")
+        : new CardLoc("Shadow Clone", $"This turn and next: ① Each non-Shadow-Clone card resolves once more. ② Incoming attack damage -{DamageReductionPct}%. ③ If you have Thorns, the clone retaliates with equal damage.");
 }

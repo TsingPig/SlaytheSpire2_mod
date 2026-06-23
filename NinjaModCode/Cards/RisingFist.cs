@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
-using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -21,8 +20,6 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class RisingFist : NinjaModCard
 {
     // 飞刀的基础伤害（与 Kunai 一致）。
-    private const int KunaiDamage = 5;
-
     public RisingFist() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
@@ -42,17 +39,10 @@ public class RisingFist : NinjaModCard
             .FirstOrDefault();
         if (kunai != null)
         {
-            var attack = await DamageCmd.Attack(KunaiDamage)
-                .FromCard(kunai)
-                .Targeting(cardPlay.Target)
-                .WithHitFx(NinjaConstants.SlashVfx)
-                .Execute(choiceContext);
-
-            if (attack.Results.SelectMany(r => r).Sum(r => r.UnblockedDamage) > 0)
-            {
-                await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, kunai);
-            }
-            await CardPileCmd.RemoveFromCombat(kunai, true);
+            // Use the complete autoplay pipeline so the actual card leaves the hand cleanly,
+            // spends no Energy, keeps Rising Fist's target, resolves Kunai.OnPlay (including
+            // Bleed), and then enters the Exhaust pile.
+            await CardCmd.AutoPlay(choiceContext, kunai, cardPlay.Target);
         }
     }
 

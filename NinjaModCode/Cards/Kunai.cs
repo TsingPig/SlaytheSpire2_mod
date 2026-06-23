@@ -60,6 +60,6 @@ public class Kunai : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("飞刀", "保留。消耗。造成 5 点伤害。如果未被完全格挡，施加 1 层流血。")
-        : new CardLoc("Kunai", "Retain. Exhaust. Deal 5 damage. If unblocked, apply 1 Bleed.");
+        ? new CardLoc("飞刀", $"保留。消耗。造成 {DynamicVars.Damage.BaseValue} 点伤害。如果未被完全格挡，施加 1 层流血。")
+        : new CardLoc("Kunai", $"Retain. Exhaust. Deal {DynamicVars.Damage.BaseValue} damage. If unblocked, apply 1 Bleed.");
 }

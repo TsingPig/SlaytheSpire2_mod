@@ -33,6 +33,6 @@ public class NinjaStrike : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("忍者打击", "造成 6 点伤害。")
-        : new CardLoc("Ninja Strike", "Deal 6 damage.");
+        ? new CardLoc("忍者打击", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。")
+        : new CardLoc("Ninja Strike", $"Deal {DynamicVars.Damage.BaseValue} damage.");
 }

@@ -32,6 +32,6 @@ public class CrimsonClaw : NinjaModCard
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：凤仙花爪红", $"在手牌中生成 {Count} 张火焰手里剑（附带 6 层燃烧、保留）。消耗。")
-        : new CardLoc("Fire Ninjutsu: Crimson Claw", $"Add {Count} Flame Shurikens (6 Burning, Retain) to your hand. Exhaust.");
+        ? new CardLoc("火忍：凤仙花爪红", $"在手牌中生成 {Count} 张火焰手里剑（附带 {FlameShuriken.BurningStacks} 层燃烧、保留）。消耗。")
+        : new CardLoc("Fire Ninjutsu: Crimson Claw", $"Add {Count} Flame Shurikens ({FlameShuriken.BurningStacks} Burning, Retain) to your hand. Exhaust.");
 }

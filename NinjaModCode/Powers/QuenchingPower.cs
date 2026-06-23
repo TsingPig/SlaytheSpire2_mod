@@ -5,6 +5,7 @@ using BaseLib.Abstracts;
 using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -31,14 +32,14 @@ public class QuenchingPower : NinjaModPower
     // 防止自身递归触发。
     private bool _applying;
 
-    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? target,
-        DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
+    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? dealer,
+        DamageResult result, ValueProp props, Creature target, CardModel? cardSource)
     {
         if (_applying) return;
         if (dealer != Owner) return;                 // 只在本体造成伤害时
         if (target == Owner) return;
-        if (cardSource == null) return;               // 只在“攻击牌”造成伤害时
-        if (!props.IsCardOrMonsterMove()) return;     // 只在攻击伤害时
+        if (cardSource?.Type != CardType.Attack) return;
+        if (!props.IsPoweredAttack()) return;
 
         _applying = true;
         try

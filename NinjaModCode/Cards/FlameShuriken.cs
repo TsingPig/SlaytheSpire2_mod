@@ -19,8 +19,8 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class FlameShuriken : NinjaModCard
 {
-    // 附加的燃烧层数（常量）。
-    private const int Burning = 6;
+    // internal 以允许 CrimsonClaw 在描述中引用。
+    internal const int BurningStacks = 6;
 
     public FlameShuriken() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
 
@@ -37,7 +37,7 @@ public class FlameShuriken : NinjaModCard
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
 
-        await PowerCmd.Apply<BurningPower>(choiceContext, cardPlay.Target, Burning, Owner.Creature, this);
+        await PowerCmd.Apply<BurningPower>(choiceContext, cardPlay.Target, BurningStacks, Owner.Creature, this);
     }
 
     /// <summary>在指定玩家手牌生成一张火焰手里剑（供凤仙花爪红调用）。</summary>
@@ -49,6 +49,6 @@ public class FlameShuriken : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火焰手里剑", $"造成 {DynamicVars.Damage.BaseValue} 点伤害，施加 {Burning} 层燃烧。保留。消耗。")
-        : new CardLoc("Flame Shuriken", $"Deal {DynamicVars.Damage.BaseValue} damage and apply {Burning} Burning. Retain. Exhaust.");
+        ? new CardLoc("火焰手里剑", $"造成 {DynamicVars.Damage.BaseValue} 点伤害，施加 {BurningStacks} 层燃烧。保留。消耗。")
+        : new CardLoc("Flame Shuriken", $"Deal {DynamicVars.Damage.BaseValue} damage and apply {BurningStacks} Burning. Retain. Exhaust.");
 }

@@ -43,6 +43,6 @@ public class FlameBarrage : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：火焰弹幕", "造成 3 次 2 点伤害，然后施加 3 层燃烧。")
-        : new CardLoc("Fire Ninjutsu: Flame Barrage", "Deal 2 damage 3 times, then apply 3 Burning.");
+        ? new CardLoc("火忍：火焰弹幕", $"造成 {_hits} 次 {_hitDamage} 点伤害，然后施加 {_burning} 层燃烧。")
+        : new CardLoc("Fire Ninjutsu: Flame Barrage", $"Deal {_hitDamage} damage {_hits} times, then apply {_burning} Burning.");
 }

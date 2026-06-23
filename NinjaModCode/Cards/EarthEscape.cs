@@ -26,6 +26,6 @@ public class EarthEscape : NinjaModCard
     protected override void OnUpgrade() => _resist = 2;
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：土遁", "获得 1 层抵挡。")
-        : new CardLoc("Earth Ninjutsu: Earth Escape", "Gain 1 Resist.");
+        ? new CardLoc("土忍：土遁", $"获得 {_resist} 层抵挡。")
+        : new CardLoc("Earth Ninjutsu: Earth Escape", $"Gain {_resist} Resist.");
 }
