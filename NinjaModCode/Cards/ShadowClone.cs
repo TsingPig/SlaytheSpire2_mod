@@ -31,6 +31,6 @@ public class ShadowClone : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("影分身", "本回合及下回合，你打出的每张非影分身卡牌都会额外结算一次。")
-        : new CardLoc("Shadow Clone", "This turn and next turn, each non-Shadow-Clone card you play resolves one extra time.");
+        ? new CardLoc("影分身", "本回合及下回合：①每张非影分身卡额外结算一次；②受到的攻击伤害减少40%；③若你有荆棘，克隆体对攻击者造成等量反击。")
+        : new CardLoc("Shadow Clone", "This turn and next: ① Each non-Shadow-Clone card resolves once more. ② Incoming attack damage -40%. ③ If you have Thorns, the clone retaliates with equal damage.");
 }

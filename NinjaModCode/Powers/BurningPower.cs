@@ -28,6 +28,8 @@ public class BurningPower : NinjaModPower
     {
         if (!participants.Contains(Owner)) return;
         if (Amount <= 0) return;
+        // 安全检查：战斗已结束（如进入商店/休息节点）则不触发
+        if (CombatManager.Instance == null || CombatManager.Instance.IsOverOrEnding) return;
 
         Flash();
         await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), Owner, Amount,

@@ -16,7 +16,7 @@ public class EarthEscape : NinjaModCard
 {
     private int _resist = 1;
 
-    public EarthEscape() : base(1, CardType.Power, CardRarity.Common, TargetType.Self) { }
+    public EarthEscape() : base(0, CardType.Power, CardRarity.Common, TargetType.Self) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

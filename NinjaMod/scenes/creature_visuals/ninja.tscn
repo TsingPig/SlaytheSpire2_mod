@@ -7,7 +7,7 @@
 [node name="Visuals" type="Sprite2D" parent="."]
 unique_name_in_owner = true
 position = Vector2(0, -292)
-scale = Vector2(0.48, 0.48)
+scale = Vector2(0.36, 0.36)
 texture = ExtResource("1_battle")
 
 [node name="PhobiaModeVisuals" type="Node2D" parent="."]
