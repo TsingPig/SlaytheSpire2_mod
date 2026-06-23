@@ -1,0 +1,27 @@
+.godot/
+bin/
+obj/
+/android/
+.git/
+.idea/
+.vs/
+publish/
+Properties/
+packages/
+.editorconfig
+*.user
+
+# Local machine-specific config (game paths, Godot path). Never commit.
+Directory.Build.props
+local.props
+
+# Build / export artifacts and generated game references (never commit game DLLs).
+*.pck
+*.pdb
+sts2.dll
+0Harmony.dll
+
+# Logs and temporary export files.
+*.log
+logs/
+*.tmp

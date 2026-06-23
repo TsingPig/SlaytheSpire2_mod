@@ -1,0 +1,38 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using NinjaMod.NinjaModCode.Character;
+using NinjaMod.NinjaModCode.Powers;
+using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
+using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.ValueProps;
+using BaseLib.Abstracts;
+
+namespace NinjaMod.NinjaModCode.Cards;
+
+/// <summary>
+/// Earth Ninjutsu: Earth Wall (土忍：土墙) - Skill.
+/// Gain 7 (10 upgraded) Block and gain Debuff Immunity until the end of next turn.
+/// </summary>
+public class EarthWall : NinjaModCard
+{
+    public EarthWall() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+
+    public override bool GainsBlock => true;
+
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(7m, ValueProp.Move)];
+
+    protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
+    {
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
+        // Amount 2 => lasts until the end of the next turn.
+        await PowerCmd.Apply<DebuffImmunityPower>(choiceContext, Owner.Creature, 2, Owner.Creature, this);
+    }
+
+    protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(3m);
+
+    public override List<(string, string)>? Localization => Lang.Zh
+        ? new CardLoc("土忍：土墙", "获得 7 点格挡，并获得免疫负面直到下个回合结束。")
+        : new CardLoc("Earth Ninjutsu: Earth Wall", "Gain 7 Block and gain Debuff Immunity until the end of next turn.");
+}
