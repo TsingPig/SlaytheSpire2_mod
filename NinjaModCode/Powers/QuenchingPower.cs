@@ -31,7 +31,7 @@ public class QuenchingPower : NinjaModPower
     // 防止自身递归触发。
     private bool _applying;
 
-    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature target,
+    public override async Task AfterDamageGiven(PlayerChoiceContext choiceContext, Creature? target,
         DamageResult result, ValueProp props, Creature? dealer, CardModel? cardSource)
     {
         if (_applying) return;

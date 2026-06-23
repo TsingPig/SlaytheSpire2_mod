@@ -14,8 +14,8 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 居合（Iai Strike）——攻击牌。
-/// 2 费，造成 10（升级 15）点伤害；打出后返还 2 点能量（“释放后仍然有能量”），
-/// 随后额外造成 5（升级 8）点伤害并附加 3 层流血。
+/// 2 费，造成 10（升级 15）点伤害；若打出后玩家仍有剩余能量（> 0），
+/// 则额外造成 5（升级 8）点伤害并附加 3 层流血。
 /// 主伤害用 DamageVar，额外伤害用 <see cref="_extra"/> 变量，均随升级改变。
 /// </summary>
 public class IaiStrike : NinjaModCard
@@ -39,13 +39,13 @@ public class IaiStrike : NinjaModCard
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
 
-        // 返还本牌花费的 2 点能量（“释放后仍然有能量”）。
-        await PlayerCmd.GainEnergy(2m, Owner);
-
-        // 额外伤害（作为攻击/Move，可触发已有流血），并附加流血。
-        await CreatureCmd.Damage(choiceContext, cardPlay.Target, _extra,
-            ValueProp.Move, Owner.Creature, this);
-        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, Bleed, Owner.Creature, this);
+        // 释放后若仍有剩余能量（> 0），追加伤害与流血。
+        if (Owner.PlayerCombatState.Energy > 0)
+        {
+            await CreatureCmd.Damage(choiceContext, cardPlay.Target, _extra,
+                ValueProp.Move, Owner.Creature, this);
+            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, Bleed, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade()
@@ -55,6 +55,6 @@ public class IaiStrike : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("居合", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。返还 2 点能量，随后额外造成 {_extra} 点伤害并附加 {Bleed} 层流血。")
-        : new CardLoc("Iai Strike", $"Deal {DynamicVars.Damage.BaseValue} damage. Refund 2 Energy, then deal {_extra} extra damage and apply {Bleed} Bleed.");
+        ? new CardLoc("居合", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。若打出后仍有能量，额外造成 {_extra} 点伤害并附加 {Bleed} 层流血。")
+        : new CardLoc("Iai Strike", $"Deal {DynamicVars.Damage.BaseValue} damage. If you still have Energy left, deal {_extra} extra damage and apply {Bleed} Bleed.");
 }
