@@ -18,26 +18,30 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class StoneSummon : NinjaModCard
 {
-    // 格挡倍率，升级后提升到 5。
-    private int _multiplier = 4;
-
     public StoneSummon() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
 
     public override bool GainsBlock => true;
 
+    // 动态计算格挡 = 当前抵挡层数 × 倍率（4，升级 5）。卡面用 {CalculatedBlock:diff()} 显示实际值。
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+        MakeCalculatedBlock(0, (card, creature) =>
+        {
+            if (creature == null) return 0m;
+            int resist = creature.GetPower<ResistPower>()?.Amount ?? 0;
+            return resist * (card.IsUpgraded ? 5 : 4);
+        }, 0, ValueProp.Move);
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 读取自身抵挡（Resist）层数，乘以倍率作为格挡量。
-        var resist = Owner.Creature.GetPower<ResistPower>();
-        decimal stacks = resist?.Amount ?? 0m;
-        decimal block = stacks * _multiplier;
-
-        await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(block, ValueProp.Move), cardPlay);
+        int resist = Owner.Creature.GetPower<ResistPower>()?.Amount ?? 0;
+        int block = resist * (IsUpgraded ? 5 : 4);
+        if (block > 0)
+        {
+            await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);
+        }
     }
 
-    protected override void OnUpgrade() => _multiplier = 5;
-
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：唤石", $"获得（当前抵挡层数 × {_multiplier}）点格挡。")
-        : new CardLoc("Earth Ninjutsu: Stone Summon", $"Gain Block equal to {_multiplier}× your current Resist.");
+        ? new CardLoc("土忍：唤石", $"获得 {{CalculatedBlock:diff()}} 点格挡（当前[gold]抵挡[/gold]层数 × {(IsUpgraded ? 5 : 4)}）。")
+        : new CardLoc("Earth Ninjutsu: Stone Summon", $"Gain {{CalculatedBlock:diff()}} Block (current [gold]Resist[/gold] × {(IsUpgraded ? 5 : 4)}).");
 }

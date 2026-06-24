@@ -18,12 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class KatanaArt : NinjaModCard
 {
-    // 每个目标的命中次数，升级后提升到 3。
-    private int _hits = 2;
-
     public KatanaArt() : base(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Move), new RepeatVar(2)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -31,14 +28,14 @@ public class KatanaArt : NinjaModCard
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .TargetingAllOpponents(CombatState)
-            .WithHitCount(_hits)
+            .WithHitCount(DynamicVars.Repeat.IntValue)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
     }
 
-    protected override void OnUpgrade() => _hits = 3;
+    protected override void OnUpgrade() => DynamicVars.Repeat.UpgradeValueBy(1m); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("武士刀法", $"对所有敌人造成 {DynamicVars.Damage.BaseValue} 点伤害，共 {_hits} 次。")
-        : new CardLoc("Katana Art", $"Deal {DynamicVars.Damage.BaseValue} damage to ALL enemies {_hits} times.");
+        ? new CardLoc("武士刀法", "对所有敌人造成 {Damage:diff()} 点伤害，共 {Repeat:diff()} 次。")
+        : new CardLoc("Katana Art", "Deal {Damage:diff()} damage to ALL enemies {Repeat:diff()} times.");
 }

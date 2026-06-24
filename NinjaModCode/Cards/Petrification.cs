@@ -41,6 +41,6 @@ public class Petrification : NinjaModCard
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：石化术", $"获得 {DynamicVars.Block.BaseValue} 点格挡，并清除所有负面效果。")
-        : new CardLoc("Earth Ninjutsu: Petrification", $"Gain {DynamicVars.Block.BaseValue} Block and remove all Debuffs.");
+        ? new CardLoc("土忍：石化术", "获得 {Block:diff()} 点格挡，并清除自身所有[gold]负面效果[/gold]。")
+        : new CardLoc("Earth Ninjutsu: Petrification", "Gain {Block:diff()} Block and remove all [gold]Debuffs[/gold].");
 }

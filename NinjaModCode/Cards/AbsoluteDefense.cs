@@ -16,28 +16,25 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class AbsoluteDefense : NinjaModCard
 {
-    // 回血量，升级后提升到 6。
-    private int _heal = 4;
-
     public AbsoluteDefense() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
 
     public override bool GainsBlock => true;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(20m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(20m, ValueProp.Move), new HealVar(4m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-        await CreatureCmd.Heal(Owner.Creature, _heal, true);
+        await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.IntValue, true);
     }
 
     protected override void OnUpgrade()
     {
         DynamicVars.Block.UpgradeValueBy(10m); // 20 -> 30
-        _heal = 6;
+        DynamicVars.Heal.UpgradeValueBy(2m);   // 4 -> 6
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("回天：绝对防御", $"获得 {DynamicVars.Block.BaseValue} 点格挡，回复 {_heal} 点生命。")
-        : new CardLoc("Reversal: Absolute Defense", $"Gain {DynamicVars.Block.BaseValue} Block and heal {_heal} HP.");
+        ? new CardLoc("回天：绝对防御", "获得 {Block:diff()} 点格挡，回复 {Heal:diff()} 点生命。")
+        : new CardLoc("Reversal: Absolute Defense", "Gain {Block:diff()} Block and heal {Heal:diff()} HP.");
 }

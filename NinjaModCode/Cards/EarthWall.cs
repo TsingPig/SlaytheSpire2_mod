@@ -33,6 +33,6 @@ public class EarthWall : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(3m);
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：土墙", $"获得 {DynamicVars.Block.BaseValue} 点格挡，并获得免疫负面效果 2 个回合。")
-        : new CardLoc("Earth Ninjutsu: Earth Wall", $"Gain {DynamicVars.Block.BaseValue} Block and gain Debuff Immunity until the end of next turn.");
+        ? new CardLoc("土忍：土墙", "获得 {Block:diff()} 点格挡，并获得[gold]免疫负面[/gold]效果 2 个回合。")
+        : new CardLoc("Earth Ninjutsu: Earth Wall", "Gain {Block:diff()} Block and gain [gold]Debuff Immunity[/gold] until the end of next turn.");
 }

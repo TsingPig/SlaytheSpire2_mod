@@ -32,20 +32,16 @@ public class Ashes : NinjaModCard
             }
         }
 
-        // 成功点燃则消耗抽牌堆中的一张牌。
+        // 成功点燃则抽 1 张牌。
         if (ignitedAny)
         {
-            var drawCard = CardPile.GetCards(Owner, new[] { PileType.Draw }).FirstOrDefault();
-            if (drawCard != null)
-            {
-                await CardPileCmd.RemoveFromCombat(drawCard, true);
-            }
+            await CardPileCmd.Draw(choiceContext, Owner);
         }
     }
 
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 1 -> 0
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：灰烬", "点燃所有敌人身上的燃烧（造成燃烧 2 倍的无法格挡伤害并移除）。如果成功点燃，消耗抽牌堆中的一张牌。")
-        : new CardLoc("Fire Ninjutsu: Ashes", "Ignite all Burning on enemies (deal twice Burning as unblockable damage, then remove). If anything ignited, exhaust a card from your draw pile.");
+        ? new CardLoc("火忍：灰烬", "点燃所有敌人身上的[gold]燃烧[/gold]（造成燃烧 2 倍的无法格挡伤害并移除）。如果成功点燃，抽 1 张牌。")
+        : new CardLoc("Fire Ninjutsu: Ashes", "Ignite all [gold]Burning[/gold] on enemies (deal twice Burning as unblockable damage, then remove). If anything ignited, draw 1 card.");
 }

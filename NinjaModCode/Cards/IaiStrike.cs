@@ -20,14 +20,12 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class IaiStrike : NinjaModCard
 {
-    // 额外伤害，升级后提升到 8。
-    private int _extra = 5;
     // 额外附加的流血层数。
     private const int Bleed = 3;
 
     public IaiStrike() : base(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Move), new ExtraDamageVar(5m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -42,7 +40,7 @@ public class IaiStrike : NinjaModCard
         // 释放后若仍有剩余能量（> 0），追加伤害与流血。
         if (Owner.PlayerCombatState.Energy > 0)
         {
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, _extra,
+            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
                 ValueProp.Move, Owner.Creature, this);
             await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, Bleed, Owner.Creature, this);
         }
@@ -50,11 +48,11 @@ public class IaiStrike : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m); // 10 -> 15
-        _extra = 8;
+        DynamicVars.Damage.UpgradeValueBy(5m);       // 10 -> 15
+        DynamicVars.ExtraDamage.UpgradeValueBy(3m);  // 5 -> 8
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("居合", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。若打出后仍有能量，额外造成 {_extra} 点伤害并附加 {Bleed} 层流血。")
-        : new CardLoc("Iai Strike", $"Deal {DynamicVars.Damage.BaseValue} damage. If you still have Energy left, deal {_extra} extra damage and apply {Bleed} Bleed.");
+        ? new CardLoc("居合", $"造成 {{Damage:diff()}} 点伤害。若打出后仍有能量，额外造成 {{ExtraDamage:diff()}} 点伤害并附加 {Bleed} 层[gold]流血[/gold]。")
+        : new CardLoc("Iai Strike", $"Deal {{Damage:diff()}} damage. If you still have Energy, deal {{ExtraDamage:diff()}} extra damage and apply {Bleed} [gold]Bleed[/gold].");
 }

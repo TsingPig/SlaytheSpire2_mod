@@ -49,6 +49,6 @@ public class RisingFist : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m); // 6 -> 9
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("起承拳", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。如果手牌中有飞刀，自动免费打出一张飞刀。")
-        : new CardLoc("Rising Fist", $"Deal {DynamicVars.Damage.BaseValue} damage. If you have a Kunai in hand, auto-play one for free.");
+        ? new CardLoc("起承拳", "造成 {Damage:diff()} 点伤害。如果手牌中有[gold]飞刀[/gold]，自动免费打出一张飞刀。")
+        : new CardLoc("Rising Fist", "Deal {Damage:diff()} damage. If you have a [gold]Kunai[/gold] in hand, auto-play one for free.");
 }

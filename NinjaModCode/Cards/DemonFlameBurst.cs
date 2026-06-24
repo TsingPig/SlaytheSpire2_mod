@@ -42,6 +42,6 @@ public class DemonFlameBurst : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(4m);
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：火魔爆", $"造成 {DynamicVars.Damage.BaseValue} 点伤害，然后引爆目标身上的所有燃烧（造成燃烧层数 2 倍的无法格挡伤害并移除）。")
-        : new CardLoc("Fire Ninjutsu: Demon Flame Burst", $"Deal {DynamicVars.Damage.BaseValue} damage, then ignite all Burning on the target (deal twice Burning as unblockable damage, then remove it).");
+        ? new CardLoc("火忍：火魔爆", "造成 {Damage:diff()} 点伤害，然后引爆目标身上的所有[gold]燃烧[/gold]（造成燃烧层数 2 倍的无法格挡伤害并移除）。")
+        : new CardLoc("Fire Ninjutsu: Demon Flame Burst", "Deal {Damage:diff()} damage, then ignite all [gold]Burning[/gold] on the target (deal twice Burning as unblockable damage, then remove it).");
 }

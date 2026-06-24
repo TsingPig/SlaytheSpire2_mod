@@ -15,3 +15,4 @@ fix:火忍灰烬：在点燃成功后没有抽牌。
 upd: 火盾效果：这个火盾能力牌对应的火盾效果改为可以叠加的效果的。就是本来说敌人攻击获得3点燃烧，如果重复打出来火盾，是可以叠加这个火盾层数的。
 upd: 
 ：[burning_infusion_frame.png](D:/--UnityProject/RunminG-Lab/SlaytheSpire2_mod/NinjaMod/images/card_effects/burning_infusion_frame.png)这个贴图已经做好了加给燃烧附加的特效
+fix: 土忍碎石有bug，我需要自动免费打出所有手牌中的忍者格挡，但是目前没有实现这个功能。你需要去修复这个bug。

@@ -18,18 +18,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Susanoo : NinjaModCard
 {
-    // 攻击段数（常量）。
-    private const int Hits = 6;
-
     public Susanoo() : base(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move), new RepeatVar(6)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         // 逐段攻击：每命中一次立即追加 1 层流血。
-        for (int i = 0; i < Hits; i++)
+        int hits = DynamicVars.Repeat.IntValue;
+        for (int i = 0; i < hits; i++)
         {
             await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
                 .FromCard(this)
@@ -44,6 +42,6 @@ public class Susanoo : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m); // 7 -> 9
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("须佐能乎", $"造成 {DynamicVars.Damage.BaseValue} 点伤害，共 {Hits} 段，每段追加 1 层流血。")
-        : new CardLoc("Susanoo", $"Deal {DynamicVars.Damage.BaseValue} damage {Hits} times; each hit applies 1 Bleed.");
+        ? new CardLoc("须佐能乎", "造成 {Damage:diff()} 点伤害，共 {Repeat:diff()} 段，每段追加 1 层[gold]流血[/gold]。")
+        : new CardLoc("Susanoo", "Deal {Damage:diff()} damage {Repeat:diff()} times; each hit applies 1 [gold]Bleed[/gold].");
 }

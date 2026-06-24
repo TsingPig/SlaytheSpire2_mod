@@ -35,13 +35,15 @@ public class RockShatter : NinjaModCard
         // 1) 本牌自身的格挡。
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
 
-        // 2) 自动免费打出手牌中的所有“忍者防御”：逐张结算格挡并移出战斗（进入弃牌）。
+        // 2) 自动免费打出手牌中的所有“忍者防御”：逐张按其实际格挡值结算并移到弃牌堆。
         var defends = CardPile.GetCards(Owner, new[] { PileType.Hand })
             .OfType<NinjaDefend>()
             .ToList();
         foreach (var defend in defends)
         {
-            await CreatureCmd.GainBlock(Owner.Creature, new BlockVar(DefendBlock, ValueProp.Move), cardPlay);
+            // 用该忍者防御的实际格挡值（含升级），默认 5。
+            int defendBlock = defend.DynamicVars.Block?.IntValue ?? DefendBlock;
+            await CreatureCmd.GainBlock(Owner.Creature, defendBlock, ValueProp.Move, cardPlay);
             await CardPileCmd.RemoveFromCombat(defend, false);
         }
 
@@ -56,6 +58,6 @@ public class RockShatter : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(5m); // 8 -> 13
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：碎石", $"获得 {DynamicVars.Block.BaseValue} 点格挡。自动免费打出手牌中所有“忍者防御”，随后移除 1 层抵挡。消耗。")
-        : new CardLoc("Earth Ninjutsu: Rock Shatter", $"Gain {DynamicVars.Block.BaseValue} Block. Auto-play all Ninja Defends in your hand, then remove 1 Resist. Exhaust.");
+        ? new CardLoc("土忍：碎石", "获得 {Block:diff()} 点格挡。自动免费打出手牌中所有[gold]忍者防御[/gold]，随后移除 1 层[gold]抵挡[/gold]。[gold]消耗[/gold]。")
+        : new CardLoc("Earth Ninjutsu: Rock Shatter", "Gain {Block:diff()} Block. Auto-play all [gold]Ninja Defends[/gold] in your hand, then remove 1 [gold]Resist[/gold]. [gold]Exhaust[/gold].");
 }

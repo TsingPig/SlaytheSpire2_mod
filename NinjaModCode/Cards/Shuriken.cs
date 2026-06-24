@@ -53,6 +53,6 @@ public class Shuriken : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("手里剑", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。如果未被完全格挡，施加 {_bleed} 层流血。")
-        : new CardLoc("Shuriken", $"Deal {DynamicVars.Damage.BaseValue} damage. If unblocked, apply {_bleed} Bleed.");
+        ? new CardLoc("手里剑", $"造成 {{Damage:diff()}} 点伤害。如果未被完全格挡，施加 {_bleed} 层[gold]流血[/gold]。")
+        : new CardLoc("Shuriken", $"Deal {{Damage:diff()}} damage. If unblocked, apply {_bleed} [gold]Bleed[/gold].");
 }

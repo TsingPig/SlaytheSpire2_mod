@@ -43,6 +43,6 @@ public class SwallowReturn : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("燕返", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。如果伤害被完全格挡，获得 1 点能量。")
-        : new CardLoc("Swallow Return", $"Deal {DynamicVars.Damage.BaseValue} damage. If fully blocked, gain 1 Energy.");
+        ? new CardLoc("燕返", "造成 {Damage:diff()} 点伤害。如果伤害被完全[gold]格挡[/gold]，获得 1 点能量。")
+        : new CardLoc("Swallow Return", "Deal {Damage:diff()} damage. If fully blocked, gain 1 Energy.");
 }

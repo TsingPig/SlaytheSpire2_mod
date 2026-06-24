@@ -18,12 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class KusariGama : NinjaModCard
 {
-    // 对流血目标的额外伤害，升级后提升到 6。
-    private int _bonus = 4;
-
     public KusariGama() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(9m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(9m, ValueProp.Move), new ExtraDamageVar(4m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -38,7 +35,7 @@ public class KusariGama : NinjaModCard
 
         if (hadBleed)
         {
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, _bonus,
+            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
                 ValueProp.Move, Owner.Creature, this);
         }
     }
@@ -46,10 +43,10 @@ public class KusariGama : NinjaModCard
     protected override void OnUpgrade()
     {
         DynamicVars.Damage.UpgradeValueBy(3m); // 9 -> 12
-        _bonus = 6;
+        DynamicVars.ExtraDamage.UpgradeValueBy(2m); // 4 -> 6
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("锁镰", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。如果目标有流血，额外造成 {_bonus} 点伤害。")
-        : new CardLoc("Kusari-Gama", $"Deal {DynamicVars.Damage.BaseValue} damage. If the target has Bleed, deal {_bonus} extra damage.");
+        ? new CardLoc("锁镰", "造成 {Damage:diff()} 点伤害。如果目标有[gold]流血[/gold]，额外造成 {ExtraDamage:diff()} 点伤害。")
+        : new CardLoc("Kusari-Gama", "Deal {Damage:diff()} damage. If the target has [gold]Bleed[/gold], deal {ExtraDamage:diff()} extra damage.");
 }

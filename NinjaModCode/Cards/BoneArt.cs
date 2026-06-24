@@ -34,6 +34,6 @@ public class BoneArt : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("骨法", $"获得 {DynamicVars.Block.BaseValue} 点格挡，并获得 {Vigor} 点活力。")
-        : new CardLoc("Bone Art", $"Gain {DynamicVars.Block.BaseValue} Block and {Vigor} Vigor.");
+        ? new CardLoc("骨法", $"获得 {{Block:diff()}} 点格挡，并获得 {Vigor} 点[gold]活力[/gold]。")
+        : new CardLoc("Bone Art", $"Gain {{Block:diff()}} Block and {Vigor} [gold]Vigor[/gold].");
 }

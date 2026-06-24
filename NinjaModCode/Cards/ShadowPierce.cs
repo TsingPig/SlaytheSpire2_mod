@@ -44,6 +44,6 @@ public class ShadowPierce : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("影心刺", $"只能在隐身状态下打出。造成 {DynamicVars.Damage.BaseValue} 点伤害，附加 {_bleed} 层流血。")
-        : new CardLoc("Shadow Pierce", $"Can only be played while Stealthed. Deal {DynamicVars.Damage.BaseValue} damage and apply {_bleed} Bleed.");
+        ? new CardLoc("影心刺", $"只能在[gold]隐身[/gold]状态下打出。造成 {{Damage:diff()}} 点伤害，附加 {_bleed} 层[gold]流血[/gold]。")
+        : new CardLoc("Shadow Pierce", $"Can only be played while [gold]Stealthed[/gold]. Deal {{Damage:diff()}} damage and apply {_bleed} [gold]Bleed[/gold].");
 }

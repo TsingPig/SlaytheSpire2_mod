@@ -36,6 +36,6 @@ public class Assassination : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("暗杀", $"无视格挡，造成 {DynamicVars.Damage.BaseValue} 点伤害。")
-        : new CardLoc("Assassination", $"Deal {DynamicVars.Damage.BaseValue} damage ignoring Block.");
+        ? new CardLoc("暗杀", "无视格挡，造成 {Damage:diff()} 点伤害。")
+        : new CardLoc("Assassination", "Deal {Damage:diff()} damage ignoring Block.");
 }

@@ -44,6 +44,6 @@ public class KunaiThrow : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("苦无", $"造成 {DynamicVars.Damage.BaseValue} 点伤害。如果目标有流血，恢复 1 点能量。")
-        : new CardLoc("Kunai Throw", $"Deal {DynamicVars.Damage.BaseValue} damage. If the target has Bleed, gain 1 Energy.");
+        ? new CardLoc("苦无", "造成 {Damage:diff()} 点伤害。如果目标有[gold]流血[/gold]，恢复 1 点能量。")
+        : new CardLoc("Kunai Throw", "Deal {Damage:diff()} damage. If the target has [gold]Bleed[/gold], gain 1 Energy.");
 }

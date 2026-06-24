@@ -30,6 +30,6 @@ public class Prowl : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("潜行", $"获得 {DynamicVars.Block.BaseValue} 点格挡。下个回合开始时，获得一张暗杀。")
-        : new CardLoc("Prowl", $"Gain {DynamicVars.Block.BaseValue} Block. At the start of your next turn, add an Assassination to your hand.");
+        ? new CardLoc("潜行", "获得 {Block:diff()} 点格挡。下个回合开始时，获得一张[gold]暗杀[/gold]。")
+        : new CardLoc("Prowl", "Gain {Block:diff()} Block. At the start of your next turn, add an [gold]Assassination[/gold] to your hand.");
 }
