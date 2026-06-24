@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://qlih0uq4rojn"
-path="res://.godot/imported/yata_mirror_power_chroma.png-7267882fbaf4a25759d8f8a117cbfd69.ctex"
+uid="uid://c3i321jti1xym"
+path="res://.godot/imported/prowl_power.png-7b2d5ff786e67fcd2d57ea9b269fa949.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://temp/imagegen/missing-power-icons/yata_mirror_power_chroma.png"
-dest_files=["res://.godot/imported/yata_mirror_power_chroma.png-7267882fbaf4a25759d8f8a117cbfd69.ctex"]
+source_file="res://NinjaMod/images/powers/prowl_power.png"
+dest_files=["res://.godot/imported/prowl_power.png-7b2d5ff786e67fcd2d57ea9b269fa949.ctex"]
 
 [params]
 

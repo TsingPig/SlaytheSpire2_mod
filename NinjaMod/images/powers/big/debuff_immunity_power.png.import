@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://chexdwgnw55kn"
-path="res://.godot/imported/quenching_power_alpha.png-19620b5ccd3afbea26e72d63d844a232.ctex"
+uid="uid://c8twhb00ua5e4"
+path="res://.godot/imported/debuff_immunity_power.png-c4f4d6f946b1bb4baab66672e847fa3b.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://temp/imagegen/missing-power-icons/quenching_power_alpha.png"
-dest_files=["res://.godot/imported/quenching_power_alpha.png-19620b5ccd3afbea26e72d63d844a232.ctex"]
+source_file="res://NinjaMod/images/powers/big/debuff_immunity_power.png"
+dest_files=["res://.godot/imported/debuff_immunity_power.png-c4f4d6f946b1bb4baab66672e847fa3b.ctex"]
 
 [params]
 
