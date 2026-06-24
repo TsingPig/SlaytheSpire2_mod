@@ -27,6 +27,6 @@ public class Quenching : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：淡火术", $"本回合，你用攻击牌每次造成伤害都会额外附加 {BurningPerHit} 层燃烧。")
+        ? new CardLoc("火忍：淬火术", $"本回合，你用攻击牌每次造成伤害都会额外附加 {BurningPerHit} 层燃烧。")
         : new CardLoc("Fire Ninjutsu: Quenching", $"This turn, your attack cards apply {BurningPerHit} Burning on each hit.");
 }

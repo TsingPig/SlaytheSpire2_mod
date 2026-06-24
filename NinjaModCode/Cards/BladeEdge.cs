@@ -12,7 +12,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// <summary>
 /// 锋刃（Blade Edge）——技能牌（稀有），消耗。
 /// 2（升级 1）费，本场战斗中，将所有牌堆里的手里剑（<see cref="Shuriken"/>）、
-/// 飞刀（<see cref="Kunai"/>）以及火焰手里剑（<see cref="FlameShuriken"/>）的能量消耗永久降低 1。
+/// 飞刀（<see cref="Kunai"/>）以及注入手里剑（<see cref="InfusedShuriken"/>）的能量消耗永久降低 1。
 /// </summary>
 public class BladeEdge : NinjaModCard
 {
@@ -30,7 +30,7 @@ public class BladeEdge : NinjaModCard
             new[] { PileType.Hand, PileType.Draw, PileType.Discard });
         foreach (var card in allCards)
         {
-            if (card is Shuriken || card is Kunai || card is FlameShuriken)
+            if (card is Shuriken || card is Kunai || card is InfusedShuriken)
             {
                 card.EnergyCost.AddThisCombat(-CostReduction, false);
             }

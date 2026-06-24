@@ -17,26 +17,30 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EarthRend : NinjaModCard
 {
-    public EarthRend() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies) { }
+    // 升级后为 false：移除消耗。
+    private bool _exhaust = true;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+    public EarthRend() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+
+    public override bool GainsBlock => true;
+
+    public override IEnumerable<CardKeyword> CanonicalKeywords => _exhaust ? [CardKeyword.Exhaust] : [];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 遍历所有可命中敌人，按各自负面效果层数造成伤害。
-        foreach (var enemy in CombatState.HittableEnemies.ToList())
-        {
-            int debuffStacks = enemy.Powers
-                .Where(p => p.Type == PowerType.Debuff)
-                .Sum(p => p.Amount);
-            if (debuffStacks <= 0) continue;
+        // 统计所有敌人身上的负面效果（Debuff）总层数。
+        int totalDebuff = CombatState.HittableEnemies
+            .Sum(enemy => enemy.Powers.Where(p => p.Type == PowerType.Debuff).Sum(p => p.Amount));
 
-            await CreatureCmd.Damage(choiceContext, enemy, debuffStacks,
-                ValueProp.Move, Owner.Creature, this);
+        if (totalDebuff > 0)
+        {
+            await CreatureCmd.GainBlock(Owner.Creature, totalDebuff, ValueProp.Move, cardPlay);
         }
     }
 
+    protected override void OnUpgrade() => _exhaust = false;
+
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：裂地", "对每个敌人造成等同于其负面效果层数的伤害。消耗。")
-        : new CardLoc("Earth Ninjutsu: Earth Rend", "Deal damage to each enemy equal to its total Debuff stacks. Exhaust.");
+        ? new CardLoc("土忍：裂地", "获得等同于所有敌人负面效果层数之和的格挡。" + (_exhaust ? "消耗。" : ""))
+        : new CardLoc("Earth Ninjutsu: Earth Rend", "Gain Block equal to the total Debuff stacks on all enemies." + (_exhaust ? " Exhaust." : ""));
 }
