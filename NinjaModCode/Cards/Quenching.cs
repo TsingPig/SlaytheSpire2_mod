@@ -5,6 +5,7 @@ using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 
 namespace NinjaMod.NinjaModCode.Cards;
@@ -15,17 +16,21 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Quenching : NinjaModCard
 {
-    // 与 QuenchingPower.BurningPerHit 保持一致，卡牌描述用此常量显示。
-    private const int BurningPerHit = 6;
-
     public Quenching() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+
+    // 用 PowerVar 表示获得的淬火层数：基础 6（升级 8），卡面 {Quench:diff()} 显示。
+    // 淬火层数 = 每次攻击附加的燃烧；叠加多张可累加（两张基础即 12/击）。
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<QuenchingPower>("Quench", 6m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<QuenchingPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        int amount = (int)DynamicVars["Quench"].BaseValue;
+        await PowerCmd.Apply<QuenchingPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
+    protected override void OnUpgrade() => DynamicVars["Quench"].UpgradeValueBy(2m); // 6 -> 8
+
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：淬火术", $"获得 1 层[gold]淬火[/gold]。本回合，每层[gold]淬火[/gold]使攻击牌每次造成伤害额外附加 {BurningPerHit} 层燃烧。")
-        : new CardLoc("Fire Ninjutsu: Quenching", $"Gain 1 [gold]Quenching[/gold]. This turn, each stack makes your attack cards apply {BurningPerHit} Burning on each hit.");
+        ? new CardLoc("火忍：淬火术", "获得 {Quench:diff()} 层[gold]淬火[/gold]。本回合，攻击牌每次造成伤害额外附加等同于淬火层数的[gold]燃烧[/gold]。")
+        : new CardLoc("Fire Ninjutsu: Quenching", "Gain {Quench:diff()} [gold]Quenching[/gold]. This turn, your attacks apply [gold]Burning[/gold] equal to your Quenching stacks on each hit.");
 }

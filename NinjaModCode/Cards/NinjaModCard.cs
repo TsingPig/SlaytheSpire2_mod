@@ -136,9 +136,6 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     /// </summary>
     public void CreateCustomUi(Control toAdd)
     {
-        if (BurningInfusion > 0)
-        {
-            BurningInfusionCardEffect.Attach(toAdd, this);
-        }
+        // 燃烧追加的火焰边框特效会在全屏错误显示，已按需求停用（“实在做不到就删掉”）。
     }
 }

@@ -21,7 +21,7 @@ public class MusashiSevenStar : NinjaModCard
     // 每损失多少生命提供 1 点斩杀加成。
     private const int HpPerExecute = 5;
 
-    public MusashiSevenStar() : base(2, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
+    public MusashiSevenStar() : base(2, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy) { }
 
     public override bool IsMusashi => true;
 

@@ -33,7 +33,7 @@ public class MusashiSwiftTriangle : NinjaModCard
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
-        await PowerCmd.Apply<TemporaryDexterityPower>(choiceContext, Owner.Creature,
+        await PowerCmd.Apply<DexterityPower>(choiceContext, Owner.Creature,
             DynamicVars["Dex"].IntValue, Owner.Creature, this);
     }
 
@@ -44,6 +44,6 @@ public class MusashiSwiftTriangle : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("武藏：迅光三角剑", "造成 {Damage:diff()} 点伤害，短暂获得 {Dex:diff()} 点[gold]敏捷[/gold]。")
-        : new CardLoc("Musashi: Swift Triangle", "Deal {Damage:diff()} damage and gain {Dex:diff()} temporary [gold]Dexterity[/gold].");
+        ? new CardLoc("武藏：迅光三角剑", "造成 {Damage:diff()} 点伤害，获得 {Dex:diff()} 点[gold]敏捷[/gold]。")
+        : new CardLoc("Musashi: Swift Triangle", "Deal {Damage:diff()} damage and gain {Dex:diff()} [gold]Dexterity[/gold].");
 }

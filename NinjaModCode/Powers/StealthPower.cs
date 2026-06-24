@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
@@ -24,7 +25,9 @@ namespace NinjaMod.NinjaModCode.Powers;
 public class StealthPower : NinjaModPower
 {
     public override PowerType Type => PowerType.Buff;
-    public override PowerStackType StackType => PowerStackType.Single;
+
+    // 可叠加层数：隐身术给予 3 层，每回合开始失去 1 层。
+    public override PowerStackType StackType => PowerStackType.Counter;
 
     // ── 敌人攻击伤害归零（等价“无法攻击你”）──
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
@@ -42,7 +45,14 @@ public class StealthPower : NinjaModPower
         if (cardPlay.Card.Type != CardType.Attack) return;
         if (cardPlay.Card is NinjaModCard { PreservesStealth: true }) return;
 
-        await PowerCmd.Remove(this);
+        await PowerCmd.Remove(this); // 主动攻击：立即失去全部隐身
+    }
+
+    public override async Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)
+    {
+        // 每回合开始失去 1 层隐身，降到 0 时自动移除。
+        if (player.Creature != Owner) return;
+        await PowerCmd.Decrement(this);
     }
 
     public override Task AfterApplied(Creature? applier, CardModel? cardSource)
@@ -71,9 +81,9 @@ public class StealthPower : NinjaModPower
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new PowerLoc("隐身",
-            "敌人无法攻击你。当你攻击敌人时，失去隐身。",
-            "敌人无法攻击你。当你攻击敌人时，失去隐身。")
+            "敌人无法攻击你。每回合开始时失去 1 层；当你攻击敌人时，立即失去全部隐身。",
+            "敌人无法攻击你。每回合开始时失去 1 层；当你攻击敌人时，立即失去全部隐身。")
         : new PowerLoc("Stealth",
-            "Enemies cannot attack you. When you attack an enemy, lose Stealth.",
-            "Enemies cannot attack you. When you attack an enemy, lose Stealth.");
+            "Enemies cannot attack you. Lose 1 stack at the start of each turn; attacking removes all Stealth.",
+            "Enemies cannot attack you. Lose 1 stack at the start of each turn; attacking removes all Stealth.");
 }

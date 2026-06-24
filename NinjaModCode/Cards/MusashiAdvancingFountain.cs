@@ -23,7 +23,7 @@ public class MusashiAdvancingFountain : NinjaModCard
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new HealVar(7m), new IntVar("Energy", 1m)];
+        [new HealVar(4m), new IntVar("Energy", 1m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

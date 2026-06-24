@@ -24,6 +24,8 @@ public class MusashiEnmeiStyle : NinjaModCard
         await PowerCmd.Apply<EnmeiPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 1 -> 0
+
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：圆明流", "获得[gold]圆明[/gold]：每当你打出一张“武藏”牌，回复 1 点生命。")
         : new CardLoc("Musashi: Enmei Style", "Gain [gold]Enmei[/gold]: whenever you play a Musashi card, heal 1 HP.");

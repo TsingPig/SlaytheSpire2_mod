@@ -20,7 +20,7 @@ public class LightSnow : NinjaModCard
     public LightSnow() : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(6m, ValueProp.Move), new HealVar(2m)];
+        [new DamageVar(1m, ValueProp.Move), new RepeatVar(6), new HealVar(2m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -28,6 +28,7 @@ public class LightSnow : NinjaModCard
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
             .Targeting(cardPlay.Target)
+            .WithHitCount(DynamicVars.Repeat.IntValue)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.IntValue, true);
@@ -36,6 +37,6 @@ public class LightSnow : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Heal.UpgradeValueBy(1m); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("细雪", "造成 {Damage:diff()} 点伤害，回复 {Heal:diff()} 点生命。")
-        : new CardLoc("Light Snow", "Deal {Damage:diff()} damage. Heal {Heal:diff()} HP.");
+        ? new CardLoc("细雪", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段，回复 {Heal:diff()} 点生命。")
+        : new CardLoc("Light Snow", "Deal {Damage:diff()} damage {Repeat} times. Heal {Heal:diff()} HP.");
 }

@@ -27,7 +27,9 @@ public class EarthTalisman : NinjaModCard
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         MakeCalculatedBlock(0, (card, creature) =>
         {
-            var owner = card.Owner;
+            // 卡面预览时 card.Owner 可能为空，用 CombatState 的玩家可靠读取消耗牌堆数量。
+            var players = card.CombatState?.Players;
+            var owner = (players != null && players.Count > 0) ? players[0] : card.Owner;
             if (owner == null) return 0m;
             return CardPile.GetCards(owner, new[] { PileType.Exhaust }).Count();
         }, 0, ValueProp.Move);
