@@ -15,7 +15,57 @@ from PIL import Image, ImageDraw, ImageEnhance, ImageOps
 
 ROOT = Path(__file__).resolve().parents[1]
 TEMP = ROOT / "temp"
+NEW_ART = ROOT / "tmp"
 MOD_IMAGES = ROOT / "NinjaMod" / "images"
+
+# New card sheets supplied in tmp/.  The ordering matches the panels from left
+# to right.  AfterimageAttack intentionally reuses the Afterimage Art panel.
+NEW_CARD_SHEETS = (
+    (
+        "1.png",
+        (
+            "detonation",
+            "lihuo",
+            "earth_talisman",
+            "light_snow",
+            "soul_chase",
+        ),
+    ),
+    (
+        "2.png",
+        (
+            "soul_reap",
+            "crane_shield",
+            "rashomon",
+            "afterimage_art",
+            "burning_heart",
+        ),
+    ),
+    (
+        "3.png",
+        (
+            "musashi_thrust",
+            "musashi_godspeed",
+            "musashi_void_slash",
+            "musashi_inheritance",
+            "musashi_enmei_style",
+        ),
+    ),
+    (
+        "4.png",
+        (
+            "musashi_swift_triangle",
+            "musashi_advancing_fountain",
+            "musashi_two_heavens",
+            "musashi_seven_star",
+        ),
+    ),
+)
+
+NEW_POWER_ART = (
+    ("image copy.png", "afterimage_power"),
+    ("image.png", "enmei_power"),
+)
 
 # (output slug, sheet column, sheet row, vertical focus within the panel)
 CARD_CROPS = (
@@ -65,6 +115,136 @@ def prepare_cards() -> List[Path]:
         small.save(small_path, optimize=True)
         outputs.extend((big_path, small_path))
 
+    return outputs
+
+
+def split_card_sheet(sheet: Image.Image, panel_count: int) -> List[Image.Image]:
+    """Split an AI contact sheet at its near-white vertical separators."""
+
+    source = np.array(sheet.convert("RGB"))
+    minimum = source.min(axis=2)
+    chroma = source.max(axis=2) - minimum
+    near_white = (minimum > 240) & (chroma < 18)
+    white_score = near_white.mean(axis=0)
+    smooth_score = np.convolve(white_score, np.ones(7) / 7, mode="same")
+
+    boundaries = [0]
+    expected_width = sheet.width / panel_count
+    search_radius = max(24, round(expected_width * 0.16))
+    for index in range(1, panel_count):
+        expected = round(index * expected_width)
+        left = max(boundaries[-1] + 8, expected - search_radius)
+        right = min(sheet.width - 8, expected + search_radius)
+        boundary = left + int(np.argmax(smooth_score[left:right]))
+        boundaries.append(boundary)
+    boundaries.append(sheet.width)
+
+    panels: List[Image.Image] = []
+    for left, right in zip(boundaries, boundaries[1:]):
+        segment = source[:, left:right]
+        seg_min = segment.min(axis=2)
+        seg_chroma = segment.max(axis=2) - seg_min
+        content = ~((seg_min > 240) & (seg_chroma < 18))
+        x_density = content.mean(axis=0)
+        y_density = content.mean(axis=1)
+        xs = np.where(x_density > 0.04)[0]
+        ys = np.where(y_density > 0.04)[0]
+        if not len(xs) or not len(ys):
+            raise RuntimeError("A card sheet panel contains no artwork")
+        panels.append(
+            sheet.crop(
+                (
+                    left + int(xs[0]),
+                    int(ys[0]),
+                    left + int(xs[-1]) + 1,
+                    int(ys[-1]) + 1,
+                )
+            )
+        )
+    return panels
+
+
+def save_card_art(panel: Image.Image, slug: str) -> List[Path]:
+    """Create the full-card and thumbnail sizes consumed by NinjaModCard."""
+
+    big_dir = MOD_IMAGES / "card_portraits" / "big"
+    small_dir = MOD_IMAGES / "card_portraits"
+    big_dir.mkdir(parents=True, exist_ok=True)
+    small_dir.mkdir(parents=True, exist_ok=True)
+
+    big = ImageOps.fit(
+        panel.convert("RGB"),
+        (606, 852),
+        method=Image.Resampling.LANCZOS,
+        centering=(0.5, 0.5),
+    )
+    small = big.resize((250, 350), Image.Resampling.LANCZOS)
+    big_path = big_dir / f"{slug}.png"
+    small_path = small_dir / f"{slug}.png"
+    big.save(big_path, optimize=True)
+    small.save(small_path, optimize=True)
+    return [big_path, small_path]
+
+
+def prepare_new_cards() -> List[Path]:
+    outputs: List[Path] = []
+    afterimage_panel: Image.Image | None = None
+    for sheet_name, slugs in NEW_CARD_SHEETS:
+        source_path = NEW_ART / sheet_name
+        if not source_path.exists():
+            raise FileNotFoundError(f"Missing new card sheet: {source_path}")
+        sheet = Image.open(source_path).convert("RGB")
+        panels = split_card_sheet(sheet, len(slugs))
+        for slug, panel in zip(slugs, panels):
+            outputs.extend(save_card_art(panel, slug))
+            if slug == "afterimage_art":
+                afterimage_panel = panel.copy()
+
+    if afterimage_panel is None:
+        raise RuntimeError("Afterimage Art panel was not found")
+    outputs.extend(save_card_art(afterimage_panel, "afterimage_attack"))
+    return outputs
+
+
+def remove_light_checkerboard(image: Image.Image) -> Image.Image:
+    """Remove the baked white/gray checkerboard from a supplied power icon."""
+
+    source = np.array(image.convert("RGB"))
+    minimum = source.min(axis=2)
+    chroma = source.max(axis=2) - minimum
+    background_candidate = ((minimum > 218) & (chroma < 24)).astype(np.uint8)
+
+    count, labels = cv2.connectedComponents(background_candidate, 8)
+    border_labels = np.unique(
+        np.concatenate((labels[0], labels[-1], labels[:, 0], labels[:, -1]))
+    )
+    border_labels = border_labels[border_labels != 0]
+    background = np.isin(labels, border_labels).astype(np.uint8)
+    background = cv2.dilate(background, np.ones((3, 3), np.uint8), iterations=1)
+    alpha = 255 - cv2.GaussianBlur(background * 255, (0, 0), 0.7)
+    alpha[background == 1] = 0
+    return Image.fromarray(np.dstack((source, alpha.astype(np.uint8))))
+
+
+def prepare_new_powers() -> List[Path]:
+    big_dir = MOD_IMAGES / "powers" / "big"
+    small_dir = MOD_IMAGES / "powers"
+    big_dir.mkdir(parents=True, exist_ok=True)
+    small_dir.mkdir(parents=True, exist_ok=True)
+
+    outputs: List[Path] = []
+    for source_name, slug in NEW_POWER_ART:
+        source_path = NEW_ART / source_name
+        if not source_path.exists():
+            raise FileNotFoundError(f"Missing new power art: {source_path}")
+        extracted = remove_light_checkerboard(Image.open(source_path))
+        big = extracted.resize((256, 256), Image.Resampling.LANCZOS)
+        small = big.resize((64, 64), Image.Resampling.LANCZOS)
+        big_path = big_dir / f"{slug}.png"
+        small_path = small_dir / f"{slug}.png"
+        big.save(big_path, optimize=True)
+        small.save(small_path, optimize=True)
+        outputs.extend((big_path, small_path))
     return outputs
 
 
@@ -236,7 +416,15 @@ def make_card_contact_sheet() -> Path:
 
 
 if __name__ == "__main__":
-    written = prepare_cards() + prepare_character()
-    written.append(make_card_contact_sheet())
+    written = prepare_new_cards() + prepare_new_powers()
+
+    # Keep the original import workflow available when its legacy sources are
+    # present, but do not require those deleted raw files to process new art.
+    if (TEMP / "image copy 2.png").exists():
+        written.extend(prepare_cards())
+        written.append(make_card_contact_sheet())
+    if (TEMP / "image copy.png").exists() and (TEMP / "image.png").exists():
+        written.extend(prepare_character())
+
     for path in written:
         print(path.relative_to(ROOT))

@@ -25,6 +25,11 @@ sts2.dll
 *.log
 logs/
 *.tmp
+/image-*.png.import
+/tmp/*.png.import
+/temp/pub*.txt
+/temp/release/
+/temp/release-staging/
 
 # --- Distributable mod package ---
 # Committed on purpose so anyone who clones/downloads the repo gets a ready-to-use

@@ -11,7 +11,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 火忍：淬火术（Fire Ninjutsu: Quenching）——技能牌。
-/// 1 费，施加本回合的 <see cref="QuenchingPower"/>：本回合用攻击牌每次伤害额外附加 6 层燃烧。
+/// 1 费，获得 1 层本回合的 <see cref="QuenchingPower"/>；每层使攻击牌每次伤害额外附加 6 层燃烧。
 /// </summary>
 public class Quenching : NinjaModCard
 {
@@ -22,11 +22,10 @@ public class Quenching : NinjaModCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // amount=1 仅表示激活；实际燃烧值在 Power 内部为常量。
         await PowerCmd.Apply<QuenchingPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：淬火术", $"本回合，你用攻击牌每次造成伤害都会额外附加 {BurningPerHit} 层燃烧。")
-        : new CardLoc("Fire Ninjutsu: Quenching", $"This turn, your attack cards apply {BurningPerHit} Burning on each hit.");
+        ? new CardLoc("火忍：淬火术", $"获得 1 层[gold]淬火[/gold]。本回合，每层[gold]淬火[/gold]使攻击牌每次造成伤害额外附加 {BurningPerHit} 层燃烧。")
+        : new CardLoc("Fire Ninjutsu: Quenching", $"Gain 1 [gold]Quenching[/gold]. This turn, each stack makes your attack cards apply {BurningPerHit} Burning on each hit.");
 }

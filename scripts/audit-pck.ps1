@@ -104,7 +104,7 @@ try {
     }
 
     $unexpectedEntries = @($entries.Keys | Where-Object {
-        $_ -match '^(temp|dist|scripts)/' -or
+        $_ -match '^(temp|tmp|dist|scripts)/' -or
         $_ -match '^image-[^/]+\.png\.import$' -or
         $_ -match '^\.godot/imported/image-[^/]+\.ctex$'
     })
