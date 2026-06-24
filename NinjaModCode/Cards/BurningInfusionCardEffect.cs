@@ -1,12 +1,17 @@
+using System.Linq;
 using Godot;
 using NinjaMod.NinjaModCode.Extensions;
+using MegaCrit.Sts2.Core.Entities.Cards;
 
 namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
-/// 为带有燃烧追加的卡牌挂载动态火焰边框。
+/// 为卡牌挂载动态火焰边框。
 /// 贴图负责火焰造型，运行时 canvas shader 负责轻微摆动和明暗呼吸，
 /// 因此不依赖额外的 .gdshader/.tscn 资源。
+/// 边框节点会按卡牌当前状态实时显隐：
+///   • 带燃烧追加（<see cref="NinjaModCard.BurningInfusion"/> &gt; 0）的卡牌恒显；
+///   • 攻击牌在玩家拥有淬火（Quenching）时显示，淬火失效后自动隐藏。
 /// </summary>
 internal static class BurningInfusionCardEffect
 {
@@ -35,7 +40,7 @@ internal static class BurningInfusionCardEffect
     private static Texture2D? _texture;
     private static ShaderMaterial? _material;
 
-    internal static void Attach(Control root)
+    internal static void Attach(Control root, NinjaModCard card)
     {
         var texture = GetTexture();
         if (texture == null)
@@ -47,8 +52,9 @@ internal static class BurningInfusionCardEffect
         root.ClipContents = false;
         root.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
 
-        var frame = new TextureRect
+        var frame = new BurningFrameNode
         {
+            Card = card,
             Name = "BurningInfusionFrame",
             Texture = texture,
             Material = GetMaterial(),
@@ -97,5 +103,48 @@ internal static class BurningInfusionCardEffect
             Shader = new Shader { Code = ShaderCode }
         };
         return _material;
+    }
+}
+
+/// <summary>
+/// 火焰边框节点：每帧根据所属卡牌的状态决定是否可见，
+/// 实现「玩家拥有淬火时攻击牌实时高亮」的动态包裹效果。
+/// </summary>
+internal partial class BurningFrameNode : TextureRect
+{
+    public NinjaModCard? Card;
+
+    public override void _Process(double delta)
+    {
+        Visible = ShouldShow();
+    }
+
+    private bool ShouldShow()
+    {
+        var card = Card;
+        if (card == null)
+        {
+            return false;
+        }
+
+        // 带燃烧追加的卡牌恒显火焰边框。
+        if (card.BurningInfusion > 0)
+        {
+            return true;
+        }
+
+        // 攻击牌：仅当玩家当前拥有淬火（Quenching）能力时，才动态包裹火焰边框。
+        if (card.Type != CardType.Attack)
+        {
+            return false;
+        }
+
+        var owner = card.Owner?.Creature;
+        if (owner == null)
+        {
+            return false;
+        }
+
+        return owner.Powers.Any(power => power.Id.Entry.Contains("Quenching"));
     }
 }

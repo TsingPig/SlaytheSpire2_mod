@@ -19,7 +19,7 @@ public class BladeEdge : NinjaModCard
     // 降低的能量数量（常量）。
     private const int CostReduction = 1;
 
-    public BladeEdge() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
+    public BladeEdge() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
