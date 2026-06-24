@@ -48,6 +48,11 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     public virtual int BurningInfusion => 0;
 
     /// <summary>
+    /// 打出攻击牌时是否保留隐身。默认攻击牌会破除隐身；特殊攻击牌可覆盖为 true。
+    /// </summary>
+    public virtual bool PreservesStealth => false;
+
+    /// <summary>
     /// 若本卡拥有燃烧追加（<see cref="BurningInfusion"/> &gt; 0），对目标施加对应层数燃烧。
     /// 应在攻击命中后调用。
     /// </summary>

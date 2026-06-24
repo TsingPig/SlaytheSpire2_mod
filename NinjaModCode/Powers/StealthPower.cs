@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
+using NinjaMod.NinjaModCode.Cards;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -39,6 +40,7 @@ public class StealthPower : NinjaModPower
     {
         if (cardPlay.Card.Owner?.Creature != Owner) return;
         if (cardPlay.Card.Type != CardType.Attack) return;
+        if (cardPlay.Card is NinjaModCard { PreservesStealth: true }) return;
 
         await PowerCmd.Remove(this);
     }

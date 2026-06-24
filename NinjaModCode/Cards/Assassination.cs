@@ -20,6 +20,8 @@ public class Assassination : NinjaModCard
 {
     public Assassination() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
 
+    public override bool PreservesStealth => true;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -36,6 +38,6 @@ public class Assassination : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("暗杀", "无视格挡，造成 {Damage:diff()} 点伤害。")
-        : new CardLoc("Assassination", "Deal {Damage:diff()} damage ignoring Block.");
+        ? new CardLoc("暗杀", "无视格挡，造成 {Damage:diff()} 点伤害。打出这张牌不会失去[gold]隐身[/gold]。")
+        : new CardLoc("Assassination", "Deal {Damage:diff()} damage ignoring Block. Playing this card does not break [gold]Stealth[/gold].");
 }

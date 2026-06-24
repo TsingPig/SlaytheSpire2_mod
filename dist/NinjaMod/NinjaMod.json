@@ -3,7 +3,7 @@
   "name": "Ninja",
   "author": "RunminG",
   "description": "Adds the Ninja (忍者): a Bleed / fire-ninjutsu / stealth character. Built on BaseLib.",
-  "version": "v0.1.0",
+  "version": "v1.0.1",
   "min_game_version": "0.107.0",
   "has_pck": true,
   "has_dll": true,

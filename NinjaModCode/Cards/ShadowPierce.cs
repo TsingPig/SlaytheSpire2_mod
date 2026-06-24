@@ -23,6 +23,8 @@ public class ShadowPierce : NinjaModCard
 
     public ShadowPierce() : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
 
+    public override bool PreservesStealth => true;
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(9m, ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -44,6 +46,6 @@ public class ShadowPierce : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("影心刺", $"只能在[gold]隐身[/gold]状态下打出。造成 {{Damage:diff()}} 点伤害，附加 {_bleed} 层[gold]流血[/gold]。")
-        : new CardLoc("Shadow Pierce", $"Can only be played while [gold]Stealthed[/gold]. Deal {{Damage:diff()}} damage and apply {_bleed} [gold]Bleed[/gold].");
+        ? new CardLoc("影心刺", $"只能在[gold]隐身[/gold]状态下打出。造成 {{Damage:diff()}} 点伤害，附加 {_bleed} 层[gold]流血[/gold]。打出这张牌不会失去[gold]隐身[/gold]。")
+        : new CardLoc("Shadow Pierce", $"Can only be played while [gold]Stealthed[/gold]. Deal {{Damage:diff()}} damage and apply {_bleed} [gold]Bleed[/gold]. Playing this card does not break [gold]Stealth[/gold].");
 }
