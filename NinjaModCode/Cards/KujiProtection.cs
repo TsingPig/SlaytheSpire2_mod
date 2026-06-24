@@ -32,6 +32,6 @@ public class KujiProtection : NinjaModCard
     protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("九字护身法", $"获得 {Resist} 点抵挡。每回合开始时，额外获得当前抵挡层数 2 倍的格挡。消耗。")
-        : new CardLoc("Kuji Protection", $"Gain {Resist} Resist. At the start of each turn, gain Block equal to twice your current Resist. Exhaust.");
+        ? new CardLoc("九字护身法", $"获得 {Resist} 点[gold]抵挡[/gold]。每回合开始时，额外获得当前[gold]抵挡[/gold]层数 2 倍的格挡。")
+        : new CardLoc("Kuji Protection", $"Gain {Resist} [gold]Resist[/gold]. At the start of each turn, gain Block equal to twice your current [gold]Resist[/gold].");
 }

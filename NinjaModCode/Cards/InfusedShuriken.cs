@@ -66,6 +66,6 @@ public class InfusedShuriken : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("手里剑", $"造成 {{Damage:diff()}} 点伤害。未被完全格挡施加 {Bleed} 层[gold]流血[/gold]。[gold]燃烧追加[/gold] {BurningInfusion}。[gold]保留[/gold]。[gold]消耗[/gold]。")
-        : new CardLoc("Shuriken", $"Deal {{Damage:diff()}} damage. If unblocked, apply {Bleed} [gold]Bleed[/gold]. [gold]Burning Infusion[/gold] {BurningInfusion}. [gold]Retain[/gold]. [gold]Exhaust[/gold].");
+        ? new CardLoc("手里剑", $"造成 {{Damage:diff()}} 点伤害。未被完全格挡施加 {Bleed} 层[gold]流血[/gold]。[gold]燃烧追加[/gold] {BurningInfusion}。")
+        : new CardLoc("Shuriken", $"Deal {{Damage:diff()}} damage. If unblocked, apply {Bleed} [gold]Bleed[/gold]. [gold]Burning Infusion[/gold] {BurningInfusion}.");
 }

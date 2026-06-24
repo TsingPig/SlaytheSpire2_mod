@@ -172,30 +172,7 @@ internal partial class BurningFrameNode : TextureRect
 
     private bool ShouldShow()
     {
-        var card = Card;
-        if (card == null)
-        {
-            return false;
-        }
-
-        // 带燃烧追加的卡牌恒显火焰边框。
-        if (card.BurningInfusion > 0)
-        {
-            return true;
-        }
-
-        // 攻击牌：仅当玩家当前拥有淬火（Quenching）能力时，才动态包裹火焰边框。
-        if (card.Type != CardType.Attack)
-        {
-            return false;
-        }
-
-        var owner = card.Owner?.Creature;
-        if (owner == null)
-        {
-            return false;
-        }
-
-        return owner.Powers.Any(power => power.Id.Entry.Contains("Quenching"));
+        // 仅为带【燃烧追加】的卡牌显示火焰边框。
+        return Card?.BurningInfusion > 0;
     }
 }

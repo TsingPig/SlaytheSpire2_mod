@@ -18,14 +18,12 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EarthRend : NinjaModCard
 {
-    // 升级后为 false：移除消耗。
-    private bool _exhaust = true;
-
     public EarthRend() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
 
     public override bool GainsBlock => true;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => _exhaust ? [CardKeyword.Exhaust] : [];
+    // 升级后移除消耗：随 IsUpgraded 实时变化。
+    public override IEnumerable<CardKeyword> CanonicalKeywords => IsUpgraded ? [] : [CardKeyword.Exhaust];
 
     // 动态计算格挡 = 所有敌人负面效果（Debuff）层数之和。卡面用 {CalculatedBlock:diff()} 显示。
     protected override IEnumerable<DynamicVar> CanonicalVars =>
@@ -48,9 +46,9 @@ public class EarthRend : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => _exhaust = false;
+    protected override void OnUpgrade() { } // 升级仅移除消耗（由 CanonicalKeywords 处理）
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：裂地", "获得 {CalculatedBlock:diff()} 点格挡（所有敌人[gold]负面效果[/gold]层数之和）。" + (_exhaust ? "[gold]消耗[/gold]。" : ""))
-        : new CardLoc("Earth Ninjutsu: Earth Rend", "Gain {CalculatedBlock:diff()} Block (total [gold]Debuff[/gold] stacks on all enemies)." + (_exhaust ? " [gold]Exhaust[/gold]." : ""));
+        ? new CardLoc("土忍：裂地", "获得 {CalculatedBlock:diff()} 点格挡（所有敌人[gold]负面效果[/gold]层数之和）。")
+        : new CardLoc("Earth Ninjutsu: Earth Rend", "Gain {CalculatedBlock:diff()} Block (total [gold]Debuff[/gold] stacks on all enemies).");
 }

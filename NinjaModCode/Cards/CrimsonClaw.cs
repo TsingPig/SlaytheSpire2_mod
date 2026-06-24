@@ -30,6 +30,6 @@ public class CrimsonClaw : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：凤仙花爪红", $"在手牌中生成 {Count} 张手里剑（燃烧追加 6、保留、消耗）。消耗。")
-        : new CardLoc("Fire Ninjutsu: Crimson Claw", $"Add {Count} Shurikens (Burning Infusion 6, Retain, Exhaust) to your hand. Exhaust.");
+        ? new CardLoc("火忍：凤仙花爪红", $"在手牌中生成 {Count} 张带[gold]燃烧追加[/gold]的手里剑（保留、消耗）。")
+        : new CardLoc("Fire Ninjutsu: Crimson Claw", $"Add {Count} Shurikens with [gold]Burning Infusion[/gold] (Retain, Exhaust) to your hand.");
 }

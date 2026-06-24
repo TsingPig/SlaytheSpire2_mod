@@ -25,7 +25,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Kunai : NinjaModCard
 {
-    public Kunai() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
+    public Kunai() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
 
@@ -60,6 +60,6 @@ public class Kunai : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("飞刀", "[gold]保留[/gold]。[gold]消耗[/gold]。造成 {Damage:diff()} 点伤害。如果未被完全格挡，施加 1 层[gold]流血[/gold]。")
-        : new CardLoc("Kunai", "[gold]Retain[/gold]. [gold]Exhaust[/gold]. Deal {Damage:diff()} damage. If unblocked, apply 1 [gold]Bleed[/gold].");
+        ? new CardLoc("飞刀", "造成 {Damage:diff()} 点伤害。如果未被完全格挡，施加 1 层[gold]流血[/gold]。")
+        : new CardLoc("Kunai", "Deal {Damage:diff()} damage. If unblocked, apply 1 [gold]Bleed[/gold].");
 }

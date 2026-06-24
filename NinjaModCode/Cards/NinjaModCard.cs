@@ -48,6 +48,12 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     public virtual int BurningInfusion => 0;
 
     /// <summary>
+    /// 是否为“武藏”系列卡牌。用于【圆明】效果判定（每打出一张武藏牌回复 1 点生命）。
+    /// 武藏系列卡牌应重写此属性返回 true。
+    /// </summary>
+    public virtual bool IsMusashi => false;
+
+    /// <summary>
     /// 打出攻击牌时是否保留隐身。默认攻击牌会破除隐身；特殊攻击牌可覆盖为 true。
     /// </summary>
     public virtual bool PreservesStealth => false;
@@ -82,6 +88,8 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
         ("潜行",     "Prowl",           () => ModelDb.Power<ProwlPower>()?.DumbHoverTip),
         ("九字护身", "Kuji Protection", () => ModelDb.Power<KujiProtectionPower>()?.DumbHoverTip),
         ("八咫镜",   "Yata Mirror",     () => ModelDb.Power<YataMirrorPower>()?.DumbHoverTip),
+        ("残影",     "Afterimage",      () => ModelDb.Power<AfterimagePower>()?.DumbHoverTip),
+        ("圆明",     "Enmei",           () => ModelDb.Power<EnmeiPower>()?.DumbHoverTip),
     };
 
     /// <summary>
@@ -124,12 +132,11 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
 
     /// <summary>
     /// BaseLib 会在每次卡牌节点绑定/刷新时重建这里提供的 UI。
-    /// 带燃烧追加的卡牌、或在玩家拥有淬火时的攻击牌，会挂载可动态显隐的火焰边框。
+    /// 仅为带【燃烧追加】的卡牌挂载火焰边框特效。
     /// </summary>
     public void CreateCustomUi(Control toAdd)
     {
-        // 带燃烧追加的卡牌恒显边框；攻击牌挂载后由边框自身根据淬火状态实时显隐。
-        if (BurningInfusion > 0 || Type == CardType.Attack)
+        if (BurningInfusion > 0)
         {
             BurningInfusionCardEffect.Attach(toAdd, this);
         }

@@ -45,6 +45,6 @@ public class StoneSummon : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：唤石", $"获得 {{CalculatedBlock:diff()}} 点格挡（当前[gold]抵挡[/gold]层数 × {(IsUpgraded ? 5 : 4)}）。")
-        : new CardLoc("Earth Ninjutsu: Stone Summon", $"Gain {{CalculatedBlock:diff()}} Block (current [gold]Resist[/gold] × {(IsUpgraded ? 5 : 4)}).");
+        ? new CardLoc("土忍：唤石", "获得 {CalculatedBlock:diff()} 点格挡（随当前[gold]抵挡[/gold]层数提升）。")
+        : new CardLoc("Earth Ninjutsu: Stone Summon", "Gain {CalculatedBlock:diff()} Block (scales with your [gold]Resist[/gold]).");
 }

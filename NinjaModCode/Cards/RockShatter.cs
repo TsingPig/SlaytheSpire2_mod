@@ -58,6 +58,6 @@ public class RockShatter : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(5m); // 8 -> 13
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：碎石", "获得 {Block:diff()} 点格挡。自动免费打出手牌中所有[gold]忍者防御[/gold]，随后移除 1 层[gold]抵挡[/gold]。[gold]消耗[/gold]。")
-        : new CardLoc("Earth Ninjutsu: Rock Shatter", "Gain {Block:diff()} Block. Auto-play all [gold]Ninja Defends[/gold] in your hand, then remove 1 [gold]Resist[/gold]. [gold]Exhaust[/gold].");
+        ? new CardLoc("土忍：碎石", "获得 {Block:diff()} 点格挡。自动免费打出手牌中所有[gold]忍者防御[/gold]，随后移除 1 层[gold]抵挡[/gold]。")
+        : new CardLoc("Earth Ninjutsu: Rock Shatter", "Gain {Block:diff()} Block. Auto-play all [gold]Ninja Defends[/gold] in your hand, then remove 1 [gold]Resist[/gold].");
 }

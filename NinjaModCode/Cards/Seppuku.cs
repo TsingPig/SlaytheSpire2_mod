@@ -18,16 +18,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Seppuku : NinjaModCard
 {
-    // 升级后为 false：移除消耗。
-    private bool _exhaust = true;
-
     // base 费用 0；通过 HasEnergyCostX 标记为 X 费（消耗当前全部剩余能量）。
     public Seppuku() : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
 
     // 标记为 X 费牌：实际花费为当前剩余能量，X = 投入的能量值。
     protected override bool HasEnergyCostX => true;
 
-    public override IEnumerable<CardKeyword> CanonicalKeywords => _exhaust ? [CardKeyword.Exhaust] : [];
+    // 升级后移除消耗：随 IsUpgraded 实时变化。
+    public override IEnumerable<CardKeyword> CanonicalKeywords => IsUpgraded ? [] : [CardKeyword.Exhaust];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -35,8 +33,8 @@ public class Seppuku : NinjaModCard
         int x = ResolveEnergyXValue();
         if (x <= 0) return;
 
-        // 失去 X 点生命（无法格挡、不受加成影响的自残）。
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, x,
+        // 失去 2X 点生命（无法格挡、不受加成影响的自残）。
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, x * 2,
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this);
 
         // 获得 X 点能量。
@@ -49,9 +47,9 @@ public class Seppuku : NinjaModCard
         await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, x, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => _exhaust = false;
+    protected override void OnUpgrade() { } // 升级仅移除消耗（由 CanonicalKeywords 处理）
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("切腹", "失去 X 点生命，获得 X 点能量、抽 X 张牌、获得 X 点力量。" + (_exhaust ? "消耗。" : ""))
-        : new CardLoc("Seppuku", "Lose X HP. Gain X Energy, draw X cards, gain X Strength." + (_exhaust ? " Exhaust." : ""));
+        ? new CardLoc("切腹", "失去 2X 点生命，获得 X 点能量、抽 X 张牌、获得 X 点[gold]力量[/gold]。")
+        : new CardLoc("Seppuku", "Lose 2X HP. Gain X Energy, draw X cards, gain X [gold]Strength[/gold].");
 }
