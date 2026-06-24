@@ -23,11 +23,14 @@ public class StoneSummon : NinjaModCard
     public override bool GainsBlock => true;
 
     // 动态计算格挡 = 当前抵挡层数 × 倍率（4，升级 5）。卡面用 {CalculatedBlock:diff()} 显示实际值。
+    // 注意：calc 传入的 creature 参数在手牌展示时不可靠（可能为空或为悬停的敌人），
+    // 故统一用 card.Owner?.Creature 读取玩家自身的抵挡层数，与 OnPlay 保持一致。
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         MakeCalculatedBlock(0, (card, creature) =>
         {
-            if (creature == null) return 0m;
-            int resist = creature.GetPower<ResistPower>()?.Amount ?? 0;
+            var owner = card.Owner?.Creature;
+            if (owner == null) return 0m;
+            int resist = owner.GetPower<ResistPower>()?.Amount ?? 0;
             return resist * (card.IsUpgraded ? 5 : 4);
         }, 0, ValueProp.Move);
 

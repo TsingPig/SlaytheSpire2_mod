@@ -25,7 +25,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Kunai : NinjaModCard
 {
-    public Kunai() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
+    public Kunai() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
 

@@ -25,3 +25,9 @@ sts2.dll
 *.log
 logs/
 *.tmp
+
+# --- Distributable mod package ---
+# Committed on purpose so anyone who clones/downloads the repo gets a ready-to-use
+# mod (DLL + JSON + PCK with all textures). Overrides the broad *.pck / *.pdb rules above.
+!dist/
+!dist/**

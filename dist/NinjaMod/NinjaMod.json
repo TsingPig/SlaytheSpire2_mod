@@ -1,0 +1,14 @@
+﻿{
+  "id": "NinjaMod",
+  "name": "Ninja",
+  "author": "RunminG",
+  "description": "Adds the Ninja (忍者): a Bleed / fire-ninjutsu / stealth character. Built on BaseLib.",
+  "version": "v0.1.0",
+  "min_game_version": "0.107.0",
+  "has_pck": true,
+  "has_dll": true,
+  "dependencies": [
+    {"id": "BaseLib", "min_version": "3.3.2"}
+  ],
+  "affects_gameplay": true
+}

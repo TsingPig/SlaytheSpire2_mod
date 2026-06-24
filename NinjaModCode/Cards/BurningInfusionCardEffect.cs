@@ -48,10 +48,6 @@ internal static class BurningInfusionCardEffect
             return;
         }
 
-        root.MouseFilter = Control.MouseFilterEnum.Ignore;
-        root.ClipContents = false;
-        root.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
-
         var frame = new BurningFrameNode
         {
             Card = card,
@@ -62,14 +58,10 @@ internal static class BurningInfusionCardEffect
             StretchMode = TextureRect.StretchModeEnum.Scale,
             MouseFilter = Control.MouseFilterEnum.Ignore,
             ClipContents = false,
-            ZIndex = 100
+            ZIndex = 100,
+            // 用全局坐标独立于父节点布局，便于每帧精确对齐并包住整张卡牌。
+            TopLevel = true
         };
-
-        frame.SetAnchorsAndOffsetsPreset(Control.LayoutPreset.FullRect);
-        frame.OffsetLeft = -20f;
-        frame.OffsetTop = -28f;
-        frame.OffsetRight = 20f;
-        frame.OffsetBottom = 28f;
         root.AddChild(frame);
     }
 
@@ -113,10 +105,69 @@ internal static class BurningInfusionCardEffect
 internal partial class BurningFrameNode : TextureRect
 {
     public NinjaModCard? Card;
+    private Control? _cardRoot;
 
     public override void _Process(double delta)
     {
-        Visible = ShouldShow();
+        bool show = ShouldShow();
+        Visible = show;
+        if (!show)
+        {
+            return;
+        }
+
+        var cardRoot = ResolveCardRoot();
+        if (cardRoot == null)
+        {
+            return;
+        }
+
+        var rect = cardRoot.GetGlobalRect();
+        if (rect.Size.X < 2f || rect.Size.Y < 2f)
+        {
+            return;
+        }
+
+        // 略微外扩，让火焰边框正好包住卡牌四周。
+        float padX = rect.Size.X * 0.08f;
+        float padY = rect.Size.Y * 0.08f;
+        GlobalPosition = rect.Position - new Vector2(padX, padY);
+        Size = rect.Size + new Vector2(padX * 2f, padY * 2f);
+    }
+
+    /// <summary>
+    /// 向上遍历父节点，在靠近的几层内取尺寸最大的祖先 Control 作为卡牌主体参照，
+    /// 避免 BaseLib 传入的宿主容器尺寸过小导致边框缩成一团。
+    /// </summary>
+    private Control? ResolveCardRoot()
+    {
+        if (_cardRoot != null && IsInstanceValid(_cardRoot) && _cardRoot.Size.X > 50f)
+        {
+            return _cardRoot;
+        }
+
+        Control? best = null;
+        Node? node = GetParent();
+        int steps = 0;
+        while (node != null && steps < 5)
+        {
+            if (node is Control c)
+            {
+                float area = c.Size.X * c.Size.Y;
+                if (best == null || area > best.Size.X * best.Size.Y)
+                {
+                    best = c;
+                }
+            }
+            node = node.GetParent();
+            steps++;
+        }
+
+        if (best != null && best.Size.X > 50f)
+        {
+            _cardRoot = best;
+        }
+        return best;
     }
 
     private bool ShouldShow()

@@ -25,18 +25,16 @@ public class Susanoo : NinjaModCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        // 逐段攻击：每命中一次立即追加 1 层流血。
+        // 用单个多段攻击指令（WithHitCount）代替 6 次逐个 await 的独立攻击，
+        // 各段之间几乎无间隔，出招明显更快；多段结束后统一追加等数量的流血（结果等同于每段 1 层）。
         int hits = DynamicVars.Repeat.IntValue;
-        for (int i = 0; i < hits; i++)
-        {
-            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-                .FromCard(this)
-                .Targeting(cardPlay.Target)
-                .WithHitFx(NinjaConstants.SlashVfx)
-                .Execute(choiceContext);
-            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, this);
-        }
-
+        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+            .FromCard(this)
+            .Targeting(cardPlay.Target)
+            .WithHitCount(hits)
+            .WithHitFx(NinjaConstants.SlashVfx)
+            .Execute(choiceContext);
+        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, hits, Owner.Creature, this);
     }
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m); // 7 -> 9
