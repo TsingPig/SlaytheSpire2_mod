@@ -3,9 +3,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
 using NinjaMod.NinjaModCode.Powers;
+using MegaCrit.Sts2.Core.CardSelection;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization;
 using BaseLib.Abstracts;
 
 namespace NinjaMod.NinjaModCode.Cards;
@@ -31,10 +33,18 @@ public class BurningHeart : NinjaModCard
         int x = ResolveEnergyXValue();
         if (x <= 0) return;
 
-        // 消耗抽牌堆顶部最多 X 张牌。
-        var toExhaust = CardPile.GetCards(Owner, new[] { PileType.Draw }).Take(x).ToList();
-        int k = toExhaust.Count;
-        foreach (var card in toExhaust)
+        // 进入抽牌堆选牌界面：玩家可选择消耗最多 X 张牌（也可以选择更少）。
+        var drawPile = CardPile.Get(PileType.Draw, Owner);
+        if (drawPile.IsEmpty) return;
+
+        var prefs = new CardSelectorPrefs(
+            new LocString("NINJAMOD_BURNING_HEART_EXHAUST",
+                Lang.Zh ? "选择要消耗的牌（最多 X 张）" : "Choose cards to exhaust (up to X)"),
+            0, x);
+
+        var selected = (await CardSelectCmd.FromCombatPile(choiceContext, drawPile, Owner, prefs)).ToList();
+        int k = selected.Count;
+        foreach (var card in selected)
         {
             await CardPileCmd.RemoveFromCombat(card, true);
         }
@@ -50,6 +60,6 @@ public class BurningHeart : NinjaModCard
     protected override void OnUpgrade() { } // 升级仅获得保留（由 CanonicalKeywords 处理）
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：燃心", "消耗抽牌堆顶部最多 X 张牌（K 张），给予所有敌人 K × 3 层[gold]燃烧[/gold]。")
-        : new CardLoc("Fire Ninjutsu: Burning Heart", "Exhaust up to X cards from the top of your draw pile (K cards). Apply K x 3 [gold]Burning[/gold] to ALL enemies.");
+        ? new CardLoc("火忍：燃心", "进入抽牌堆，消耗最多 X 张牌（K 张），给予所有敌人 K × 3 层[gold]燃烧[/gold]。")
+        : new CardLoc("Fire Ninjutsu: Burning Heart", "Choose up to X cards from your draw pile to Exhaust (K cards). Apply K x 3 [gold]Burning[/gold] to ALL enemies.");
 }

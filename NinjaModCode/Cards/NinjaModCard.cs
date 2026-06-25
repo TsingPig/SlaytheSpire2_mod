@@ -13,6 +13,7 @@ using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Localization;
 using MegaCrit.Sts2.Core.Models;
 
 namespace NinjaMod.NinjaModCode.Cards;
@@ -48,15 +49,16 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     public virtual int BurningInfusion => 0;
 
     /// <summary>
-    /// 是否为“武藏”系列卡牌。用于【圆明】效果判定（每打出一张武藏牌回复 1 点生命）。
+    /// 是否为“武藏”系列卡牌。用于【圆明】效果判定（每打出一张武藏牌按圆明层数回复生命）。
     /// 武藏系列卡牌应重写此属性返回 true。
     /// </summary>
     public virtual bool IsMusashi => false;
 
     /// <summary>
-    /// 打出攻击牌时是否保留隐身。默认攻击牌会破除隐身；特殊攻击牌可覆盖为 true。
+    /// 【静默】机制：拥有静默的卡牌打出后不会破除你的隐身。默认 false。
+    /// 需要静默的卡牌重写为 true；接口预留：也可写成 => IsUpgraded 实现“升级后获得静默”。
     /// </summary>
-    public virtual bool PreservesStealth => false;
+    public virtual bool HasSilence => false;
 
     /// <summary>
     /// 若本卡拥有燃烧追加（<see cref="BurningInfusion"/> &gt; 0），对目标施加对应层数燃烧。
@@ -126,9 +128,21 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
                 }
             }
 
+            // 自定义关键词【静默】：不是 Power，单独构造提示。
+            if (HasSilence)
+            {
+                result.Add(BuildSilenceTip());
+            }
+
             return result;
         }
     }
+
+    /// <summary>构造【静默】关键词的悬浮提示（静默不是 Power，需手动构造 HoverTip）。</summary>
+    private static HoverTip BuildSilenceTip() => new(
+        new LocString("NINJAMOD_SILENCE", Lang.Zh ? "静默" : "Silence"),
+        Lang.Zh ? "打出这张牌不会破除你的[gold]隐身[/gold]。" : "Playing this card does not break your [gold]Stealth[/gold].",
+        null!);
 
     /// <summary>
     /// BaseLib 会在每次卡牌节点绑定/刷新时重建这里提供的 UI。

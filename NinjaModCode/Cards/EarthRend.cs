@@ -26,12 +26,14 @@ public class EarthRend : NinjaModCard
     public override IEnumerable<CardKeyword> CanonicalKeywords => IsUpgraded ? [] : [CardKeyword.Exhaust];
 
     // 动态计算格挡 = 所有敌人负面效果（Debuff）层数之和。卡面用 {CalculatedBlock:diff()} 显示。
+    // 注意：卡面预览时 HittableEnemies 可能为空，用 Enemies（所有存活敌人）才能实时显示。
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         MakeCalculatedBlock(0, (card, creature) =>
         {
             var cs = card.CombatState;
             if (cs == null) return 0m;
-            return cs.HittableEnemies.Sum(e => e.Powers.Where(p => p.Type == PowerType.Debuff).Sum(p => p.Amount));
+            return cs.Enemies.Where(e => e.IsAlive)
+                .Sum(e => e.Powers.Where(p => p.Type == PowerType.Debuff).Sum(p => p.Amount));
         }, 0, ValueProp.Move);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
+using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -37,12 +38,19 @@ public class SoulChase : NinjaModCard
         foreach (var kunai in kunais)
         {
             if (cardPlay.Target.CurrentHp <= 0) break;
+            // 真正复刻飞刀被完整打出一遍：造成该飞刀的伤害，未被完全格挡则施加 1 层流血。
             int dmg = kunai.DynamicVars.Damage?.IntValue ?? KunaiDamage;
-            await DamageCmd.Attack(dmg)
+            var attack = await DamageCmd.Attack(dmg)
                 .FromCard(this)
                 .Targeting(cardPlay.Target)
                 .WithHitFx(NinjaConstants.SlashVfx)
                 .Execute(choiceContext);
+
+            if (cardPlay.Target.CurrentHp > 0 &&
+                attack.Results.SelectMany(r => r).Sum(r => r.UnblockedDamage) > 0)
+            {
+                await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, this);
+            }
         }
 
         // 成功击杀则抽牌。

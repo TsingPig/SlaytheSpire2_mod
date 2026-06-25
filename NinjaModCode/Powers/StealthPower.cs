@@ -43,7 +43,7 @@ public class StealthPower : NinjaModPower
     {
         if (cardPlay.Card.Owner?.Creature != Owner) return;
         if (cardPlay.Card.Type != CardType.Attack) return;
-        if (cardPlay.Card is NinjaModCard { PreservesStealth: true }) return;
+        if (cardPlay.Card is NinjaModCard { HasSilence: true }) return;
 
         await PowerCmd.Remove(this); // 主动攻击：立即失去全部隐身
     }

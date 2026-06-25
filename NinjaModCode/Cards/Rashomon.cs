@@ -28,10 +28,10 @@ public class Rashomon : NinjaModCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner, false);
+        // 只统计“本次抽到”的牌中的攻击牌（而非整个手牌）。
+        var drawn = (await CardPileCmd.Draw(choiceContext, DynamicVars.Cards.IntValue, Owner, false)).ToList();
 
-        int attackCount = CardPile.GetCards(Owner, new[] { PileType.Hand })
-            .Count(c => c.Type == CardType.Attack);
+        int attackCount = drawn.Count(c => c.Type == CardType.Attack);
         if (attackCount > 0)
         {
             await CreatureCmd.GainBlock(Owner.Creature, attackCount * BlockPerAttack, ValueProp.Move, cardPlay);
@@ -41,6 +41,6 @@ public class Rashomon : NinjaModCard
     protected override void OnUpgrade() => DynamicVars.Cards.UpgradeValueBy(1m); // 3 -> 4
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("多重罗生门", $"抽 {{Cards:diff()}} 张牌。随后手牌中每有一张[gold]攻击[/gold]牌，获得 {BlockPerAttack} 点格挡。")
-        : new CardLoc("Manifold Rashomon", $"Draw {{Cards:diff()}} cards. Then gain {BlockPerAttack} Block for each [gold]Attack[/gold] in your hand.");
+        ? new CardLoc("多重罗生门", $"抽 {{Cards:diff()}} 张牌。抽到的牌中每有一张[gold]攻击[/gold]牌，获得 {BlockPerAttack} 点格挡。")
+        : new CardLoc("Manifold Rashomon", $"Draw {{Cards:diff()}} cards. Gain {BlockPerAttack} Block for each [gold]Attack[/gold] among the drawn cards.");
 }
