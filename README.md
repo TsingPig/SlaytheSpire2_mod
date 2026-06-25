@@ -238,7 +238,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <td width="25%"><img src="NinjaMod/images/card_portraits/burning_heart.png" width="120"><br><b>火忍：燃心</b><br>X⚡ 技能<br><small>进入抽牌堆，消耗最多 X 张牌（K 张），给予所有敌人 K × 3 层燃烧。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/afterimage_art.png" width="120"><br><b>残影术</b><br>2(1)⚡ 能力<br><small>获得 1 层残影。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/musashi_inheritance.png" width="120"><br><b>武藏：承袭</b><br>3(2)⚡ 技能 · 消耗<br><small>将各一张【神速】【空明斩】【刺】加入手牌。下回合开始获得 3 点能量。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_seven_star.png" width="120"><br><b>武藏：七星光芒斩</b><br>2⚡ 技能<br><small>造成 7 点伤害，共 7 段。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_seven_star.png" width="120"><br><b>武藏：七星光芒斩</b><br>2⚡ 技能<br><small>造成 7 点伤害，共 7 段。追加一段斩杀：目标每损失 5 点生命，造成 1 点伤害。</small></td>
 </tr>
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/musashi_two_heavens.png" width="120"><br><b>武藏：二天一流</b><br>3(2)⚡ 技能<br><small>造成 16 点伤害，共 2 段。若目标同时拥有流血与燃烧，则使其眩晕。</small></td>
