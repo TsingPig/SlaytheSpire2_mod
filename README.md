@@ -117,26 +117,26 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 
 ## Card Gallery / 卡牌图鉴
 
-> Click any card to view full-size. Images in `NinjaMod/images/card_portraits/` (250×350 px).
+> 卡牌描述与代码中的原文一致。点击图片查看大图（`images/card_portraits/`，250×350 px）。
 
 ### Basic（基础牌）
 
 <table>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/ninja_strike.png" width="130"><br><b>忍者打击</b><br>1⚡ 攻击<br>6(9) 伤害</td>
-<td><img src="NinjaMod/images/card_portraits/ninja_defend.png" width="130"><br><b>忍者防御</b><br>1⚡ 技能<br>5(8) 格挡</td>
-<td><img src="NinjaMod/images/card_portraits/shuriken.png" width="130"><br><b>手里剑</b><br>1⚡ 攻击<br>10(13) 伤+2(3)流血</td>
-<td><img src="NinjaMod/images/card_portraits/assassination.png" width="130"><br><b>暗杀</b><br>1⚡ 攻击 · 静默<br>7(10) 无视格挡</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/ninja_strike.png" width="120"><br><b>忍者打击</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/ninja_defend.png" width="120"><br><b>忍者防御</b><br>1⚡ 技能<br><small>获得 5(8) 点格挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/shuriken.png" width="120"><br><b>手里剑</b><br>1⚡ 攻击<br><small>造成 10(13) 点伤害。如果未被完全格挡，施加 2(3) 层流血。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/assassination.png" width="120"><br><b>暗杀</b><br>1⚡ 攻击<br><small>无视格挡，造成 7(10) 点伤害。静默。</small></td>
 </tr>
 </table>
 
-### Token（衍生牌）
+### Token（衍生牌，不出现在奖励池）
 
 <table>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/kunai.png" width="130"><br><b>飞刀</b><br>1⚡ 攻击 · 保留消耗<br>5(7) 伤+1流血</td>
-<td><img src="NinjaMod/images/card_portraits/shuriken.png" width="130"><br><b>注入手里剑</b><br>1⚡ 攻击 · 保留消耗<br>10 伤+2流血·燃烧追加6</td>
-<td><img src="NinjaMod/images/card_portraits/afterimage_attack.png" width="130"><br><b>残影</b><br>0⚡ 攻击 · 消耗<br>动态伤害（半伤）</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/kunai.png" width="120"><br><b>飞刀</b><br>1⚡ 攻击 · 保留 · 消耗<br><small>造成 5(7) 点伤害。如果未被完全格挡，施加 1 层流血。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/shuriken.png" width="120"><br><b>注入手里剑</b><br>1⚡ 攻击 · 保留 · 消耗<br><small>造成 10 点伤害。未被完全格挡施加 2 层流血。燃烧追加 6。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/afterimage_attack.png" width="120"><br><b>残影</b><br>0⚡ 攻击 · 消耗<br><small>造成动态伤害（复制源攻击牌伤害减半）。</small></td>
 </tr>
 </table>
 
@@ -144,25 +144,27 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 
 <table>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/katana_art.png" width="130"><br><b>武士刀法</b><br>1⚡ 攻击<br>5×2(3) AOE</td>
-<td><img src="NinjaMod/images/card_portraits/prowl.png" width="130"><br><b>潜行</b><br>0⚡ 技能<br>4 格挡+下回合暗杀</td>
-<td><img src="NinjaMod/images/card_portraits/quenching.png" width="130"><br><b>火忍：淬火术</b><br>1⚡ 技能<br>6(8) 淬火</td>
-<td><img src="NinjaMod/images/card_portraits/rock_shatter.png" width="130"><br><b>土忍：碎石</b><br>1⚡ 技能 · 消耗<br>8(13) 格挡+打出防御</td>
-<td><img src="NinjaMod/images/card_portraits/kunai_throw.png" width="130"><br><b>苦无</b><br>1⚡ 攻击<br>6(9) 伤·流血回能</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/katana_art.png" width="120"><br><b>武士刀法</b><br>1⚡ 攻击<br><small>对所有敌人造成 5 点伤害，共 2(3) 次。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/prowl.png" width="120"><br><b>潜行</b><br>0⚡ 技能<br><small>获得 4 点格挡。下个回合开始时，获得一张暗杀。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/quenching.png" width="120"><br><b>火忍：淬火术</b><br>1⚡ 技能<br><small>获得 6(8) 层淬火。本回合，攻击牌每次造成伤害额外附加等同于淬火层数的燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/rock_shatter.png" width="120"><br><b>土忍：碎石</b><br>1⚡ 技能 · 消耗<br><small>获得 8(13) 点格挡。自动免费打出手牌中所有忍者防御，随后移除 1 层抵挡。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/iai_strike.png" width="130"><br><b>居合</b><br>2⚡ 攻击<br>10(15)+5(8)追加</td>
-<td><img src="NinjaMod/images/card_portraits/ki_breath.png" width="130"><br><b>气合</b><br>1⚡ 技能<br>4(6) 回复</td>
-<td><img src="NinjaMod/images/card_portraits/swallow_return.png" width="130"><br><b>燕返</b><br>1⚡ 攻击<br>4(7) 伤·全挡回能</td>
-<td><img src="NinjaMod/images/card_portraits/stone_summon.png" width="130"><br><b>土忍：唤石</b><br>1⚡ 技能<br>抵挡×4(5) 格挡</td>
-<td><img src="NinjaMod/images/card_portraits/earth_escape.png" width="130"><br><b>土忍：土遁</b><br>0⚡ 能力<br>1(2) 抵挡</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/kunai_throw.png" width="120"><br><b>苦无</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害。如果目标有流血，恢复 1 点能量。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/iai_strike.png" width="120"><br><b>居合</b><br>2⚡ 攻击<br><small>造成 10(15) 点伤害。若打出后仍有能量，额外造成 5(8) 点伤害并附加 3 层流血。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/ki_breath.png" width="120"><br><b>气合</b><br>1⚡ 技能<br><small>回复 4(6) 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/swallow_return.png" width="120"><br><b>燕返</b><br>1⚡ 攻击<br><small>造成 4(7) 点伤害。如果伤害被完全格挡，获得 1 点能量。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/earth_wall.png" width="130"><br><b>土忍：土墙</b><br>1⚡ 技能<br>7(10) 格挡+免疫负面</td>
-<td><img src="NinjaMod/images/card_portraits/detonation.png" width="130"><br><b>火忍：起爆符</b><br>0⚡ 技能<br>点燃单体燃烧</td>
-<td><img src="NinjaMod/images/card_portraits/forge_flame_thrust.png" width="130"><br><b>火忍：锻火刺</b><br>1⚡ 攻击<br>6(9) 伤+4(5)燃烧</td>
-<td><img src="NinjaMod/images/card_portraits/stone_gather_thrust.png" width="130"><br><b>土忍：聚石刺</b><br>1⚡ 攻击<br>6(9) 伤+3(4)抵挡</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_thrust.png" width="130"><br><b>武藏：刺</b><br>0⚡ 攻击 · 消耗<br>9 伤+2流血</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/stone_summon.png" width="120"><br><b>土忍：唤石</b><br>1⚡ 技能<br><small>获得动态格挡（随当前抵挡层数提升）。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/earth_escape.png" width="120"><br><b>土忍：土遁</b><br>0⚡ 能力<br><small>获得 1(2) 层抵挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/earth_wall.png" width="120"><br><b>土忍：土墙</b><br>1⚡ 技能<br><small>获得 7(10) 点格挡，并获得免疫负面效果 2 个回合。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/detonation.png" width="120"><br><b>火忍：起爆符</b><br>0⚡ 技能<br><small>点燃目标的燃烧（造成燃烧 2 倍的无法格挡伤害并移除）。</small></td>
+</tr>
+<tr align="center">
+<td width="25%"><img src="NinjaMod/images/card_portraits/forge_flame_thrust.png" width="120"><br><b>火忍：锻火刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，附加 4(5) 层燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/stone_gather_thrust.png" width="120"><br><b>土忍：聚石刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，获得 3(4) 层抵挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_thrust.png" width="120"><br><b>武藏：刺</b><br>0⚡ 攻击 · 消耗<br><small>造成 9 点伤害，附加 2 层流血。</small></td>
 </tr>
 </table>
 
@@ -170,38 +172,40 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 
 <table>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/kusari_gama.png" width="130"><br><b>锁镰</b><br>1⚡ 攻击<br>9(12)+4(6)追加</td>
-<td><img src="NinjaMod/images/card_portraits/rising_fist.png" width="130"><br><b>起承拳</b><br>1⚡ 攻击<br>6(9) 伤+打出飞刀</td>
-<td><img src="NinjaMod/images/card_portraits/earth_rend.png" width="130"><br><b>土忍：裂地</b><br>1⚡ 技能<br>敌debuff和=格挡</td>
-<td><img src="NinjaMod/images/card_portraits/bone_art.png" width="130"><br><b>骨法</b><br>1⚡ 技能<br>11 格挡+2活力</td>
-<td><img src="NinjaMod/images/card_portraits/yata_mirror.png" width="130"><br><b>八咫镜</b><br>1⚡ 能力<br>每回合2(3)格挡</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/kusari_gama.png" width="120"><br><b>锁镰</b><br>1⚡ 攻击<br><small>造成 9(12) 点伤害。如果目标有流血，额外造成 4(6) 点伤害。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/rising_fist.png" width="120"><br><b>起承拳</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害。如果手牌中有飞刀，自动免费打出一张飞刀。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/earth_rend.png" width="120"><br><b>土忍：裂地</b><br>1⚡ 技能<br><small>获得动态格挡（所有敌人负面效果层数之和）。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/bone_art.png" width="120"><br><b>骨法</b><br>1⚡ 技能<br><small>获得 11 点格挡，并获得 2 点活力。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/kuji_protection.png" width="130"><br><b>九字护身法</b><br>2(1)⚡ 能力·消耗<br>3抵挡+每回合2×格挡</td>
-<td><img src="NinjaMod/images/card_portraits/flame_shield.png" width="130"><br><b>火忍：火盾</b><br>1(0)⚡ 能力<br>受击反烧</td>
-<td><img src="NinjaMod/images/card_portraits/blaze_inferno.png" width="130"><br><b>火忍：豪炎</b><br>0⚡ 技能<br>7(9) 燃烧AOE</td>
-<td><img src="NinjaMod/images/card_portraits/crimson_claw.png" width="130"><br><b>凤仙花爪红</b><br>1⚡ 技能·消耗<br>生成2张注入手里剑</td>
-<td><img src="NinjaMod/images/card_portraits/petrification.png" width="130"><br><b>土忍：石化术</b><br>2(1)⚡ 技能<br>13格挡+清负面</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/yata_mirror.png" width="120"><br><b>八咫镜</b><br>1⚡ 能力<br><small>每回合开始时，获得 2(3) 点格挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/kuji_protection.png" width="120"><br><b>九字护身法</b><br>2(1)⚡ 能力 · 消耗<br><small>获得 3 点抵挡。每回合开始时，额外获得当前抵挡层数 2 倍的格挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/flame_shield.png" width="120"><br><b>火忍：火盾</b><br>1(0)⚡ 能力<br><small>获得 1 层火盾：每当你受到攻击时，对攻击者施加等同于火盾层数的燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/blaze_inferno.png" width="120"><br><b>火忍：豪炎</b><br>0⚡ 技能<br><small>对所有敌人施加 7(9) 层燃烧。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/ashes.png" width="130"><br><b>火忍：灰烬</b><br>1(0)⚡ 技能<br>引爆AOE+抽1</td>
-<td><img src="NinjaMod/images/card_portraits/demon_flame_burst.png" width="130"><br><b>火忍：火魔爆</b><br>2⚡ 技能<br>12(16) 伤+引爆</td>
-<td><img src="NinjaMod/images/card_portraits/flame_barrage.png" width="130"><br><b>火忍：火焰弹幕</b><br>1⚡ 技能<br>2(3)×3+3(4)燃烧</td>
-<td><img src="NinjaMod/images/card_portraits/rashomon.png" width="130"><br><b>多重罗生门</b><br>2⚡ 技能<br>抽3(4)·攻牌×9格挡</td>
-<td><img src="NinjaMod/images/card_portraits/soul_chase.png" width="130"><br><b>追魂</b><br>3⚡ 技能·消耗<br>打出消耗飞刀+抽2(3)</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/crimson_claw.png" width="120"><br><b>火忍：凤仙花爪红</b><br>1⚡ 技能 · 消耗<br><small>在手牌中生成 2 张带燃烧追加的手里剑（保留、消耗）。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/petrification.png" width="120"><br><b>土忍：石化术</b><br>2(1)⚡ 技能<br><small>获得 13 点格挡，并清除自身所有负面效果。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/ashes.png" width="120"><br><b>火忍：灰烬</b><br>1(0)⚡ 技能<br><small>点燃所有敌人身上的燃烧（造成燃烧 2 倍的无法格挡伤害并移除）。如果成功点燃，抽 1 张牌。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/demon_flame_burst.png" width="120"><br><b>火忍：火魔爆</b><br>2⚡ 技能<br><small>造成 12(16) 点伤害，然后引爆目标身上的所有燃烧（造成燃烧层数 2 倍的无法格挡伤害并移除）。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/crane_shield.png" width="130"><br><b>守鹤之盾</b><br>2(1)⚡ 技能·消耗<br>已损失HP=格挡</td>
-<td><img src="NinjaMod/images/card_portraits/earth_talisman.png" width="130"><br><b>土忍：土护符</b><br>1(0)⚡ 技能·消耗<br>消耗堆牌数=格挡</td>
-<td><img src="NinjaMod/images/card_portraits/light_snow.png" width="130"><br><b>细雪</b><br>0⚡ 攻击<br>1×6段+2(3)回复</td>
-<td><img src="NinjaMod/images/card_portraits/lihuo.png" width="130"><br><b>火忍：离火符</b><br>0⚡ 技能<br>5(8) 燃烧单体</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_advancing_fountain.png" width="130"><br><b>武藏：前进喷泉</b><br>1⚡ 技能·消耗<br>4回复+下回合1(2)能</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/flame_barrage.png" width="120"><br><b>火忍：火焰弹幕</b><br>1⚡ 技能<br><small>造成 3 次 2(3) 点伤害，然后施加 3(4) 层燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/rashomon.png" width="120"><br><b>多重罗生门</b><br>2⚡ 技能<br><small>抽 3(4) 张牌。抽到的牌中每有一张攻击牌，获得 9 点格挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/soul_chase.png" width="120"><br><b>追魂</b><br>3⚡ 技能 · 消耗<br><small>对目标打出消耗牌堆中的所有飞刀（每张造成其伤害）。若成功击杀，抽 2(3) 张牌。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/crane_shield.png" width="120"><br><b>守鹤之盾</b><br>2(1)⚡ 技能 · 消耗<br><small>获得动态格挡（等同于当前已损失的生命值）。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/musashi_enmei_style.png" width="130"><br><b>武藏：圆明流</b><br>1(0)⚡ 能力<br>打出武藏牌回血</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_godspeed.png" width="130"><br><b>武藏：神速</b><br>0⚡ 技能·消耗<br>3(5)伤+8(11)挡+抽1</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_swift_triangle.png" width="130"><br><b>武藏：迅光三角剑</b><br>1⚡ 技能<br>11(15)伤+3(4)敏捷</td>
-<td><img src="NinjaMod/images/card_portraits/soul_reap.png" width="130"><br><b>索命</b><br>2⚡ 技能<br>移除8(12)流血·回血</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/earth_talisman.png" width="120"><br><b>土忍：土护符</b><br>1(0)⚡ 技能 · 消耗<br><small>获得动态格挡（等同于当前消耗牌堆中的牌数）。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/light_snow.png" width="120"><br><b>细雪</b><br>0⚡ 攻击<br><small>造成 1 点伤害，共 6 段，回复 2(3) 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/lihuo.png" width="120"><br><b>火忍：离火符</b><br>0⚡ 技能<br><small>给予目标 5(8) 层燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_advancing_fountain.png" width="120"><br><b>武藏：前进喷泉</b><br>1⚡ 技能 · 消耗<br><small>回复 4 点生命，下个回合额外获得 1(2) 点能量。</small></td>
+</tr>
+<tr align="center">
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_enmei_style.png" width="120"><br><b>武藏：圆明流</b><br>1(0)⚡ 能力<br><small>获得 1 层圆明：每当你打出一张"武藏"牌，回复等同于圆明层数的生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_godspeed.png" width="120"><br><b>武藏：神速</b><br>0⚡ 技能 · 消耗<br><small>造成 3(5) 点伤害，获得 8(11) 点格挡，并抽 1 张牌。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_swift_triangle.png" width="120"><br><b>武藏：迅光三角剑</b><br>1⚡ 技能<br><small>造成 11(15) 点伤害，获得 3(4) 点敏捷。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/soul_reap.png" width="120"><br><b>索命</b><br>2⚡ 技能<br><small>移除目标身上最多 8(12) 层流血，回复等同于移除层数的生命。若移除后目标没有流血，抽 1 张牌并回复 1 点能量。</small></td>
 </tr>
 </table>
 
@@ -209,28 +213,30 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 
 <table>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/shadow_pierce.png" width="130"><br><b>影心刺</b><br>0⚡ 攻击 · 静默<br>9(14) 伤+5(6)流血</td>
-<td><img src="NinjaMod/images/card_portraits/blade_edge.png" width="130"><br><b>锄刃</b><br>2(1)⚡ 能力·消耗<br>飞刀/手里剑永久-1费</td>
-<td><img src="NinjaMod/images/card_portraits/stealth_art.png" width="130"><br><b>隐身法</b><br>2(1)⚡ 能力<br>活力1+隐身3</td>
-<td><img src="NinjaMod/images/card_portraits/seppuku.png" width="130"><br><b>切腹</b><br>X⚡ 技能<br>失2X血·得X能牌力</td>
-<td><img src="NinjaMod/images/card_portraits/eight_techniques.png" width="130"><br><b>忍者八法</b><br>1⚡ 技能<br>全属性+1·飞刀+1</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/shadow_pierce.png" width="120"><br><b>影心刺</b><br>0⚡ 攻击<br><small>造成 9(14) 点伤害，附加 5(6) 层流血。静默。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/blade_edge.png" width="120"><br><b>锄刃</b><br>2(1)⚡ 能力 · 消耗<br><small>本场战斗中，所有牌堆中以及后续生成的手里剑、飞刀与火焰手里剑的能量消耗降低 1。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/stealth_art.png" width="120"><br><b>隐身法</b><br>2(1)⚡ 能力<br><small>获得 1 点活力，并获得 3 层隐身（敌人无法攻击你；每回合失去 1 层，攻击后立即结束）。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/seppuku.png" width="120"><br><b>切腹</b><br>X⚡ 技能<br><small>失去 2X 点生命，获得 X 点能量、抽 X 张牌、获得 X 点力量。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/susanoo.png" width="130"><br><b>须佐能乎</b><br>3⚡ 攻击<br>7(9)×6段+每段1流血</td>
-<td><img src="NinjaMod/images/card_portraits/absolute_defense.png" width="130"><br><b>回天：绝对防御</b><br>2⚡ 技能<br>20(30)挡+4(6)回复</td>
-<td><img src="NinjaMod/images/card_portraits/shadow_clone.png" width="130"><br><b>影分身</b><br>3(2)⚡ 技能<br>2回合复制+减伤40%</td>
-<td><img src="NinjaMod/images/card_portraits/burning_heart.png" width="130"><br><b>火忍：燃心</b><br>X⚡ 技能<br>选消耗K张·K×3燃烧AOE</td>
-<td><img src="NinjaMod/images/card_portraits/afterimage_art.png" width="130"><br><b>残影术</b><br>2(1)⚡ 能力<br>攻击→生成半伤复制</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/eight_techniques.png" width="120"><br><b>忍者八法</b><br>1⚡ 技能<br><small>获得 1 点力量、1 点抵挡、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/susanoo.png" width="120"><br><b>须佐能乎</b><br>3⚡ 攻击<br><small>造成 7(9) 点伤害，共 6 段，每段追加 1 层流血。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/absolute_defense.png" width="120"><br><b>回天：绝对防御</b><br>2⚡ 技能<br><small>获得 20(30) 点格挡，回复 4(6) 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/shadow_clone.png" width="120"><br><b>影分身</b><br>3(2)⚡ 技能<br><small>本回合及下回合：①每张非影分身卡额外结算一次；②受到的攻击伤害减少 40%；③若你有荆棘，克隆体对攻击者造成等量反击。</small></td>
 </tr>
 <tr align="center">
-<td><img src="NinjaMod/images/card_portraits/musashi_inheritance.png" width="130"><br><b>武藏：承袭</b><br>3(2)⚡ 技能·消耗<br>13挡+神速/空明/刺</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_seven_star.png" width="130"><br><b>武藏：七星光芒斩</b><br>2⚡ 技能<br>7×7+升级斩杀</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_two_heavens.png" width="130"><br><b>武藏：二天一流</b><br>3(2)⚡ 技能<br>16×2+流血燃烧→眩晕</td>
-<td><img src="NinjaMod/images/card_portraits/musashi_void_slash.png" width="130"><br><b>武藏：空明斩</b><br>0⚡ 攻击·消耗<br>15(21)伤+1(2)抵挡</td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/burning_heart.png" width="120"><br><b>火忍：燃心</b><br>X⚡ 技能<br><small>进入抽牌堆，消耗最多 X 张牌（K 张），给予所有敌人 K × 3 层燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/afterimage_art.png" width="120"><br><b>残影术</b><br>2(1)⚡ 能力<br><small>获得 1 层残影。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_inheritance.png" width="120"><br><b>武藏：承袭</b><br>3(2)⚡ 技能 · 消耗<br><small>获得 13 点格挡，将各一张【神速】【空明斩】【刺】加入手牌。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_seven_star.png" width="120"><br><b>武藏：七星光芒斩</b><br>2⚡ 技能<br><small>造成 7 点伤害，共 7 段。升级后，追加第 8 段斩杀伤害：目标每损失 5 点生命，造成 1 点伤害。</small></td>
+</tr>
+<tr align="center">
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_two_heavens.png" width="120"><br><b>武藏：二天一流</b><br>3(2)⚡ 技能<br><small>造成 16 点伤害，共 2 段。若目标同时拥有流血与燃烧，则使其眩晕。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_void_slash.png" width="120"><br><b>武藏：空明斩</b><br>0⚡ 攻击 · 消耗<br><small>造成 15(21) 点伤害，获得 1(2) 点抵挡。</small></td>
 </tr>
 </table>
 
-> **贴图命名规则**：`images/card_portraits/<snake_case>.png`（如 `KatanaArt` → `katana_art.png`），大图在 `big/` 子目录。注入手里剑复用 `shuriken.png`。
+> **贴图命名规则**：`images/card_portraits/<snake_case>.png` + `big/<snake_case>.png`。注入手里剑复用 `shuriken.png`。
 
 ---
 
