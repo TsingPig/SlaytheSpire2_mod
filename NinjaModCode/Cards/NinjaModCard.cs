@@ -8,9 +8,11 @@ using Godot;
 using NinjaMod.NinjaModCode.Character;
 using NinjaMod.NinjaModCode.Extensions;
 using NinjaMod.NinjaModCode.Powers;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
+using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization;
@@ -59,6 +61,41 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     /// 需要静默的卡牌重写为 true；接口预留：也可写成 => IsUpgraded 实现“升级后获得静默”。
     /// </summary>
     public virtual bool HasSilence => false;
+
+    /// <summary>
+    /// 卡面预览/悬浮刷新时，BaseLib 的 CalculatedBlock 回调可能拿到的是 canonical card，
+    /// 这时 card.Owner / card.CombatState 不稳定，导致显示值回落为 0。
+    /// 这里统一提供当前战斗兜底；只用于显示/只读计算，实际打牌仍使用卡牌自身 Owner/CombatState。
+    /// </summary>
+    protected static ICombatState? ResolveCombatStateForDisplay(CardModel card) =>
+        card.CombatState
+        ?? (card.IsMutable ? card.Owner?.Creature.CombatState : null)
+        ?? CombatManager.Instance?.DebugOnlyGetState();
+
+    protected static Player? ResolveCardOwnerForDisplay(CardModel card)
+    {
+        if (card.IsMutable)
+        {
+            var owner = card.Owner;
+            if (owner != null)
+            {
+                return owner;
+            }
+        }
+
+        return ResolveCombatStateForDisplay(card)?.Players.FirstOrDefault();
+    }
+
+    protected static Creature? ResolvePlayerCreatureForDisplay(CardModel card)
+    {
+        var owner = ResolveCardOwnerForDisplay(card);
+        if (owner?.Creature != null)
+        {
+            return owner.Creature;
+        }
+
+        return ResolveCombatStateForDisplay(card)?.PlayerCreatures.FirstOrDefault();
+    }
 
     /// <summary>
     /// 若本卡拥有燃烧追加（<see cref="BurningInfusion"/> &gt; 0），对目标施加对应层数燃烧。

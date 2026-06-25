@@ -78,6 +78,8 @@ powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 Copies `NinjaMod.dll`, `NinjaMod.json`, `NinjaMod.pck` and `NinjaMod.pdb` into
 `<ModsDir>\NinjaMod`. It never deletes other mods.
 
+
+
 ### 4. Build + install in one step
 
 ```powershell

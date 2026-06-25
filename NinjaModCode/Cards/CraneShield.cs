@@ -26,12 +26,10 @@ public class CraneShield : NinjaModCard
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         MakeCalculatedBlock(0, (card, creature) =>
         {
-            // 卡面预览时 card.Owner 可能为空，用 CombatState 的玩家生物可靠读取已损失生命。
-            var players = card.CombatState?.PlayerCreatures;
-            var owner = (players != null && players.Count > 0) ? players[0] : card.Owner?.Creature;
+            var owner = ResolvePlayerCreatureForDisplay(card);
             if (owner == null) return 0m;
             return owner.MaxHp - owner.CurrentHp;
-        }, 0, ValueProp.Move);
+        }, 1, ValueProp.Move);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

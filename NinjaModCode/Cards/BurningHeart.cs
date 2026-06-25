@@ -33,20 +33,26 @@ public class BurningHeart : NinjaModCard
         int x = ResolveEnergyXValue();
         if (x <= 0) return;
 
-        // 进入抽牌堆选牌界面：玩家可选择消耗最多 X 张牌（也可以选择更少）。
         var drawPile = CardPile.Get(PileType.Draw, Owner);
         if (drawPile.IsEmpty) return;
+        var drawCards = drawPile.Cards.ToList();
+        int maxSelect = System.Math.Min(x, drawCards.Count);
+        if (maxSelect <= 0) return;
 
-        var prefs = new CardSelectorPrefs(
-            new LocString("NINJAMOD_BURNING_HEART_EXHAUST",
-                Lang.Zh ? "选择要消耗的牌（最多 X 张）" : "Choose cards to exhaust (up to X)"),
-            0, x);
+        // 这里不用 FromCombatPile：当前抽牌堆 pile screen 对“可少选/0 到 X 张”的显示路径不稳定，
+        // 会出现只有 Info text / 不能选牌 / 无法退出的软锁。FromSimpleGrid 使用同一批抽牌堆快照，
+        // 确认按钮在 MinSelect = 0 时可用；选完后再对原牌执行原生 Exhaust。
+        var prefs = new CardSelectorPrefs(CardSelectorPrefs.ExhaustSelectionPrompt, 0, maxSelect);
 
-        var selected = (await CardSelectCmd.FromCombatPile(choiceContext, drawPile, Owner, prefs)).ToList();
-        int k = selected.Count;
+        var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, drawCards, Owner, prefs)).ToList();
+        int k = 0;
         foreach (var card in selected)
         {
-            await CardPileCmd.RemoveFromCombat(card, true);
+            if (card.Pile == drawPile)
+            {
+                await CardCmd.Exhaust(choiceContext, card);
+                k++;
+            }
         }
 
         if (k <= 0) return;

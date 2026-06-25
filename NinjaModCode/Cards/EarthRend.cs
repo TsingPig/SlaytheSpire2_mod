@@ -30,11 +30,11 @@ public class EarthRend : NinjaModCard
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         MakeCalculatedBlock(0, (card, creature) =>
         {
-            var cs = card.CombatState;
+            var cs = ResolveCombatStateForDisplay(card);
             if (cs == null) return 0m;
             return cs.Enemies.Where(e => e.IsAlive)
                 .Sum(e => e.Powers.Where(p => p.Type == PowerType.Debuff).Sum(p => p.Amount));
-        }, 0, ValueProp.Move);
+        }, 1, ValueProp.Move);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

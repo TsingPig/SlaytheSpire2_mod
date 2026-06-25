@@ -28,12 +28,11 @@ public class StoneSummon : NinjaModCard
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         MakeCalculatedBlock(0, (card, creature) =>
         {
-            var players = card.CombatState?.PlayerCreatures;
-            var owner = (players != null && players.Count > 0) ? players[0] : card.Owner?.Creature;
+            var owner = ResolvePlayerCreatureForDisplay(card);
             if (owner == null) return 0m;
             int resist = owner.GetPower<ResistPower>()?.Amount ?? 0;
             return resist * (card.IsUpgraded ? 5 : 4);
-        }, 0, ValueProp.Move);
+        }, 1, ValueProp.Move);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
