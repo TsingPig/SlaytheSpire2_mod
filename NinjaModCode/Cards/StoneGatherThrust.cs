@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
-using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -14,14 +13,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 土忍：聚石刺（Earth Ninjutsu: Stone Gather Thrust）——攻击牌。
-/// 1 费，造成 6（升级 9）点伤害，获得 3（升级 4）层抵挡。
+/// 1 费，造成 6（升级 9）点伤害，获得 6（升级 9）点格挡。
 /// </summary>
 public class StoneGatherThrust : NinjaModCard
 {
     public StoneGatherThrust() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
 
+    public override bool GainsBlock => true;
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(6m, ValueProp.Move), new PowerVar<ResistPower>("Resist", 3m)];
+        [new DamageVar(6m, ValueProp.Move), new BlockVar(6m, ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -31,17 +32,16 @@ public class StoneGatherThrust : NinjaModCard
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
-        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature,
-            (int)DynamicVars["Resist"].BaseValue, Owner.Creature, this);
+        await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);    // 6 -> 9
-        DynamicVars["Resist"].UpgradeValueBy(1m); // 3 -> 4
+        DynamicVars.Damage.UpgradeValueBy(3m);  // 6 -> 9
+        DynamicVars.Block.UpgradeValueBy(3m);   // 6 -> 9
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：聚石刺", "造成 {Damage:diff()} 点伤害，获得 {Resist:diff()} 层[gold]抵挡[/gold]。")
-        : new CardLoc("Earth Ninjutsu: Stone Gather Thrust", "Deal {Damage:diff()} damage and gain {Resist:diff()} [gold]Resist[/gold].");
+        ? new CardLoc("土忍：聚石刺", "造成 {Damage:diff()} 点伤害，获得 {Block:diff()} 点格挡。")
+        : new CardLoc("Earth Ninjutsu: Stone Gather Thrust", "Deal {Damage:diff()} damage and gain {Block:diff()} Block.");
 }

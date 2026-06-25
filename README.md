@@ -173,7 +173,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 </tr>
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/forge_flame_thrust.png" width="120"><br><b>火忍：锻火刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，附加 4(5) 层燃烧。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/stone_gather_thrust.png" width="120"><br><b>土忍：聚石刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，获得 3(4) 层抵挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/stone_gather_thrust.png" width="120"><br><b>土忍：聚石刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，获得 6(9) 点格挡。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/musashi_thrust.png" width="120"><br><b>武藏：刺</b><br>0⚡ 攻击 · 消耗<br><small>造成 9 点伤害，附加 2 层流血。</small></td>
 </tr>
 </table>
