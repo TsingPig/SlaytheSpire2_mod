@@ -1,19 +1,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
+using NinjaMod.NinjaModCode.Afflictions;
 using NinjaMod.NinjaModCode.Cards;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
-using MegaCrit.Sts2.Core.Localization.DynamicVars;
 
 namespace NinjaMod.NinjaModCode.Powers;
 
 /// <summary>
 /// 残影（Afterimage）能力——“残影术”施加。
-/// 每当你打出一张攻击牌，在弃牌堆中额外生成【残影层数】张 0 费的【残影攻击牌】，
-/// 每张残影攻击牌造成原攻击伤害一半的伤害。残影攻击牌本身不会再触发残影。
+/// 每当你打出一张攻击牌，在弃牌堆中额外生成【残影层数】张该攻击牌的复制牌。
+/// 复制牌带【残影】与【消耗】：费用为 0，造成原本伤害的 50%，且不会再触发残影。
 /// </summary>
 public class AfterimagePower : NinjaModPower
 {
@@ -30,13 +30,8 @@ public class AfterimagePower : NinjaModPower
         var card = cardPlay.Card;
         if (card.Type != CardType.Attack) return;
         if (card is AfterimageAttack) return;            // Legacy afterimage token guard.
-        if (card.IsClone) return;                        // Afterimage-created clones should not recursively trigger Afterimage.
+        if (card.Affliction is AfterimageAffliction) return;
         if (card.Owner?.Creature != Owner) return;
-
-        // 取该攻击牌的基础伤害，减半（向下取整）。
-        int damageHalf = (card.DynamicVars.Damage?.IntValue ?? 0) / 2;
-        int extraDamageHalf = (card.DynamicVars.ExtraDamage?.IntValue ?? 0) / 2;
-        if (damageHalf <= 0 && extraDamageHalf <= 0) return;
 
         var player = Owner.Player;
         var combatState = card.CombatState;
@@ -46,28 +41,31 @@ public class AfterimagePower : NinjaModPower
         for (int i = 0; i < Amount; i++)
         {
             var token = card.CreateClone();
-            token.EnergyCost.SetThisCombat(0, false);
+            if (token.Affliction != null)
+            {
+                // 残影复制牌必须显示/执行残影机制；若原复制牌带有其他战斗内 affliction，
+                // 这里让【残影】优先，避免 CardCmd.Afflict 因单 affliction 槽位失败。
+                CardCmd.ClearAffliction(token);
+            }
 
-            SetDamageVarToHalf(token.DynamicVars.Damage, damageHalf);
-            SetDamageVarToHalf(token.DynamicVars.ExtraDamage, extraDamageHalf);
+            var afterimage = await CardCmd.Afflict<AfterimageAffliction>(token, 1m);
+            if (afterimage == null)
+            {
+                // 兜底：即使 affliction 因战斗结束等边界失败，也不要生成可无限循环的普通复制牌。
+                token.EnergyCost.SetThisCombat(0, false);
+                CardCmd.ApplyKeyword(token, CardKeyword.Exhaust);
+            }
 
+            // 加入弃牌堆，而不是手牌/抽牌堆/消失；这张牌是额外生成的复制品。
             await CardPileCmd.AddGeneratedCardToCombat(token, PileType.Discard, player);
         }
     }
 
-    private static void SetDamageVarToHalf(DynamicVar? targetVar, int halfDamage)
-    {
-        if (targetVar == null) return;
-
-        targetVar.UpgradeValueBy(halfDamage - targetVar.BaseValue);
-        targetVar.FinalizeUpgrade();
-    }
-
     public override List<(string, string)>? Localization => Lang.Zh
         ? new PowerLoc("残影",
-            "每当你打出一张攻击牌，在弃牌堆中生成等同于层数的该攻击牌 0 费残影复制牌（各造成原伤害一半的伤害）。",
-            "每当你打出一张攻击牌，在弃牌堆中生成等同于层数的该攻击牌 0 费残影复制牌（各造成原伤害一半的伤害）。")
+            "每当你打出一张攻击牌，在弃牌堆中额外生成等同于层数的该攻击牌复制牌。复制牌带[gold]残影[/gold]与[gold]消耗[/gold]：耗费为 0，造成原本伤害的 50%。",
+            "每当你打出一张攻击牌，在弃牌堆中额外生成等同于层数的该攻击牌复制牌。复制牌带[gold]残影[/gold]与[gold]消耗[/gold]：耗费为 0，造成原本伤害的 50%。")
         : new PowerLoc("Afterimage",
-            "Whenever you play an Attack, add that many 0-cost clones of it to your discard pile (each deals half the original damage).",
-            "Whenever you play an Attack, add that many 0-cost clones of it to your discard pile (each deals half the original damage).");
+            "Whenever you play an Attack, add that many extra copies of it to your discard pile. The copies have [gold]Afterimage[/gold] and [gold]Exhaust[/gold]: they cost 0 and deal 50% of their original damage.",
+            "Whenever you play an Attack, add that many extra copies of it to your discard pile. The copies have [gold]Afterimage[/gold] and [gold]Exhaust[/gold]: they cost 0 and deal 50% of their original damage.");
 }

@@ -87,7 +87,8 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
         ("影分身",   "Shadow Clone",    () => ModelDb.Power<ShadowClonePower>()?.DumbHoverTip),
         ("免疫负面", "Debuff Immunity", () => ModelDb.Power<DebuffImmunityPower>()?.DumbHoverTip),
         ("隐身",     "Stealth",         () => ModelDb.Power<StealthPower>()?.DumbHoverTip),
-        ("潜行",     "Prowl",           () => ModelDb.Power<ProwlPower>()?.DumbHoverTip),
+        ("静默",     "Silence",         BuildSilenceTip),
+        ("潜行",     "Prowl",           BuildProwlTextOnlyTip),
         ("九字护身", "Kuji Protection", () => ModelDb.Power<KujiProtectionPower>()?.DumbHoverTip),
         ("八咫镜",   "Yata Mirror",     () => ModelDb.Power<YataMirrorPower>()?.DumbHoverTip),
         ("残影",     "Afterimage",      () => ModelDb.Power<AfterimagePower>()?.DumbHoverTip),
@@ -129,20 +130,60 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
             }
 
             // 自定义关键词【静默】：不是 Power，单独构造提示。
-            if (HasSilence)
+            // 这里是兜底：即使某张静默牌的描述没有直接写出“静默”，仍然显示提示。
+            string silenceNeedle = Lang.Zh ? "静默" : "Silence";
+            if (HasSilence && emitted.Add(silenceNeedle))
             {
-                result.Add(BuildSilenceTip());
+                var silenceTip = BuildSilenceTip();
+                if (silenceTip != null)
+                {
+                    result.Add(silenceTip);
+                }
             }
 
             return result;
         }
     }
 
-    /// <summary>构造【静默】关键词的悬浮提示（静默不是 Power，需手动构造 HoverTip）。</summary>
-    private static HoverTip BuildSilenceTip() => new(
-        new LocString("NINJAMOD_SILENCE", Lang.Zh ? "静默" : "Silence"),
-        Lang.Zh ? "打出这张牌不会破除你的[gold]隐身[/gold]。" : "Playing this card does not break your [gold]Stealth[/gold].",
-        null!);
+    /// <summary>
+    /// 构造【静默】关键词的悬浮提示（静默不是 Power，需手动构造 HoverTip）。
+    /// 图标按需求复用【潜行】Power 的小图标；提示本身不绑定 Prowl，避免去重/文本错误。
+    /// </summary>
+    private static HoverTip? BuildSilenceTip()
+    {
+        var prowl = ModelDb.Power<ProwlPower>();
+        if (prowl == null) return null;
+
+        var tip = new HoverTip(prowl.Title, prowl.DumbHoverTip.Icon ?? prowl.Icon);
+        tip.Title = Lang.Zh ? "静默" : "Silence";
+        tip.Description = Lang.Zh
+            ? "打出这张牌不会破除你的[gold]隐身[/gold]。"
+            : "Playing this card does not break your [gold]Stealth[/gold].";
+        tip.Id = "NinjaMod:Silence";
+        tip.IsSmart = false;
+        tip.IsDebuff = false;
+        tip.IsInstanced = false;
+        tip.CanonicalModel = null;
+        return tip;
+    }
+
+    /// <summary>构造无图标版本的【潜行】悬浮提示；文字保留，图标让给【静默】。</summary>
+    private static HoverTip? BuildProwlTextOnlyTip()
+    {
+        var prowl = ModelDb.Power<ProwlPower>();
+        if (prowl == null) return null;
+
+        var source = prowl.DumbHoverTip;
+        var tip = new HoverTip(prowl.Title, null);
+        tip.Title = source.Title;
+        tip.Description = source.Description;
+        tip.Id = source.Id;
+        tip.IsSmart = source.IsSmart;
+        tip.IsDebuff = source.IsDebuff;
+        tip.IsInstanced = source.IsInstanced;
+        tip.CanonicalModel = source.CanonicalModel;
+        return tip;
+    }
 
     /// <summary>
     /// BaseLib 会在每次卡牌节点绑定/刷新时重建这里提供的 UI。
