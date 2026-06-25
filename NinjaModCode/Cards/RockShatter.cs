@@ -19,9 +19,6 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class RockShatter : NinjaModCard
 {
-    // 每张忍者防御提供的格挡（与 NinjaDefend 基础值一致）。
-    private const int DefendBlock = 5;
-
     public RockShatter() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
 
     public override bool GainsBlock => true;
@@ -41,10 +38,9 @@ public class RockShatter : NinjaModCard
             .ToList();
         foreach (var defend in defends)
         {
-            // 用该忍者防御的实际格挡值（含升级），默认 5。
-            int defendBlock = defend.DynamicVars.Block?.IntValue ?? DefendBlock;
-            await CreatureCmd.GainBlock(Owner.Creature, defendBlock, ValueProp.Move, cardPlay);
-            await CardPileCmd.RemoveFromCombat(defend, false);
+            // Use the real card-play pipeline so Ninja Defend resolves as a free
+            // player-played card and then follows its normal destination: Discard.
+            await CardCmd.AutoPlay(choiceContext, defend, Owner.Creature);
         }
 
         // 3) 移除 1 层抵挡。
