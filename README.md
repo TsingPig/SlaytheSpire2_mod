@@ -115,25 +115,145 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 
 ---
 
-## Mechanics summary (v0.1)
+## Card Gallery / 卡牌图鉴
 
-| Content | Type | Cost | Effect (upgraded) |
-|---|---|---|---|
-| Ninja Strike / 忍者打击 | Attack | 1 | Deal 6 (9) |
-| Ninja Defend / 忍者防御 | Skill | 1 | Gain 5 (8) Block |
-| Shuriken / 手里剑 | Attack | 2 | Deal 9 (12); if unblocked apply 2 (3) Bleed; Exhaust |
-| Assassination / 暗杀 | Attack | 1 | Deal 7 (10) ignoring Block |
-| Kunai / 飞刀 (generated, temporary) | Attack | 1 | Retain, Exhaust. Deal 5 (7); if unblocked apply 1 Bleed |
-| Flame Barrage / 火忍：火焰弹幕 | Skill | 1 | Deal 2×3 (3×3), then apply 3 (4) Burning |
-| Demon Flame Burst / 火忍：火魔爆 | Skill | 2 | Deal 12 (16), then ignite all Burning |
-| Shadow Clone / 影分身 | Skill | 3 (→2) | Copy your non-Shadow-Clone cards this turn and next turn |
-| Earth Escape / 土忍：土遁 | Power | 1 | Gain 1 (2) Resist |
-| Earth Wall / 土忍：土墙 | Skill | 1 | Gain 7 (10) Block + Debuff Immunity until end of next turn |
-| Hidden Blade / 藏刃 | Relic (Starter) | – | Start of each turn: add a Kunai to hand (the Ninja core passive) |
+> Click any card to view full-size. Images in `NinjaMod/images/card_portraits/` (250×350 px).
 
-**Powers:** Bleed/流血, Burning/燃烧, Resist/抵挡, Debuff Immunity/免疫负面, Shadow Clone/影分身.
+### Basic（基础牌）
 
-### How the custom mechanics are implemented (verified against the installed BaseLib/game API)
+<table>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/ninja_strike.png" width="130"><br><b>忍者打击</b><br>1⚡ 攻击<br>6(9) 伤害</td>
+<td><img src="NinjaMod/images/card_portraits/ninja_defend.png" width="130"><br><b>忍者防御</b><br>1⚡ 技能<br>5(8) 格挡</td>
+<td><img src="NinjaMod/images/card_portraits/shuriken.png" width="130"><br><b>手里剑</b><br>1⚡ 攻击<br>10(13) 伤+2(3)流血</td>
+<td><img src="NinjaMod/images/card_portraits/assassination.png" width="130"><br><b>暗杀</b><br>1⚡ 攻击 · 静默<br>7(10) 无视格挡</td>
+</tr>
+</table>
+
+### Token（衍生牌）
+
+<table>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/kunai.png" width="130"><br><b>飞刀</b><br>1⚡ 攻击 · 保留消耗<br>5(7) 伤+1流血</td>
+<td><img src="NinjaMod/images/card_portraits/shuriken.png" width="130"><br><b>注入手里剑</b><br>1⚡ 攻击 · 保留消耗<br>10 伤+2流血·燃烧追加6</td>
+<td><img src="NinjaMod/images/card_portraits/afterimage_attack.png" width="130"><br><b>残影</b><br>0⚡ 攻击 · 消耗<br>动态伤害（半伤）</td>
+</tr>
+</table>
+
+### Common（普通）
+
+<table>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/katana_art.png" width="130"><br><b>武士刀法</b><br>1⚡ 攻击<br>5×2(3) AOE</td>
+<td><img src="NinjaMod/images/card_portraits/prowl.png" width="130"><br><b>潜行</b><br>0⚡ 技能<br>4 格挡+下回合暗杀</td>
+<td><img src="NinjaMod/images/card_portraits/quenching.png" width="130"><br><b>火忍：淬火术</b><br>1⚡ 技能<br>6(8) 淬火</td>
+<td><img src="NinjaMod/images/card_portraits/rock_shatter.png" width="130"><br><b>土忍：碎石</b><br>1⚡ 技能 · 消耗<br>8(13) 格挡+打出防御</td>
+<td><img src="NinjaMod/images/card_portraits/kunai_throw.png" width="130"><br><b>苦无</b><br>1⚡ 攻击<br>6(9) 伤·流血回能</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/iai_strike.png" width="130"><br><b>居合</b><br>2⚡ 攻击<br>10(15)+5(8)追加</td>
+<td><img src="NinjaMod/images/card_portraits/ki_breath.png" width="130"><br><b>气合</b><br>1⚡ 技能<br>4(6) 回复</td>
+<td><img src="NinjaMod/images/card_portraits/swallow_return.png" width="130"><br><b>燕返</b><br>1⚡ 攻击<br>4(7) 伤·全挡回能</td>
+<td><img src="NinjaMod/images/card_portraits/stone_summon.png" width="130"><br><b>土忍：唤石</b><br>1⚡ 技能<br>抵挡×4(5) 格挡</td>
+<td><img src="NinjaMod/images/card_portraits/earth_escape.png" width="130"><br><b>土忍：土遁</b><br>0⚡ 能力<br>1(2) 抵挡</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/earth_wall.png" width="130"><br><b>土忍：土墙</b><br>1⚡ 技能<br>7(10) 格挡+免疫负面</td>
+<td><img src="NinjaMod/images/card_portraits/detonation.png" width="130"><br><b>火忍：起爆符</b><br>0⚡ 技能<br>点燃单体燃烧</td>
+<td><img src="NinjaMod/images/card_portraits/forge_flame_thrust.png" width="130"><br><b>火忍：锻火刺</b><br>1⚡ 攻击<br>6(9) 伤+4(5)燃烧</td>
+<td><img src="NinjaMod/images/card_portraits/stone_gather_thrust.png" width="130"><br><b>土忍：聚石刺</b><br>1⚡ 攻击<br>6(9) 伤+3(4)抵挡</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_thrust.png" width="130"><br><b>武藏：刺</b><br>0⚡ 攻击 · 消耗<br>9 伤+2流血</td>
+</tr>
+</table>
+
+### Uncommon（罕见）
+
+<table>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/kusari_gama.png" width="130"><br><b>锁镰</b><br>1⚡ 攻击<br>9(12)+4(6)追加</td>
+<td><img src="NinjaMod/images/card_portraits/rising_fist.png" width="130"><br><b>起承拳</b><br>1⚡ 攻击<br>6(9) 伤+打出飞刀</td>
+<td><img src="NinjaMod/images/card_portraits/earth_rend.png" width="130"><br><b>土忍：裂地</b><br>1⚡ 技能<br>敌debuff和=格挡</td>
+<td><img src="NinjaMod/images/card_portraits/bone_art.png" width="130"><br><b>骨法</b><br>1⚡ 技能<br>11 格挡+2活力</td>
+<td><img src="NinjaMod/images/card_portraits/yata_mirror.png" width="130"><br><b>八咫镜</b><br>1⚡ 能力<br>每回合2(3)格挡</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/kuji_protection.png" width="130"><br><b>九字护身法</b><br>2(1)⚡ 能力·消耗<br>3抵挡+每回合2×格挡</td>
+<td><img src="NinjaMod/images/card_portraits/flame_shield.png" width="130"><br><b>火忍：火盾</b><br>1(0)⚡ 能力<br>受击反烧</td>
+<td><img src="NinjaMod/images/card_portraits/blaze_inferno.png" width="130"><br><b>火忍：豪炎</b><br>0⚡ 技能<br>7(9) 燃烧AOE</td>
+<td><img src="NinjaMod/images/card_portraits/crimson_claw.png" width="130"><br><b>凤仙花爪红</b><br>1⚡ 技能·消耗<br>生成2张注入手里剑</td>
+<td><img src="NinjaMod/images/card_portraits/petrification.png" width="130"><br><b>土忍：石化术</b><br>2(1)⚡ 技能<br>13格挡+清负面</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/ashes.png" width="130"><br><b>火忍：灰烬</b><br>1(0)⚡ 技能<br>引爆AOE+抽1</td>
+<td><img src="NinjaMod/images/card_portraits/demon_flame_burst.png" width="130"><br><b>火忍：火魔爆</b><br>2⚡ 技能<br>12(16) 伤+引爆</td>
+<td><img src="NinjaMod/images/card_portraits/flame_barrage.png" width="130"><br><b>火忍：火焰弹幕</b><br>1⚡ 技能<br>2(3)×3+3(4)燃烧</td>
+<td><img src="NinjaMod/images/card_portraits/rashomon.png" width="130"><br><b>多重罗生门</b><br>2⚡ 技能<br>抽3(4)·攻牌×9格挡</td>
+<td><img src="NinjaMod/images/card_portraits/soul_chase.png" width="130"><br><b>追魂</b><br>3⚡ 技能·消耗<br>打出消耗飞刀+抽2(3)</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/crane_shield.png" width="130"><br><b>守鹤之盾</b><br>2(1)⚡ 技能·消耗<br>已损失HP=格挡</td>
+<td><img src="NinjaMod/images/card_portraits/earth_talisman.png" width="130"><br><b>土忍：土护符</b><br>1(0)⚡ 技能·消耗<br>消耗堆牌数=格挡</td>
+<td><img src="NinjaMod/images/card_portraits/light_snow.png" width="130"><br><b>细雪</b><br>0⚡ 攻击<br>1×6段+2(3)回复</td>
+<td><img src="NinjaMod/images/card_portraits/lihuo.png" width="130"><br><b>火忍：离火符</b><br>0⚡ 技能<br>5(8) 燃烧单体</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_advancing_fountain.png" width="130"><br><b>武藏：前进喷泉</b><br>1⚡ 技能·消耗<br>4回复+下回合1(2)能</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/musashi_enmei_style.png" width="130"><br><b>武藏：圆明流</b><br>1(0)⚡ 能力<br>打出武藏牌回血</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_godspeed.png" width="130"><br><b>武藏：神速</b><br>0⚡ 技能·消耗<br>3(5)伤+8(11)挡+抽1</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_swift_triangle.png" width="130"><br><b>武藏：迅光三角剑</b><br>1⚡ 技能<br>11(15)伤+3(4)敏捷</td>
+<td><img src="NinjaMod/images/card_portraits/soul_reap.png" width="130"><br><b>索命</b><br>2⚡ 技能<br>移除8(12)流血·回血</td>
+</tr>
+</table>
+
+### Rare（稀有）
+
+<table>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/shadow_pierce.png" width="130"><br><b>影心刺</b><br>0⚡ 攻击 · 静默<br>9(14) 伤+5(6)流血</td>
+<td><img src="NinjaMod/images/card_portraits/blade_edge.png" width="130"><br><b>锄刃</b><br>2(1)⚡ 能力·消耗<br>飞刀/手里剑永久-1费</td>
+<td><img src="NinjaMod/images/card_portraits/stealth_art.png" width="130"><br><b>隐身法</b><br>2(1)⚡ 能力<br>活力1+隐身3</td>
+<td><img src="NinjaMod/images/card_portraits/seppuku.png" width="130"><br><b>切腹</b><br>X⚡ 技能<br>失2X血·得X能牌力</td>
+<td><img src="NinjaMod/images/card_portraits/eight_techniques.png" width="130"><br><b>忍者八法</b><br>1⚡ 技能<br>全属性+1·飞刀+1</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/susanoo.png" width="130"><br><b>须佐能乎</b><br>3⚡ 攻击<br>7(9)×6段+每段1流血</td>
+<td><img src="NinjaMod/images/card_portraits/absolute_defense.png" width="130"><br><b>回天：绝对防御</b><br>2⚡ 技能<br>20(30)挡+4(6)回复</td>
+<td><img src="NinjaMod/images/card_portraits/shadow_clone.png" width="130"><br><b>影分身</b><br>3(2)⚡ 技能<br>2回合复制+减伤40%</td>
+<td><img src="NinjaMod/images/card_portraits/burning_heart.png" width="130"><br><b>火忍：燃心</b><br>X⚡ 技能<br>选消耗K张·K×3燃烧AOE</td>
+<td><img src="NinjaMod/images/card_portraits/afterimage_art.png" width="130"><br><b>残影术</b><br>2(1)⚡ 能力<br>攻击→生成半伤复制</td>
+</tr>
+<tr align="center">
+<td><img src="NinjaMod/images/card_portraits/musashi_inheritance.png" width="130"><br><b>武藏：承袭</b><br>3(2)⚡ 技能·消耗<br>13挡+神速/空明/刺</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_seven_star.png" width="130"><br><b>武藏：七星光芒斩</b><br>2⚡ 技能<br>7×7+升级斩杀</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_two_heavens.png" width="130"><br><b>武藏：二天一流</b><br>3(2)⚡ 技能<br>16×2+流血燃烧→眩晕</td>
+<td><img src="NinjaMod/images/card_portraits/musashi_void_slash.png" width="130"><br><b>武藏：空明斩</b><br>0⚡ 攻击·消耗<br>15(21)伤+1(2)抵挡</td>
+</tr>
+</table>
+
+> **贴图命名规则**：`images/card_portraits/<snake_case>.png`（如 `KatanaArt` → `katana_art.png`），大图在 `big/` 子目录。注入手里剑复用 `shuriken.png`。
+
+---
+
+## 自定义机制速查
+
+| 关键词 | 类型 | 说明 |
+|---|---|---|
+| 流血 (Bleed) | Debuff | 受未被格挡的攻击伤害时，额外失去等量生命 |
+| 燃烧 (Burning) | Debuff | 下回合开始时受到等量无法格挡伤害后移除；可引爆（×2） |
+| 抵挡 (Resist) | Buff | 每次受攻击伤害前减免等量数值（格挡计算之前） |
+| 静默 (Silence) | 卡牌属性 | 打出后不破除隐身（黄字显示，可悬停查看） |
+| 隐身 (Stealth) | Buff | 敌人无法攻击你；攻击后失去（静默牌除外）；每回合-1 |
+| 燃烧追加 (Burning Infusion) | 卡牌属性 | 攻击命中后额外施加对应层数燃烧 |
+| 淬火 (Quenching) | Buff | 本回合攻击命中时附加等量燃烧；回合结束移除 |
+| 火盾 (Flame Shield) | Buff | 受击时对攻击者施加等量燃烧 |
+| 影分身 (Shadow Clone) | Buff | 非影分身卡×2结算 + 受击-40% + 荆棘反击 |
+| 圆明 (Enmei) | Buff | 打出武藏牌时回复等量生命（可叠加） |
+| 残影 (Afterimage) | Buff | 打出攻击牌→生成N张0费半伤复制到弃牌堆 |
+| 免疫负面 (Debuff Immunity) | Buff | 免疫Debuff，持续回合递减 |
+
+---
+
+## How the custom mechanics are implemented (verified against the installed BaseLib/game API)
 
 - **Bleed** uses the `AfterDamageReceived` hook and `DamageResult.UnblockedDamage` to detect HP
   loss. It only triggers on **move (attack)** damage. The bonus is dealt as
@@ -153,55 +273,23 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 
 ---
 
-## Known limitations / approximations
+## Architecture notes
 
-- **Shadow Clone has no visible clone body and does not take damage.** The current StS2/BaseLib
-  surface used here has no ally/summon entity API, so Shadow Clone is a player power that copies card
-  effects only. A visible companion and "the clone also takes damage" are **TODO** and intentionally
-  not faked with unsafe global hacks.
-- **Burning does not trigger Bleed** (by design for v0.1). Because Bleed only fires on *move/attack*
-  damage and Burning is unblockable non-attack damage, Burning never triggers Bleed. This avoids
-  unclear balance/recursion.
-- **"Not fully blocked"** is read from `DamageResult.UnblockedDamage > 0` (the engine's exact
-  post-block HP-loss value), so it is precise.
-- **Resist** reduces only attack hits (move damage) before Block, never unblockable HP loss
-  (Bleed/Burning), matching the requested intent.
-- **Localization** is defined **in code** (the BaseLib-recommended approach) and is **language-aware**:
-  it returns English or Simplified Chinese (`zhs`) based on the active game language. The JSON files
-  under `NinjaMod/localization/eng/` are template placeholders; the prefixed/slugified runtime entry
-  ids make hand-written JSON fragile, so in-code loc is the source of truth.
-- **The "Architect" character banter** loc (optional flavor the analyzer flags as `STS001`) is not
-  authored; BaseLib provides runtime fallbacks, so this is non-fatal. The diagnostic is suppressed
-  via `NoWarn`.
-- **Visuals** use the Ironclad as a placeholder body/animations (`PlaceholderCharacterModel`).
-- **No multiplayer is implemented or faked.** The mod is a normal single-player character mod that
-  loads via the standard StS2 mod loader and coexists with other mods.
+- **Localization** is in-code (BaseLib-recommended), language-aware (zh/eng).
+- **Custom powers**: 15 total — `BleedPower`, `BurningPower`, `ResistPower`, `StealthPower`, `ShadowClonePower`, `DebuffImmunityPower`, `FlameShieldPower`, `QuenchingPower`, `YataMirrorPower`, `KujiProtectionPower`, `ProwlPower`, `AfterimagePower`, `EnmeiPower`, `BladeEdgePower`.
+- **`HasSilence`** (静默) is a virtual bool on `NinjaModCard` — cards with this attribute do not break Stealth when played. Override as `=> IsUpgraded` for upgrade-granted silence. Hover tip auto-generated.
+- **X-cost cards**: `HasEnergyCostX => true` with base cost 0. Use `ResolveEnergyXValue()` in `OnPlay`.
 
-## Placeholder art
+## 贴图命名
 
-The images under `NinjaMod/images/**` are the template's **placeholder** PNGs (card/power/relic/
-character icons). They are clearly placeholders and ship inside the generated `.pck`. Replace them
-with real art (keep the same file names, or update the path helpers) to customise. `Kunai`'s art
-falls back to the placeholder `card.png` until a `kunai.png` is added.
+`images/card_portraits/<snake_case>.png` + `big/<snake_case>.png`。如 `KatanaArt` → `katana_art.png`。注入手里剑复用 `shuriken.png`。类名→蛇形规则由 `StringExtensions.cs` 处理。
 
-## Stable IDs / namespace
-
-All content ids are the model class names, namespaced under the `NinjaMod` mod prefix that BaseLib
-applies (e.g. the character entry is `Ninja`). Code namespaces: `NinjaMod.NinjaModCode.Character`,
-`.Cards`, `.Powers`, `.Relics`.
-
-## Next recommended tasks
-
-1. Author real art for the character, cards, powers and the Hidden Blade relic (replace placeholders).
-2. Add proper per-language localization JSON if you prefer file-based loc over in-code loc.
-3. Add more reward cards (more fire/earth/water ninjutsu) and a few relics/potions for the pool.
-4. Add card hover-tip keywords (Bleed/Burning/Resist) on the cards for clearer tooltips.
-5. Explore a visible Shadow Clone companion if/when an ally/summon API becomes available.
-6. Author the optional "Architect" character banter localization and remove the `STS001` suppression.
+---
 
 ## Repository notes
 
-- `local.props` and `Directory.Build.props` are **gitignored** (machine-specific paths).
-- `bin/`, `obj/`, `.godot/`, `*.pck`, `*.pdb`, logs and any game DLLs are gitignored.
-- No copyrighted game assets or DLLs are committed.
+- `local.props` / `Directory.Build.props` are gitignored (machine-specific paths).
+- `bin/`, `obj/`, `.godot/`, `*.pck`, `*.pdb`, logs, temp/ are gitignored EXCEPT `dist/NinjaMod/` (committed as release payload).
+- `dist/NinjaMod/` contains the latest DLL+JSON+PCK for friend install: copy this folder into `<game>\mods\`.
+- No copyrighted game assets or DLLs committed.
 
