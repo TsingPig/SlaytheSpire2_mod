@@ -18,9 +18,8 @@ public class Quenching : NinjaModCard
 {
     public Quenching() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
 
-    // 用 PowerVar 表示获得的淬火层数：基础 6（升级 8），卡面 {Quench:diff()} 显示。
-    // 淬火层数 = 每次攻击附加的燃烧；叠加多张可累加（两张基础即 12/击）。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<QuenchingPower>("Quench", 6m)];
+    // 用 PowerVar 表示获得的淬火层数：基础 3（升级 4），卡面 {Quench:diff()} 显示。
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<QuenchingPower>("Quench", 3m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -28,7 +27,7 @@ public class Quenching : NinjaModCard
         await PowerCmd.Apply<QuenchingPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars["Quench"].UpgradeValueBy(2m); // 6 -> 8
+    protected override void OnUpgrade() => DynamicVars["Quench"].UpgradeValueBy(1m); // 3 -> 4
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：淬火术", "获得 {Quench:diff()} 层[gold]淬火[/gold]。本回合，攻击牌每次造成伤害额外附加等同于淬火层数的[gold]燃烧[/gold]。")

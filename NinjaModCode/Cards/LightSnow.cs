@@ -13,14 +13,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 细雪（Light Snow）——攻击牌。
-/// 0 费，造成 6 点伤害，回复 2（升级 3）点生命。
+/// 1 费，造成 1 点伤害，共 4 段，回复 2（升级 3）点生命。
 /// </summary>
 public class LightSnow : NinjaModCard
 {
-    public LightSnow() : base(0, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public LightSnow() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(1m, ValueProp.Move), new RepeatVar(6), new HealVar(2m)];
+        [new DamageVar(1m, ValueProp.Move), new RepeatVar(4), new HealVar(2m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

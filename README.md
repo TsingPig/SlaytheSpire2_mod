@@ -156,7 +156,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/katana_art.png" width="120"><br><b>武士刀法</b><br>1⚡ 攻击<br><small>对所有敌人造成 5 点伤害，共 2(3) 次。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/prowl.png" width="120"><br><b>潜行</b><br>0⚡ 技能<br><small>获得 4 点格挡。下个回合开始时，获得一张暗杀。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/quenching.png" width="120"><br><b>火忍：淬火术</b><br>1⚡ 技能<br><small>获得 6(8) 层淬火。本回合，攻击牌每次造成伤害额外附加等同于淬火层数的燃烧。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/quenching.png" width="120"><br><b>火忍：淬火术</b><br>1⚡ 技能<br><small>获得 3(4) 层淬火。本回合，攻击牌每次造成伤害额外附加等同于淬火层数的燃烧。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/rock_shatter.png" width="120"><br><b>土忍：碎石</b><br>1⚡ 技能 · 消耗<br><small>获得 8(13) 点格挡。自动免费打出手牌中所有忍者防御，随后移除 1 层抵挡。</small></td>
 </tr>
 <tr align="center">
@@ -207,7 +207,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 </tr>
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/earth_talisman.png" width="120"><br><b>土忍：土护符</b><br>1(0)⚡ 技能 · 消耗<br><small>获得动态格挡（等同于当前消耗牌堆中的牌数）。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/light_snow.png" width="120"><br><b>细雪</b><br>0⚡ 攻击<br><small>造成 1 点伤害，共 6 段，回复 2(3) 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/light_snow.png" width="120"><br><b>细雪</b><br>1⚡ 攻击<br><small>造成 1 点伤害，共 4 段，回复 2(3) 点生命。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/lihuo.png" width="120"><br><b>火忍：离火符</b><br>0⚡ 技能<br><small>给予目标 5(8) 层燃烧。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/musashi_advancing_fountain.png" width="120"><br><b>武藏：前进喷泉</b><br>1⚡ 技能 · 消耗<br><small>回复 4 点生命，下个回合额外获得 1(2) 点能量。</small></td>
 </tr>
@@ -237,7 +237,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/burning_heart.png" width="120"><br><b>火忍：燃心</b><br>X⚡ 技能<br><small>进入抽牌堆，消耗最多 X 张牌（K 张），给予所有敌人 K × 3 层燃烧。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/afterimage_art.png" width="120"><br><b>残影术</b><br>2(1)⚡ 能力<br><small>获得 1 层残影。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_inheritance.png" width="120"><br><b>武藏：承袭</b><br>3(2)⚡ 技能 · 消耗<br><small>获得 13 点格挡，将各一张【神速】【空明斩】【刺】加入手牌。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_inheritance.png" width="120"><br><b>武藏：承袭</b><br>3(2)⚡ 技能 · 消耗<br><small>将各一张【神速】【空明斩】【刺】加入手牌。下回合开始获得 3 点能量。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/musashi_seven_star.png" width="120"><br><b>武藏：七星光芒斩</b><br>2⚡ 技能<br><small>造成 7 点伤害，共 7 段。升级后，追加第 8 段斩杀伤害：目标每损失 5 点生命，造成 1 点伤害。</small></td>
 </tr>
 <tr align="center">
