@@ -87,6 +87,16 @@ powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
 > The build also auto-copies outputs to the mods folder via an MSBuild post-build target, so a
 > plain `dotnet build NinjaMod.csproj` installs the DLL/JSON/PCK too.
 
+### 5. Publish to Steam Workshop
+
+```powershell
+powershell -ExecutionPolicy Bypass -File workshop\upload.ps1
+```
+
+Requires: Steam account owning Slay the Spire 2 + Steam Guard app on phone.
+Enter credentials + Guard code when prompted. First upload creates a new workshop item;
+update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
+
 ### Installed layout
 
 ```
