@@ -60,6 +60,6 @@ public class MusashiSevenStar : NinjaModCard
     protected override void OnUpgrade() => DynamicVars["ExecutePerFive"].UpgradeValueBy(1m); // 0 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("武藏：七星光芒斩", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段。升级后，追加第 8 段斩杀伤害：目标每损失 5 点生命，造成 {ExecutePerFive:diff()} 点伤害。")
-        : new CardLoc("Musashi: Seven Star Radiance", "Deal {Damage:diff()} damage {Repeat} times. When upgraded, add an 8th execute hit: deal {ExecutePerFive:diff()} damage for every 5 HP the target has lost.");
+        ? new CardLoc("武藏：七星光芒斩", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段。")
+        : new CardLoc("Musashi: Seven Star Radiance", "Deal {Damage:diff()} damage {Repeat} times.");
 }
