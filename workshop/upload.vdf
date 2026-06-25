@@ -1,0 +1,11 @@
+"workshopitem"
+{
+  "appid" "2868840"
+  "publishedfileid" "0"
+  "contentfolder" "D:\\--UnityProject\\RunminG-Lab\\SlaytheSpire2_mod\\workshop\\content\\NinjaMod"
+  "previewfile" "D:\\--UnityProject\\RunminG-Lab\\SlaytheSpire2_mod\\workshop\\preview.png"
+  "visibility" "0"
+  "title" "Ninja (忍者) — Bleed / Fire Ninjutsu / Stealth Character Mod"
+  "description" "Adds the Ninja (忍者) as a playable character to Slay the Spire 2. Built on BaseLib.\n\n=== Character ===\n• 72 max HP, 3 energy/turn\n• Starting relic: Hidden Blade (藏刃) — adds a Kunai to your hand each turn\n• Starting deck: 4x Ninja Strike, 4x Ninja Defend, 1x Shuriken, 1x Assassination\n\n=== 60+ Cards across 5 rarities ===\n• Fire Ninjutsu (火忍): Burning + Ignite burst combos\n• Earth Ninjutsu (土忍): Resist-based defense, debuff-to-block conversion\n• Bleed archetype: Kunai/Shuriken/Susanoo stack Bleed\n• Stealth/Clone: Stealth mode + Shadow Clone duplication\n• Musashi sub-archetype: Enmei self-heal engine with 10+ Musashi cards\n\n=== Custom mechanics ===\n• Bleed (流血): extra HP loss when taking unblocked attack damage\n• Burning (燃烧): delayed damage, can be Ignited for 2x burst\n• Resist (抵挡): flat per-hit damage reduction before Block\n• Stealth (隐身): enemies cannot attack you; lost on attack (Silence cards excluded)\n• Silence (静默): card attribute — does not break Stealth\n• Burning Infusion (燃烧追加): attacks apply extra Burning\n• Quenching (淬火): all attacks this turn apply Burning\n• Flame Shield (火盾): counter-attack with Burning when hit\n• Shadow Clone (影分身): duplicate card plays + 40% damage reduction\n• Enmei (圆明): heal when playing Musashi cards\n• Afterimage (残影): generate 0-cost half-damage copies on attack\n\n=== Requires BaseLib 3.3.2+ ===\nSubscribe to BaseLib first: https://steamcommunity.com/sharedfiles/filedetails/?id=(BaseLib_Workshop_ID)\n\nGitHub: https://github.com/RunminG/SlaytheSpire2_mod\n\nv1.0.1 — 2026-06-25"
+  "changenote" "v1.0.1 — Initial Steam Workshop release. 61 cards, 15 custom powers, full ZH/EN localization."
+}
