@@ -19,15 +19,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Shuriken : NinjaModCard
 {
-    // 施加的流血层数，升级后提升到 3。
-    private int _bleed => (int)DynamicVars["Bleed"].BaseValue;
+    public Shuriken() : base(BalanceCost(nameof(Shuriken), 1), BalanceType(nameof(Shuriken), CardType.Attack), BalanceRarity(nameof(Shuriken), CardRarity.Basic), BalanceTarget(nameof(Shuriken), TargetType.AnyEnemy)) { }
 
-    // 费用 1、攻击、基础稀有度、指向任意敌人。
-    public Shuriken() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
-
-    // 伤害 + 流血层数
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(10m, ValueProp.Move), new PowerVar<BleedPower>("Bleed", 2m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 10m), ValueProp.Move), new PowerVar<BleedPower>("Bleed", BalanceDecimal("BaseBleed", 2m))];
 
     /// <summary>打出效果：造成攻击伤害，若真正打掉血量则附加流血。</summary>
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -50,8 +45,8 @@ public class Shuriken : NinjaModCard
     /// <summary>升级：伤害 +3，流血层数提升到 3。</summary>
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);   // 10 -> 13
-        DynamicVars["Bleed"].UpgradeValueBy(1m); // 2 -> 3
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));
+        DynamicVars["Bleed"].UpgradeValueBy(BalanceDelta("BaseBleed", "UpgradeBleed", 1m));
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

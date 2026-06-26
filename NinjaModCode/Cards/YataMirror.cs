@@ -16,10 +16,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class YataMirror : NinjaModCard
 {
-    public YataMirror() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) { }
+    public YataMirror() : base(BalanceCost(nameof(YataMirror), 1), BalanceType(nameof(YataMirror), CardType.Power), BalanceRarity(nameof(YataMirror), CardRarity.Uncommon), BalanceTarget(nameof(YataMirror), TargetType.Self)) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new IntVar("BlockPerTurn", 3m)];
+        [new IntVar("BlockPerTurn", BalanceDecimal("BaseBlock", 3m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -27,7 +27,7 @@ public class YataMirror : NinjaModCard
         await PowerCmd.Apply<YataMirrorPower>(choiceContext, Owner.Creature, block, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars["BlockPerTurn"].UpgradeValueBy(1m); // 3 -> 4
+    protected override void OnUpgrade() => DynamicVars["BlockPerTurn"].UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 1m));
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("八咫镜", "每回合开始时，获得 {BlockPerTurn:diff()} 点格挡。")
