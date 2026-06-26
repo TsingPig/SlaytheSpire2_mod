@@ -20,13 +20,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class Shuriken : NinjaModCard
 {
     // 施加的流血层数，升级后提升到 3。
-    private int _bleed = BalanceValue(nameof(Shuriken), "BaseBleed", 2);
+    private int _bleed => (int)DynamicVars["Bleed"].BaseValue;
 
     // 费用 1、攻击、基础稀有度、指向任意敌人。
-    public Shuriken() : base(BalanceCost(nameof(Shuriken), 1), BalanceType(nameof(Shuriken), CardType.Attack), BalanceRarity(nameof(Shuriken), CardRarity.Basic), BalanceTarget(nameof(Shuriken), TargetType.AnyEnemy)) { }
+    public Shuriken() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
 
-    // 伤害变量：10 点 Move（攻击）伤害。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 10m), ValueProp.Move)];
+    // 伤害 + 流血层数
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+        [new DamageVar(10m, ValueProp.Move), new PowerVar<BleedPower>("Bleed", 2m)];
 
     /// <summary>打出效果：造成攻击伤害，若真正打掉血量则附加流血。</summary>
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
@@ -41,18 +42,19 @@ public class Shuriken : NinjaModCard
         // 只有在“有伤害真正穿过格挡打到血量”时才施加流血。
         if (attack.Results.SelectMany(r => r).Sum(r => r.UnblockedDamage) > 0)
         {
-            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, _bleed, Owner.Creature, this);
+            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target,
+                (int)DynamicVars["Bleed"].BaseValue, Owner.Creature, this);
         }
     }
 
     /// <summary>升级：伤害 +3，流血层数提升到 3。</summary>
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));
-        _bleed = BalanceValue("UpgradeBleed", 3);
+        DynamicVars.Damage.UpgradeValueBy(3m);   // 10 -> 13
+        DynamicVars["Bleed"].UpgradeValueBy(1m); // 2 -> 3
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("手里剑", $"造成 {{Damage:diff()}} 点伤害。如果未被完全格挡，施加 {_bleed} 层[gold]流血[/gold]。")
-        : new CardLoc("Shuriken", $"Deal {{Damage:diff()}} damage. If unblocked, apply {_bleed} [gold]Bleed[/gold].");
+        ? new CardLoc("手里剑", "造成 {Damage:diff()} 点伤害。如果未被完全格挡，施加 {Bleed:diff()} 层[gold]流血[/gold]。")
+        : new CardLoc("Shuriken", "Deal {Damage:diff()} damage. If unblocked, apply {Bleed:diff()} [gold]Bleed[/gold].");
 }

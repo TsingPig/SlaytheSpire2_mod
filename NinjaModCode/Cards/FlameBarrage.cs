@@ -18,12 +18,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class FlameBarrage : NinjaModCard
 {
-    // 燃烧层数，升级后为 4。
-    private int _burning = BalanceValue(nameof(FlameBarrage), "BaseBurning", 3);
+    public FlameBarrage() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
 
-    public FlameBarrage() : base(BalanceCost(nameof(FlameBarrage), 1), BalanceType(nameof(FlameBarrage), CardType.Skill), BalanceRarity(nameof(FlameBarrage), CardRarity.Uncommon), BalanceTarget(nameof(FlameBarrage), TargetType.AnyEnemy)) { }
-
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 2m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 3))];
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+        [new DamageVar(2m, ValueProp.Move), new RepeatVar(3), new PowerVar<BurningPower>("Burning", 3m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -35,16 +33,17 @@ public class FlameBarrage : NinjaModCard
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
 
-        await PowerCmd.Apply<BurningPower>(choiceContext, cardPlay.Target, _burning, Owner.Creature, this);
+        await PowerCmd.Apply<BurningPower>(choiceContext, cardPlay.Target,
+            (int)DynamicVars["Burning"].BaseValue, Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 1m)); // 2 -> 3
-        _burning = BalanceValue("UpgradeBurning", 4);
+        DynamicVars.Damage.UpgradeValueBy(1m);     // 2 -> 3
+        DynamicVars["Burning"].UpgradeValueBy(1m); // 3 -> 4
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：火焰弹幕", $"造成 {{Repeat:diff()}} 次 {{Damage:diff()}} 点伤害，然后施加 {_burning} 层[gold]燃烧[/gold]。")
-        : new CardLoc("Fire Ninjutsu: Flame Barrage", $"Deal {{Damage:diff()}} damage {{Repeat:diff()}} times, then apply {_burning} [gold]Burning[/gold].");
+        ? new CardLoc("火忍：火焰弹幕", "造成 {Repeat:diff()} 次 {Damage:diff()} 点伤害，然后施加 {Burning:diff()} 层[gold]燃烧[/gold]。")
+        : new CardLoc("Fire Ninjutsu: Flame Barrage", "Deal {Damage:diff()} damage {Repeat:diff()} times, then apply {Burning:diff()} [gold]Burning[/gold].");
 }
