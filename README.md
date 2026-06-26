@@ -256,7 +256,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 
 | 关键词 | 类型 | 说明 |
 |---|---|---|
-| 流血 (Bleed) | Debuff | 受未被格挡的攻击伤害时，额外失去等量生命 |
+| 流血 (Bleed) | Debuff | 受未被格挡的攻击伤害时，额外失去等量生命。每回合减少 1 层 |
 | 燃烧 (Burning) | Debuff | 下回合开始时受到等量无法格挡伤害后移除；可引爆（×2） |
 | 抵挡 (Resist) | Buff | 每次受攻击伤害前减免等量数值（格挡计算之前） |
 | 静默 (Silence) | 卡牌属性 | 打出后不破除隐身（黄字显示，可悬停查看） |

@@ -51,11 +51,17 @@ public class BleedPower : NinjaModPower
         }
     }
 
+    /// <summary>每回合减少 1 层流血。</summary>
+    public override async Task AfterSideTurnStart(PlayerChoiceContext ctx, CombatSide side,
+        IReadOnlyList<Creature> creatures, ICombatState combatState)
+    {
+        if (Amount <= 0) return;
+        if (!creatures.Contains(Owner)) return;
+        await PowerCmd.Decrement(this);
+    }
+
     public override List<(string, string)>? Localization => Lang.Zh
         ? new PowerLoc("流血",
-            "每当此生物受到未被格挡的攻击伤害时，立即额外失去等同于流血层数的生命（无法被格挡）。",
-            "每当此生物受到未被格挡的攻击伤害时，立即额外失去等同于流血层数的生命（无法被格挡）。")
-        : new PowerLoc("Bleed",
-            "Whenever this creature takes unblocked attack damage, it loses additional HP equal to its Bleed.",
-            "Whenever this creature takes unblocked attack damage, it loses additional HP equal to its Bleed.");
+            "每当此生物受到未被格挡的攻击伤害时，立即额外失去等同于流血层数的生命（无法被格挡）。每回合减少 1 层。",
+            "每当此生物受到未被格挡的攻击伤害时，立即额外失去等同于流血层数的生命（无法被格挡）。每回合减少 1 层。")
 }
