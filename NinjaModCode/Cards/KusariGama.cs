@@ -18,9 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class KusariGama : NinjaModCard
 {
-    public KusariGama() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public KusariGama() : base(BalanceCost(nameof(KusariGama), 1), BalanceType(nameof(KusariGama), CardType.Attack), BalanceRarity(nameof(KusariGama), CardRarity.Uncommon), BalanceTarget(nameof(KusariGama), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(9m, ValueProp.Move), new ExtraDamageVar(4m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 9m), ValueProp.Move), new ExtraDamageVar(BalanceDecimal("BaseExtraDamage", 4m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -42,8 +42,8 @@ public class KusariGama : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m); // 9 -> 12
-        DynamicVars.ExtraDamage.UpgradeValueBy(2m); // 4 -> 6
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m)); // 9 -> 12
+        DynamicVars.ExtraDamage.UpgradeValueBy(BalanceDelta("BaseExtraDamage", "UpgradeExtraDamage", 2m)); // 4 -> 6
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

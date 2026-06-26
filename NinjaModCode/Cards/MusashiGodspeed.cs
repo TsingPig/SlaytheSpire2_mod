@@ -17,16 +17,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiGodspeed : NinjaModCard
 {
-    public MusashiGodspeed() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public MusashiGodspeed() : base(BalanceCost(nameof(MusashiGodspeed), 0), BalanceType(nameof(MusashiGodspeed), CardType.Skill), BalanceRarity(nameof(MusashiGodspeed), CardRarity.Uncommon), BalanceTarget(nameof(MusashiGodspeed), TargetType.AnyEnemy)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiGodspeed), true);
 
     public override bool GainsBlock => true;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(3m, ValueProp.Move), new BlockVar(8m, ValueProp.Move)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 3m), ValueProp.Move), new BlockVar(BalanceDecimal("BaseBlock", 8m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -42,8 +42,8 @@ public class MusashiGodspeed : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(2m); // 3 -> 5
-        DynamicVars.Block.UpgradeValueBy(3m);  // 8 -> 11
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 2m)); // 3 -> 5
+        DynamicVars.Block.UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 3m));  // 8 -> 11
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

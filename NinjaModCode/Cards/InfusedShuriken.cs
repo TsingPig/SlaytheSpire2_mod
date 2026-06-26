@@ -23,16 +23,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class InfusedShuriken : NinjaModCard
 {
     // 施加的流血层数（与普通手里剑一致）。
-    private const int Bleed = 2;
+    private int Bleed => BalanceConst(nameof(InfusedShuriken), nameof(Bleed), 2);
 
     // 燃烧追加层数：攻击命中后额外施加 6 层燃烧。
-    public override int BurningInfusion => 6;
+    public override int BurningInfusion => BalanceValue(nameof(InfusedShuriken), "BurningInfusion", 6);
 
-    public InfusedShuriken() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
+    public InfusedShuriken() : base(BalanceCost(nameof(InfusedShuriken), 1), BalanceType(nameof(InfusedShuriken), CardType.Attack), BalanceRarity(nameof(InfusedShuriken), CardRarity.Token), BalanceTarget(nameof(InfusedShuriken), TargetType.AnyEnemy)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 10m), ValueProp.Move)];
 
     // 复用手里剑（Shuriken）的卡面贴图。
     public override string CustomPortraitPath => "shuriken.png".BigCardImagePath();

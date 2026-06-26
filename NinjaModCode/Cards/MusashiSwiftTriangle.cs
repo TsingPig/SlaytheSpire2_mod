@@ -18,12 +18,12 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiSwiftTriangle : NinjaModCard
 {
-    public MusashiSwiftTriangle() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public MusashiSwiftTriangle() : base(BalanceCost(nameof(MusashiSwiftTriangle), 1), BalanceType(nameof(MusashiSwiftTriangle), CardType.Skill), BalanceRarity(nameof(MusashiSwiftTriangle), CardRarity.Uncommon), BalanceTarget(nameof(MusashiSwiftTriangle), TargetType.AnyEnemy)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiSwiftTriangle), true);
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(11m, ValueProp.Move), new IntVar("Dex", 3m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 11m), ValueProp.Move), new IntVar("Dex", BalanceDecimal("BaseDex", 3m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -39,8 +39,8 @@ public class MusashiSwiftTriangle : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(4m);   // 11 -> 15
-        DynamicVars["Dex"].UpgradeValueBy(1m);   // 3 -> 4
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 4m));   // 11 -> 15
+        DynamicVars["Dex"].UpgradeValueBy(BalanceDelta("BaseDex", "UpgradeDex", 1m));   // 3 -> 4
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

@@ -18,13 +18,13 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class Rashomon : NinjaModCard
 {
     // 每张攻击牌提供的格挡。
-    private const int BlockPerAttack = 9;
+    private int BlockPerAttack => BalanceConst(nameof(Rashomon), nameof(BlockPerAttack), 9);
 
-    public Rashomon() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public Rashomon() : base(BalanceCost(nameof(Rashomon), 2), BalanceType(nameof(Rashomon), CardType.Skill), BalanceRarity(nameof(Rashomon), CardRarity.Uncommon), BalanceTarget(nameof(Rashomon), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(3)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(BalanceValue("BaseCards", 3))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -38,7 +38,7 @@ public class Rashomon : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Cards.UpgradeValueBy(1m); // 3 -> 4
+    protected override void OnUpgrade() => DynamicVars.Cards.UpgradeValueBy(BalanceDelta("BaseCards", "UpgradeCards", 1m)); // 3 -> 4
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("多重罗生门", $"抽 {{Cards:diff()}} 张牌。抽到的牌中每有一张[gold]攻击[/gold]牌，获得 {BlockPerAttack} 点格挡。")

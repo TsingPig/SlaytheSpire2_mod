@@ -19,9 +19,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class BurningHeart : NinjaModCard
 {
     // 每消耗一张牌给予的燃烧层数。
-    private const int BurningPerCard = 3;
+    private int BurningPerCard => BalanceConst(nameof(BurningHeart), nameof(BurningPerCard), 3);
 
-    public BurningHeart() : base(0, CardType.Skill, CardRarity.Rare, TargetType.AllEnemies) { }
+    public BurningHeart() : base(BalanceCost(nameof(BurningHeart), 0), BalanceType(nameof(BurningHeart), CardType.Skill), BalanceRarity(nameof(BurningHeart), CardRarity.Rare), BalanceTarget(nameof(BurningHeart), TargetType.AllEnemies)) { }
 
     protected override bool HasEnergyCostX => true;
 

@@ -16,7 +16,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class CraneShield : NinjaModCard
 {
-    public CraneShield() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public CraneShield() : base(BalanceCost(nameof(CraneShield), 2), BalanceType(nameof(CraneShield), CardType.Skill), BalanceRarity(nameof(CraneShield), CardRarity.Uncommon), BalanceTarget(nameof(CraneShield), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
@@ -40,7 +40,7 @@ public class CraneShield : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(CraneShield), -1)); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("守鹤之盾", "获得 {CalculatedBlock:diff()} 点格挡（等同于当前已损失的生命值）。")

@@ -18,10 +18,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class ForgeFlameThrust : NinjaModCard
 {
-    public ForgeFlameThrust() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public ForgeFlameThrust() : base(BalanceCost(nameof(ForgeFlameThrust), 1), BalanceType(nameof(ForgeFlameThrust), CardType.Attack), BalanceRarity(nameof(ForgeFlameThrust), CardRarity.Common), BalanceTarget(nameof(ForgeFlameThrust), TargetType.AnyEnemy)) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(6m, ValueProp.Move), new PowerVar<BurningPower>("Burning", 4m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 6m), ValueProp.Move), new PowerVar<BurningPower>("Burning", BalanceDecimal("BaseBurning", 4m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -37,8 +37,8 @@ public class ForgeFlameThrust : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);     // 6 -> 9
-        DynamicVars["Burning"].UpgradeValueBy(1m); // 4 -> 5
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));     // 6 -> 9
+        DynamicVars["Burning"].UpgradeValueBy(BalanceDelta("BaseBurning", "UpgradeBurning", 1m)); // 4 -> 5
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

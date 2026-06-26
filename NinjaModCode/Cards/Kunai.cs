@@ -25,11 +25,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Kunai : NinjaModCard
 {
-    public Kunai() : base(1, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
+    public Kunai() : base(BalanceCost(nameof(Kunai), 1), BalanceType(nameof(Kunai), CardType.Attack), BalanceRarity(nameof(Kunai), CardRarity.Token), BalanceTarget(nameof(Kunai), TargetType.AnyEnemy)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Retain, CardKeyword.Exhaust];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 5m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -42,11 +42,11 @@ public class Kunai : NinjaModCard
 
         if (attack.Results.SelectMany(r => r).Sum(r => r.UnblockedDamage) > 0)
         {
-            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, this);
+            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, BalanceValue("BaseKunaiBleed", 1), Owner.Creature, this);
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m);
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 2m));
 
     /// <summary>
     /// Create a fresh temporary Kunai directly into the owner's hand.

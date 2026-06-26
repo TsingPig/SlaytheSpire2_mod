@@ -18,11 +18,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Assassination : NinjaModCard
 {
-    public Assassination() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
+    public Assassination() : base(BalanceCost(nameof(Assassination), 1), BalanceType(nameof(Assassination), CardType.Attack), BalanceRarity(nameof(Assassination), CardRarity.Basic), BalanceTarget(nameof(Assassination), TargetType.AnyEnemy)) { }
 
-    public override bool HasSilence => true;
+    public override bool HasSilence => BalanceHasSilence(nameof(Assassination), true);
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 7m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -34,7 +34,7 @@ public class Assassination : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

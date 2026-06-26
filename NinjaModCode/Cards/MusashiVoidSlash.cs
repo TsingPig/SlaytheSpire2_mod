@@ -18,14 +18,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiVoidSlash : NinjaModCard
 {
-    public MusashiVoidSlash() : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
+    public MusashiVoidSlash() : base(BalanceCost(nameof(MusashiVoidSlash), 0), BalanceType(nameof(MusashiVoidSlash), CardType.Attack), BalanceRarity(nameof(MusashiVoidSlash), CardRarity.Rare), BalanceTarget(nameof(MusashiVoidSlash), TargetType.AnyEnemy)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiVoidSlash), true);
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(15m, ValueProp.Move), new IntVar("Resist", 1m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 15m), ValueProp.Move), new IntVar("Resist", BalanceDecimal("BaseResist", 1m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -41,8 +41,8 @@ public class MusashiVoidSlash : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(6m);   // 15 -> 21
-        DynamicVars["Resist"].UpgradeValueBy(1m); // 1 -> 2
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 6m));   // 15 -> 21
+        DynamicVars["Resist"].UpgradeValueBy(BalanceDelta("BaseResist", "UpgradeResist", 1m)); // 1 -> 2
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

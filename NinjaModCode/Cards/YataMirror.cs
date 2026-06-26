@@ -16,16 +16,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class YataMirror : NinjaModCard
 {
     // 每回合格挡量，升级后提升到 3。
-    private int _block = 2;
+    private int _block = BalanceValue(nameof(YataMirror), "BaseBlock", 2);
 
-    public YataMirror() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) { }
+    public YataMirror() : base(BalanceCost(nameof(YataMirror), 1), BalanceType(nameof(YataMirror), CardType.Power), BalanceRarity(nameof(YataMirror), CardRarity.Uncommon), BalanceTarget(nameof(YataMirror), TargetType.Self)) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<YataMirrorPower>(choiceContext, Owner.Creature, _block, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => _block = 3;
+    protected override void OnUpgrade() => _block = BalanceValue("UpgradeBlock", 3);
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("八咫镜", $"每回合开始时，获得 {_block} 点格挡。")

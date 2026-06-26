@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using BaseLib.Abstracts;
 using BaseLib.Extensions;
@@ -7,6 +8,7 @@ using BaseLib.Utils;
 using Godot;
 using NinjaMod.NinjaModCode.Character;
 using NinjaMod.NinjaModCode.Extensions;
+using NinjaMod.NinjaModCode.Generated;
 using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
@@ -48,25 +50,120 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     /// 表示本卡的攻击命中敌人后，额外对其施加对应层数的燃烧。默认 0（无此效果）。
     /// 拥有此效果（值 > 0）的卡牌应在描述中标注“燃烧追加 N”，并显示火焰特效。
     /// </summary>
-    public virtual int BurningInfusion => 0;
+    public virtual int BurningInfusion => BalanceValue("BurningInfusion", 0);
 
     /// <summary>
     /// 是否为“武藏”系列卡牌。用于【圆明】效果判定（每打出一张武藏牌按圆明层数回复生命）。
     /// 武藏系列卡牌应重写此属性返回 true。
     /// </summary>
-    public virtual bool IsMusashi => false;
+    public virtual bool IsMusashi => CardBalance.Find(GetType().Name)?.IsMusashi ?? false;
 
     /// <summary>
     /// 【静默】机制：拥有静默的卡牌打出后不会破除你的隐身。默认 false。
     /// 需要静默的卡牌重写为 true；接口预留：也可写成 => IsUpgraded 实现“升级后获得静默”。
     /// </summary>
-    public virtual bool HasSilence => false;
+    public virtual bool HasSilence => CardBalance.Find(GetType().Name)?.HasSilence ?? false;
 
     /// <summary>
     /// 卡面预览/悬浮刷新时，BaseLib 的 CalculatedBlock 回调可能拿到的是 canonical card，
     /// 这时 card.Owner / card.CombatState 不稳定，导致显示值回落为 0。
     /// 这里统一提供当前战斗兜底；只用于显示/只读计算，实际打牌仍使用卡牌自身 Owner/CombatState。
     /// </summary>
+
+    protected static int BalanceCost(string cardId, int fallback)
+    {
+        string? raw = CardBalance.Find(cardId)?.Cost;
+        return int.TryParse(raw, out int value) ? value : fallback;
+    }
+
+    protected static CardType BalanceType(string cardId, CardType fallback) =>
+        BalanceEnum(cardId, entry => entry.Type, fallback);
+
+    protected static CardRarity BalanceRarity(string cardId, CardRarity fallback) =>
+        BalanceEnum(cardId, entry => entry.Rarity, fallback);
+
+    protected static TargetType BalanceTarget(string cardId, TargetType fallback) =>
+        BalanceEnum(cardId, entry => entry.Target, fallback);
+
+    protected static int BalanceUpgradeCostDelta(string cardId, int fallbackDelta)
+    {
+        var entry = CardBalance.Find(cardId);
+        if (entry == null)
+        {
+            return fallbackDelta;
+        }
+
+        if (!int.TryParse(entry.Cost, out int baseCost) ||
+            !int.TryParse(entry.UpgradeCost, out int upgradeCost))
+        {
+            return fallbackDelta;
+        }
+
+        return upgradeCost - baseCost;
+    }
+
+    protected static int BalanceValue(string cardId, string key, int fallback) =>
+        CardBalance.Value(cardId, key, fallback);
+
+    protected int BalanceValue(string key, int fallback) =>
+        BalanceValue(GetType().Name, key, fallback);
+
+    protected static decimal BalanceDecimal(string cardId, string key, decimal fallback) =>
+        BalanceValue(cardId, key, (int)fallback);
+
+    protected decimal BalanceDecimal(string key, decimal fallback) =>
+        BalanceDecimal(GetType().Name, key, fallback);
+
+    protected static int BalanceConst(string cardId, string constName, int fallback) =>
+        BalanceValue(cardId, $"Const.{constName}", BalanceValue(cardId, $"Const{constName}", fallback));
+
+    protected int BalanceConst(string constName, int fallback) =>
+        BalanceConst(GetType().Name, constName, fallback);
+
+    protected static int BalanceExtra(string cardId, string varName, int fallback) =>
+        BalanceValue(cardId, $"Extra.{varName}", BalanceValue(cardId, $"Base{varName}", fallback));
+
+    protected int BalanceExtra(string varName, int fallback) =>
+        BalanceExtra(GetType().Name, varName, fallback);
+
+    protected static decimal BalanceDelta(string cardId, string baseKey, string upgradeKey, decimal fallbackDelta)
+    {
+        var entry = CardBalance.Find(cardId);
+        if (entry == null)
+        {
+            return fallbackDelta;
+        }
+
+        bool hasBase = entry.Values.TryGetValue(baseKey, out int baseValue);
+        bool hasUpgrade = entry.Values.TryGetValue(upgradeKey, out int upgradeValue);
+        return hasBase && hasUpgrade ? upgradeValue - baseValue : fallbackDelta;
+    }
+
+    protected decimal BalanceDelta(string baseKey, string upgradeKey, decimal fallbackDelta) =>
+        BalanceDelta(GetType().Name, baseKey, upgradeKey, fallbackDelta);
+
+    protected static bool BalanceIsMusashi(string cardId, bool fallback) =>
+        CardBalance.Find(cardId)?.IsMusashi ?? fallback;
+
+    protected static bool BalanceHasSilence(string cardId, bool fallback) =>
+        CardBalance.Find(cardId)?.HasSilence ?? fallback;
+
+    private static TEnum BalanceEnum<TEnum>(
+        string cardId,
+        Func<CardBalanceEntry, string> selector,
+        TEnum fallback)
+        where TEnum : struct, Enum
+    {
+        var entry = CardBalance.Find(cardId);
+        if (entry == null)
+        {
+            return fallback;
+        }
+
+        string raw = selector(entry);
+        return Enum.TryParse(raw, ignoreCase: true, out TEnum value) ? value : fallback;
+    }
+
     protected static ICombatState? ResolveCombatStateForDisplay(CardModel card) =>
         card.CombatState
         ?? (card.IsMutable ? card.Owner?.Creature.CombatState : null)

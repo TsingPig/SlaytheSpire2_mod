@@ -14,11 +14,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// <summary>Ninja Strike (忍者打击) - basic attack. Deal 6 (9 upgraded) damage.</summary>
 public class NinjaStrike : NinjaModCard
 {
-    public NinjaStrike() : base(1, CardType.Attack, CardRarity.Basic, TargetType.AnyEnemy) { }
+    public NinjaStrike() : base(BalanceCost(nameof(NinjaStrike), 1), BalanceType(nameof(NinjaStrike), CardType.Attack), BalanceRarity(nameof(NinjaStrike), CardRarity.Basic), BalanceTarget(nameof(NinjaStrike), TargetType.AnyEnemy)) { }
 
     protected override HashSet<CardTag> CanonicalTags => new() { CardTag.Strike };
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 6m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -30,7 +30,7 @@ public class NinjaStrike : NinjaModCard
             .Execute(choiceContext);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("忍者打击", "造成 {Damage:diff()} 点伤害。")

@@ -17,10 +17,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class LightSnow : NinjaModCard
 {
-    public LightSnow() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public LightSnow() : base(BalanceCost(nameof(LightSnow), 1), BalanceType(nameof(LightSnow), CardType.Attack), BalanceRarity(nameof(LightSnow), CardRarity.Uncommon), BalanceTarget(nameof(LightSnow), TargetType.AnyEnemy)) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(1m, ValueProp.Move), new RepeatVar(4), new HealVar(2m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 1m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 4)), new HealVar(BalanceDecimal("BaseHeal", 2m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -34,7 +34,7 @@ public class LightSnow : NinjaModCard
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.IntValue, true);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Heal.UpgradeValueBy(1m); // 2 -> 3
+    protected override void OnUpgrade() => DynamicVars.Heal.UpgradeValueBy(BalanceDelta("BaseHeal", "UpgradeHeal", 1m)); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("细雪", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段，回复 {Heal:diff()} 点生命。")

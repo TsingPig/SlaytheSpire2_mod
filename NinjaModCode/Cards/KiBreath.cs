@@ -16,9 +16,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class KiBreath : NinjaModCard
 {
-    public KiBreath() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+    public KiBreath() : base(BalanceCost(nameof(KiBreath), 1), BalanceType(nameof(KiBreath), CardType.Skill), BalanceRarity(nameof(KiBreath), CardRarity.Common), BalanceTarget(nameof(KiBreath), TargetType.Self)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new HealVar(4m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new HealVar(BalanceDecimal("BaseHeal", 4m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -26,7 +26,7 @@ public class KiBreath : NinjaModCard
         await CreatureCmd.Heal(Owner.Creature, DynamicVars.Heal.IntValue, true);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Heal.UpgradeValueBy(2m); // 4 -> 6
+    protected override void OnUpgrade() => DynamicVars.Heal.UpgradeValueBy(BalanceDelta("BaseHeal", "UpgradeHeal", 2m)); // 4 -> 6
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("气合", "回复 {Heal:diff()} 点生命。")

@@ -21,7 +21,7 @@ public class AfterimageAttack : NinjaModCard
     // 生成时写入的伤害值（原攻击伤害的一半）。
     private int _damage;
 
-    public AfterimageAttack() : base(0, CardType.Attack, CardRarity.Token, TargetType.AnyEnemy) { }
+    public AfterimageAttack() : base(BalanceCost(nameof(AfterimageAttack), 0), BalanceType(nameof(AfterimageAttack), CardType.Attack), BalanceRarity(nameof(AfterimageAttack), CardRarity.Token), BalanceTarget(nameof(AfterimageAttack), TargetType.AnyEnemy)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

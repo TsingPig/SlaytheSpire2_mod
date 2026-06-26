@@ -17,10 +17,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Lihuo : NinjaModCard
 {
-    public Lihuo() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public Lihuo() : base(BalanceCost(nameof(Lihuo), 0), BalanceType(nameof(Lihuo), CardType.Skill), BalanceRarity(nameof(Lihuo), CardRarity.Uncommon), BalanceTarget(nameof(Lihuo), TargetType.AnyEnemy)) { }
 
     // 用 PowerVar 表示燃烧层数，卡面 {Burning:diff()} 显示 5→8 升级并自动关联燃烧提示。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<BurningPower>("Burning", 5m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<BurningPower>("Burning", BalanceDecimal("BaseBurning", 5m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -29,7 +29,7 @@ public class Lihuo : NinjaModCard
         await PowerCmd.Apply<BurningPower>(choiceContext, cardPlay.Target, amount, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars["Burning"].UpgradeValueBy(3m); // 5 -> 8
+    protected override void OnUpgrade() => DynamicVars["Burning"].UpgradeValueBy(BalanceDelta("BaseBurning", "UpgradeBurning", 3m)); // 5 -> 8
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：离火符", "给予目标 {Burning:diff()} 层[gold]燃烧[/gold]。")

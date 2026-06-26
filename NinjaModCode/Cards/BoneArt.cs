@@ -18,13 +18,13 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class BoneArt : NinjaModCard
 {
     // 活力层数（常量）。
-    private const int Vigor = 2;
+    private int Vigor => BalanceConst(nameof(BoneArt), nameof(Vigor), 2);
 
-    public BoneArt() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public BoneArt() : base(BalanceCost(nameof(BoneArt), 1), BalanceType(nameof(BoneArt), CardType.Skill), BalanceRarity(nameof(BoneArt), CardRarity.Uncommon), BalanceTarget(nameof(BoneArt), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(11m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(BalanceDecimal("BaseBlock", 11m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

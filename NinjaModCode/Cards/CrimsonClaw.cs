@@ -15,9 +15,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class CrimsonClaw : NinjaModCard
 {
     // 生成的注入手里剑数量（常量）。
-    private const int Count = 2;
+    private int Count => BalanceConst(nameof(CrimsonClaw), nameof(Count), 2);
 
-    public CrimsonClaw() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public CrimsonClaw() : base(BalanceCost(nameof(CrimsonClaw), 1), BalanceType(nameof(CrimsonClaw), CardType.Skill), BalanceRarity(nameof(CrimsonClaw), CardRarity.Uncommon), BalanceTarget(nameof(CrimsonClaw), TargetType.Self)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 

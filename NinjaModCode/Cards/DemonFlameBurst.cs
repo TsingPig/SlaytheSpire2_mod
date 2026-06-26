@@ -19,9 +19,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class DemonFlameBurst : NinjaModCard
 {
-    public DemonFlameBurst() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public DemonFlameBurst() : base(BalanceCost(nameof(DemonFlameBurst), 2), BalanceType(nameof(DemonFlameBurst), CardType.Skill), BalanceRarity(nameof(DemonFlameBurst), CardRarity.Uncommon), BalanceTarget(nameof(DemonFlameBurst), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(12m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 12m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -39,7 +39,7 @@ public class DemonFlameBurst : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(4m);
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 4m));
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：火魔爆", "造成 {Damage:diff()} 点伤害，然后引爆目标身上的所有[gold]燃烧[/gold]（造成燃烧层数 2 倍的无法格挡伤害并移除）。")

@@ -18,9 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class KatanaArt : NinjaModCard
 {
-    public KatanaArt() : base(1, CardType.Attack, CardRarity.Common, TargetType.AllEnemies) { }
+    public KatanaArt() : base(BalanceCost(nameof(KatanaArt), 1), BalanceType(nameof(KatanaArt), CardType.Attack), BalanceRarity(nameof(KatanaArt), CardRarity.Common), BalanceTarget(nameof(KatanaArt), TargetType.AllEnemies)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(5m, ValueProp.Move), new RepeatVar(2)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 5m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 2))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -33,7 +33,7 @@ public class KatanaArt : NinjaModCard
             .Execute(choiceContext);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Repeat.UpgradeValueBy(1m); // 2 -> 3
+    protected override void OnUpgrade() => DynamicVars.Repeat.UpgradeValueBy(BalanceDelta("BaseRepeat", "UpgradeRepeat", 1m)); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武士刀法", "对所有敌人造成 {Damage:diff()} 点伤害，共 {Repeat:diff()} 次。")

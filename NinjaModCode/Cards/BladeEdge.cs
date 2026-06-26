@@ -18,9 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class BladeEdge : NinjaModCard
 {
     // 降低的能量数量（常量）。
-    private const int CostReduction = 1;
+    private int CostReduction => BalanceConst(nameof(BladeEdge), nameof(CostReduction), 1);
 
-    public BladeEdge() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self) { }
+    public BladeEdge() : base(BalanceCost(nameof(BladeEdge), 2), BalanceType(nameof(BladeEdge), CardType.Power), BalanceRarity(nameof(BladeEdge), CardRarity.Rare), BalanceTarget(nameof(BladeEdge), TargetType.Self)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -41,7 +41,7 @@ public class BladeEdge : NinjaModCard
         await PowerCmd.Apply<BladeEdgePower>(choiceContext, Owner.Creature, CostReduction, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(BladeEdge), -1)); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("锄刃", $"本场战斗中，所有牌堆中以及后续生成的手里剑、飞刀与火焰手里剑的能量消耗降低 {CostReduction}。")

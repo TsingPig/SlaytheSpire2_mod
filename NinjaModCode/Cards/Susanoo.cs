@@ -18,9 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Susanoo : NinjaModCard
 {
-    public Susanoo() : base(3, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
+    public Susanoo() : base(BalanceCost(nameof(Susanoo), 3), BalanceType(nameof(Susanoo), CardType.Attack), BalanceRarity(nameof(Susanoo), CardRarity.Rare), BalanceTarget(nameof(Susanoo), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(7m, ValueProp.Move), new RepeatVar(6)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 7m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 6))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -34,10 +34,10 @@ public class Susanoo : NinjaModCard
             .WithHitCount(hits)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
-        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, hits, Owner.Creature, this);
+        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, hits * BalanceValue("BaseSusanooBleedPerHit", 1), Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(2m); // 7 -> 9
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 2m)); // 7 -> 9
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("须佐能乎", "造成 {Damage:diff()} 点伤害，共 {Repeat:diff()} 段，每段追加 1 层[gold]流血[/gold]。")

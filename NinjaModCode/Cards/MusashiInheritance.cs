@@ -16,9 +16,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiInheritance : NinjaModCard
 {
-    public MusashiInheritance() : base(3, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
+    public MusashiInheritance() : base(BalanceCost(nameof(MusashiInheritance), 3), BalanceType(nameof(MusashiInheritance), CardType.Skill), BalanceRarity(nameof(MusashiInheritance), CardRarity.Rare), BalanceTarget(nameof(MusashiInheritance), TargetType.Self)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiInheritance), true);
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
@@ -38,7 +38,7 @@ public class MusashiInheritance : NinjaModCard
         await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, Owner);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 3 -> 2
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(MusashiInheritance), -1)); // 3 -> 2
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：承袭", "将各一张【神速】【空明斩】【刺】加入手牌。下回合开始获得 3 点能量。")

@@ -19,7 +19,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class Seppuku : NinjaModCard
 {
     // base 费用 0；通过 HasEnergyCostX 标记为 X 费（消耗当前全部剩余能量）。
-    public Seppuku() : base(0, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
+    public Seppuku() : base(BalanceCost(nameof(Seppuku), 0), BalanceType(nameof(Seppuku), CardType.Skill), BalanceRarity(nameof(Seppuku), CardRarity.Rare), BalanceTarget(nameof(Seppuku), TargetType.Self)) { }
 
     // 标记为 X 费牌：实际花费为当前剩余能量，X = 投入的能量值。
     protected override bool HasEnergyCostX => true;
@@ -34,7 +34,7 @@ public class Seppuku : NinjaModCard
         if (x <= 0) return;
 
         // 失去 2X 点生命（无法格挡、不受加成影响的自残）。
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, x * 2,
+        await CreatureCmd.Damage(choiceContext, Owner.Creature, x * BalanceValue("BaseSeppukuHpMultiplier", 2),
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this);
 
         // 获得 X 点能量。

@@ -21,11 +21,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class IaiStrike : NinjaModCard
 {
     // 额外附加的流血层数。
-    private const int Bleed = 3;
+    private int Bleed => BalanceConst(nameof(IaiStrike), nameof(Bleed), 3);
 
-    public IaiStrike() : base(2, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public IaiStrike() : base(BalanceCost(nameof(IaiStrike), 2), BalanceType(nameof(IaiStrike), CardType.Attack), BalanceRarity(nameof(IaiStrike), CardRarity.Common), BalanceTarget(nameof(IaiStrike), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(10m, ValueProp.Move), new ExtraDamageVar(5m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 10m), ValueProp.Move), new ExtraDamageVar(BalanceDecimal("BaseExtraDamage", 5m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -48,8 +48,8 @@ public class IaiStrike : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m);       // 10 -> 15
-        DynamicVars.ExtraDamage.UpgradeValueBy(3m);  // 5 -> 8
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 5m));       // 10 -> 15
+        DynamicVars.ExtraDamage.UpgradeValueBy(BalanceDelta("BaseExtraDamage", "UpgradeExtraDamage", 3m));  // 5 -> 8
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

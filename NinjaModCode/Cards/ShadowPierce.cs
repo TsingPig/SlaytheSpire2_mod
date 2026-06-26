@@ -18,13 +18,13 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class ShadowPierce : NinjaModCard
 {
-    public ShadowPierce() : base(0, CardType.Attack, CardRarity.Rare, TargetType.AnyEnemy) { }
+    public ShadowPierce() : base(BalanceCost(nameof(ShadowPierce), 0), BalanceType(nameof(ShadowPierce), CardType.Attack), BalanceRarity(nameof(ShadowPierce), CardRarity.Rare), BalanceTarget(nameof(ShadowPierce), TargetType.AnyEnemy)) { }
 
-    public override bool HasSilence => true;
+    public override bool HasSilence => BalanceHasSilence(nameof(ShadowPierce), true);
 
     // 伤害 9（升级 14）；流血 5（升级 6），用 PowerVar 显示并自动关联流血提示。
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(9m, ValueProp.Move), new PowerVar<BleedPower>("Bleed", 5m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 9m), ValueProp.Move), new PowerVar<BleedPower>("Bleed", BalanceDecimal("BaseBleed", 5m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -41,8 +41,8 @@ public class ShadowPierce : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(5m);   // 9 -> 14
-        DynamicVars["Bleed"].UpgradeValueBy(1m); // 5 -> 6
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 5m));   // 9 -> 14
+        DynamicVars["Bleed"].UpgradeValueBy(BalanceDelta("BaseBleed", "UpgradeBleed", 1m)); // 5 -> 6
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

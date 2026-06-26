@@ -16,11 +16,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class AbsoluteDefense : NinjaModCard
 {
-    public AbsoluteDefense() : base(2, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
+    public AbsoluteDefense() : base(BalanceCost(nameof(AbsoluteDefense), 2), BalanceType(nameof(AbsoluteDefense), CardType.Skill), BalanceRarity(nameof(AbsoluteDefense), CardRarity.Rare), BalanceTarget(nameof(AbsoluteDefense), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(20m, ValueProp.Move), new HealVar(4m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(BalanceDecimal("BaseBlock", 20m), ValueProp.Move), new HealVar(BalanceDecimal("BaseHeal", 4m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -30,8 +30,8 @@ public class AbsoluteDefense : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Block.UpgradeValueBy(10m); // 20 -> 30
-        DynamicVars.Heal.UpgradeValueBy(2m);   // 4 -> 6
+        DynamicVars.Block.UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 10m)); // 20 -> 30
+        DynamicVars.Heal.UpgradeValueBy(BalanceDelta("BaseHeal", "UpgradeHeal", 2m));   // 4 -> 6
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

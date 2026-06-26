@@ -19,11 +19,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class FlameBarrage : NinjaModCard
 {
     // 燃烧层数，升级后为 4。
-    private int _burning = 3;
+    private int _burning = BalanceValue(nameof(FlameBarrage), "BaseBurning", 3);
 
-    public FlameBarrage() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public FlameBarrage() : base(BalanceCost(nameof(FlameBarrage), 1), BalanceType(nameof(FlameBarrage), CardType.Skill), BalanceRarity(nameof(FlameBarrage), CardRarity.Uncommon), BalanceTarget(nameof(FlameBarrage), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(2m, ValueProp.Move), new RepeatVar(3)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 2m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 3))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -40,8 +40,8 @@ public class FlameBarrage : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(1m); // 2 -> 3
-        _burning = 4;
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 1m)); // 2 -> 3
+        _burning = BalanceValue("UpgradeBurning", 4);
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

@@ -18,10 +18,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class SoulReap : NinjaModCard
 {
-    public SoulReap() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public SoulReap() : base(BalanceCost(nameof(SoulReap), 2), BalanceType(nameof(SoulReap), CardType.Skill), BalanceRarity(nameof(SoulReap), CardRarity.Uncommon), BalanceTarget(nameof(SoulReap), TargetType.AnyEnemy)) { }
 
     // 可移除的最大流血层数：8（升级 12）。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new IntVar("Remove", 8m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new IntVar("Remove", BalanceDecimal("BaseRemove", 8m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -49,12 +49,12 @@ public class SoulReap : NinjaModCard
         var after = cardPlay.Target.GetPower<BleedPower>();
         if (after == null || after.Amount <= 0)
         {
-            await CardPileCmd.Draw(choiceContext, Owner);
-            await PlayerCmd.GainEnergy(1m, Owner);
+            await CardPileCmd.Draw(choiceContext, BalanceValue("BaseSoulReapRewardCards", 1), Owner, false);
+            await PlayerCmd.GainEnergy(BalanceValue("BaseSoulReapRewardEnergy", 1), Owner);
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars["Remove"].UpgradeValueBy(4m); // 8 -> 12
+    protected override void OnUpgrade() => DynamicVars["Remove"].UpgradeValueBy(BalanceDelta("BaseRemove", "UpgradeRemove", 4m)); // 8 -> 12
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("索命", "移除目标身上最多 {Remove:diff()} 层[gold]流血[/gold]，回复等同于移除层数的生命。若移除后目标没有[gold]流血[/gold]，抽 1 张牌并回复 1 点能量。")

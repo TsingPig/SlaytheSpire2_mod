@@ -17,7 +17,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Ashes : NinjaModCard
 {
-    public Ashes() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies) { }
+    public Ashes() : base(BalanceCost(nameof(Ashes), 1), BalanceType(nameof(Ashes), CardType.Skill), BalanceRarity(nameof(Ashes), CardRarity.Uncommon), BalanceTarget(nameof(Ashes), TargetType.AllEnemies)) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -39,7 +39,7 @@ public class Ashes : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 1 -> 0
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(Ashes), -1)); // 1 -> 0
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：灰烬", "点燃所有敌人身上的[gold]燃烧[/gold]（造成燃烧 2 倍的无法格挡伤害并移除）。如果成功点燃，抽 1 张牌。")

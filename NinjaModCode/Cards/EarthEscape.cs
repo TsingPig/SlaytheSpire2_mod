@@ -14,16 +14,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EarthEscape : NinjaModCard
 {
-    private int _resist = 1;
+    private int _resist = BalanceValue(nameof(EarthEscape), "BaseResist", 1);
 
-    public EarthEscape() : base(0, CardType.Power, CardRarity.Common, TargetType.Self) { }
+    public EarthEscape() : base(BalanceCost(nameof(EarthEscape), 0), BalanceType(nameof(EarthEscape), CardType.Power), BalanceRarity(nameof(EarthEscape), CardRarity.Common), BalanceTarget(nameof(EarthEscape), TargetType.Self)) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, _resist, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => _resist = 2;
+    protected override void OnUpgrade() => _resist = BalanceValue("UpgradeResist", 2);
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("土忍：土遁", $"获得 {_resist} 层抵挡。")

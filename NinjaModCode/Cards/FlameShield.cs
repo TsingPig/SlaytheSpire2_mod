@@ -15,14 +15,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class FlameShield : NinjaModCard
 {
-    public FlameShield() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) { }
+    public FlameShield() : base(BalanceCost(nameof(FlameShield), 1), BalanceType(nameof(FlameShield), CardType.Power), BalanceRarity(nameof(FlameShield), CardRarity.Uncommon), BalanceTarget(nameof(FlameShield), TargetType.Self)) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<FlameShieldPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<FlameShieldPower>(choiceContext, Owner.Creature, BalanceValue("BaseFlameShield", 1), Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 1 -> 0
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(FlameShield), -1)); // 1 -> 0
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：火盾", "获得 1 层[gold]火盾[/gold]：每当你受到攻击时，对攻击者施加等同于火盾层数的[gold]燃烧[/gold]。")

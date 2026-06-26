@@ -18,11 +18,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Petrification : NinjaModCard
 {
-    public Petrification() : base(2, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public Petrification() : base(BalanceCost(nameof(Petrification), 2), BalanceType(nameof(Petrification), CardType.Skill), BalanceRarity(nameof(Petrification), CardRarity.Uncommon), BalanceTarget(nameof(Petrification), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(13m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(BalanceDecimal("BaseBlock", 13m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -38,7 +38,7 @@ public class Petrification : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(Petrification), -1)); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("土忍：石化术", "获得 {Block:diff()} 点格挡，并清除自身所有[gold]负面效果[/gold]。")

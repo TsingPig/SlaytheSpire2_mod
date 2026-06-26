@@ -19,9 +19,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class KunaiThrow : NinjaModCard
 {
-    public KunaiThrow() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public KunaiThrow() : base(BalanceCost(nameof(KunaiThrow), 1), BalanceType(nameof(KunaiThrow), CardType.Attack), BalanceRarity(nameof(KunaiThrow), CardRarity.Common), BalanceTarget(nameof(KunaiThrow), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 6m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -41,7 +41,7 @@ public class KunaiThrow : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("苦无", "造成 {Damage:diff()} 点伤害。如果目标有[gold]流血[/gold]，恢复 1 点能量。")

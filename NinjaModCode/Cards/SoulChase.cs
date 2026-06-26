@@ -21,14 +21,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class SoulChase : NinjaModCard
 {
     // 每张飞刀的伤害（与飞刀基础值一致）。
-    private const int KunaiDamage = 5;
+    private int KunaiDamage => BalanceConst(nameof(SoulChase), nameof(KunaiDamage), 5);
 
-    public SoulChase() : base(3, CardType.Skill, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public SoulChase() : base(BalanceCost(nameof(SoulChase), 3), BalanceType(nameof(SoulChase), CardType.Skill), BalanceRarity(nameof(SoulChase), CardRarity.Uncommon), BalanceTarget(nameof(SoulChase), TargetType.AnyEnemy)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     // 击杀后抽牌数：2（升级 3）。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(2)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new CardsVar(BalanceValue("BaseCards", 2))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -49,7 +49,7 @@ public class SoulChase : NinjaModCard
             if (cardPlay.Target.CurrentHp > 0 &&
                 attack.Results.SelectMany(r => r).Sum(r => r.UnblockedDamage) > 0)
             {
-                await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, 1, Owner.Creature, this);
+                await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, BalanceValue("BaseSoulChaseBleed", 1), Owner.Creature, this);
             }
         }
 
@@ -60,7 +60,7 @@ public class SoulChase : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Cards.UpgradeValueBy(1m); // 2 -> 3
+    protected override void OnUpgrade() => DynamicVars.Cards.UpgradeValueBy(BalanceDelta("BaseCards", "UpgradeCards", 1m)); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("追魂", "对目标打出消耗牌堆中的所有[gold]飞刀[/gold]（每张造成其伤害）。若成功击杀，抽 {Cards:diff()} 张牌。")

@@ -19,15 +19,15 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class MusashiSevenStar : NinjaModCard
 {
     // 每损失多少生命提供 1 点斩杀加成。
-    private const int HpPerExecute = 5;
+    private int HpPerExecute => BalanceConst(nameof(MusashiSevenStar), nameof(HpPerExecute), 5);
 
-    public MusashiSevenStar() : base(2, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy) { }
+    public MusashiSevenStar() : base(BalanceCost(nameof(MusashiSevenStar), 2), BalanceType(nameof(MusashiSevenStar), CardType.Skill), BalanceRarity(nameof(MusashiSevenStar), CardRarity.Rare), BalanceTarget(nameof(MusashiSevenStar), TargetType.AnyEnemy)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiSevenStar), true);
 
     // 基础伤害 7、段数 7；ExecutePerFive 表示升级后第 8 段斩杀伤害的系数，0（升级 1），用于卡面/锻造前后对比显示。
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(7m, ValueProp.Move), new RepeatVar(7), new IntVar("ExecutePerFive", 0m)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 7m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 7)), new IntVar("ExecutePerFive", BalanceDecimal("BaseExecutePerFive", 0m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -57,7 +57,7 @@ public class MusashiSevenStar : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars["ExecutePerFive"].UpgradeValueBy(1m); // 0 -> 1
+    protected override void OnUpgrade() => DynamicVars["ExecutePerFive"].UpgradeValueBy(BalanceDelta("BaseExecutePerFive", "UpgradeExecutePerFive", 1m)); // 0 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：七星光芒斩", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段。追加一段斩杀：目标每损失 5 点生命，造成 {ExecutePerFive:diff()} 点伤害。")

@@ -16,7 +16,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Detonation : NinjaModCard
 {
-    public Detonation() : base(0, CardType.Skill, CardRarity.Common, TargetType.AnyEnemy) { }
+    public Detonation() : base(BalanceCost(nameof(Detonation), 0), BalanceType(nameof(Detonation), CardType.Skill), BalanceRarity(nameof(Detonation), CardRarity.Common), BalanceTarget(nameof(Detonation), TargetType.AnyEnemy)) { }
 
     // 升级后获得保留：随 IsUpgraded 实时变化（卡面关键词行自动出现）。
     public override IEnumerable<CardKeyword> CanonicalKeywords => IsUpgraded ? [CardKeyword.Retain] : [];

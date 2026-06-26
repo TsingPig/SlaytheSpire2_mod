@@ -15,16 +15,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiEnmeiStyle : NinjaModCard
 {
-    public MusashiEnmeiStyle() : base(1, CardType.Power, CardRarity.Uncommon, TargetType.Self) { }
+    public MusashiEnmeiStyle() : base(BalanceCost(nameof(MusashiEnmeiStyle), 1), BalanceType(nameof(MusashiEnmeiStyle), CardType.Power), BalanceRarity(nameof(MusashiEnmeiStyle), CardRarity.Uncommon), BalanceTarget(nameof(MusashiEnmeiStyle), TargetType.Self)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiEnmeiStyle), true);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<EnmeiPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<EnmeiPower>(choiceContext, Owner.Creature, BalanceValue("BaseEnmei", 1), Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 1 -> 0
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(MusashiEnmeiStyle), -1)); // 1 -> 0
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：圆明流", "获得 1 层[gold]圆明[/gold]：每当你打出一张“武藏”牌，回复等同于圆明层数的生命。")

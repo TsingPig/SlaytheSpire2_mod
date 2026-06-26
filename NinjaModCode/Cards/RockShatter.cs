@@ -19,13 +19,13 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class RockShatter : NinjaModCard
 {
-    public RockShatter() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+    public RockShatter() : base(BalanceCost(nameof(RockShatter), 1), BalanceType(nameof(RockShatter), CardType.Skill), BalanceRarity(nameof(RockShatter), CardRarity.Common), BalanceTarget(nameof(RockShatter), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(8m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(BalanceDecimal("BaseBlock", 8m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -47,11 +47,14 @@ public class RockShatter : NinjaModCard
         var resist = Owner.Creature.GetPower<ResistPower>();
         if (resist != null)
         {
-            await PowerCmd.Decrement(resist);
+            for (int i = 0; i < BalanceValue("BaseRockShatterResistLoss", 1) && resist.Amount > 0; i++)
+            {
+                await PowerCmd.Decrement(resist);
+            }
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(5m); // 8 -> 13
+    protected override void OnUpgrade() => DynamicVars.Block.UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 5m)); // 8 -> 13
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("土忍：碎石", "获得 {Block:diff()} 点格挡。自动免费打出手牌中所有[gold]忍者防御[/gold]，随后移除 1 层[gold]抵挡[/gold]。")

@@ -17,20 +17,20 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class ShadowClone : NinjaModCard
 {
     // 与 ShadowClonePower 中的伤害减少比例保持一致。
-    private const int DamageReductionPct = 40;
+    private int DamageReductionPct => BalanceConst(nameof(ShadowClone), nameof(DamageReductionPct), 40);
 
-    public ShadowClone() : base(3, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
+    public ShadowClone() : base(BalanceCost(nameof(ShadowClone), 3), BalanceType(nameof(ShadowClone), CardType.Skill), BalanceRarity(nameof(ShadowClone), CardRarity.Rare), BalanceTarget(nameof(ShadowClone), TargetType.Self)) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         // Amount 2 => active this turn and next turn (ticks down at end of each owner turn).
-        await PowerCmd.Apply<ShadowClonePower>(choiceContext, Owner.Creature, 2, Owner.Creature, this);
+        await PowerCmd.Apply<ShadowClonePower>(choiceContext, Owner.Creature, BalanceValue("BaseShadowClone", 2), Owner.Creature, this);
     }
 
     protected override void OnUpgrade()
     {
         // Shadow Clone+ : reduce cost from 3 to 2.
-        EnergyCost.UpgradeBy(-1);
+        EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(ShadowClone), -1));
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

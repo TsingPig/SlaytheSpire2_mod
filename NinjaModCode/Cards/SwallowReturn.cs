@@ -18,9 +18,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class SwallowReturn : NinjaModCard
 {
-    public SwallowReturn() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public SwallowReturn() : base(BalanceCost(nameof(SwallowReturn), 1), BalanceType(nameof(SwallowReturn), CardType.Attack), BalanceRarity(nameof(SwallowReturn), CardRarity.Common), BalanceTarget(nameof(SwallowReturn), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(4m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 4m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -36,11 +36,11 @@ public class SwallowReturn : NinjaModCard
         bool fullyBlocked = dealtSomething && results.Sum(r => r.UnblockedDamage) <= 0;
         if (fullyBlocked)
         {
-            await PlayerCmd.GainEnergy(1m, Owner);
+            await PlayerCmd.GainEnergy(BalanceValue("BaseSwallowReturnEnergy", 1), Owner);
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m);
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("燕返", "造成 {Damage:diff()} 点伤害。如果伤害被完全[gold]格挡[/gold]，获得 1 点能量。")

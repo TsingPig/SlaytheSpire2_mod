@@ -20,9 +20,9 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class RisingFist : NinjaModCard
 {
     // 飞刀的基础伤害（与 Kunai 一致）。
-    public RisingFist() : base(1, CardType.Attack, CardRarity.Uncommon, TargetType.AnyEnemy) { }
+    public RisingFist() : base(BalanceCost(nameof(RisingFist), 1), BalanceType(nameof(RisingFist), CardType.Attack), BalanceRarity(nameof(RisingFist), CardRarity.Uncommon), BalanceTarget(nameof(RisingFist), TargetType.AnyEnemy)) { }
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(6m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 6m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -46,7 +46,7 @@ public class RisingFist : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(3m); // 6 -> 9
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m)); // 6 -> 9
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("起承拳", "造成 {Damage:diff()} 点伤害。如果手牌中有[gold]飞刀[/gold]，自动免费打出一张飞刀。")

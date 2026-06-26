@@ -17,11 +17,11 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class BlazeInferno : NinjaModCard
 {
-    public BlazeInferno() : base(0, CardType.Skill, CardRarity.Uncommon, TargetType.AllEnemies) { }
+    public BlazeInferno() : base(BalanceCost(nameof(BlazeInferno), 0), BalanceType(nameof(BlazeInferno), CardType.Skill), BalanceRarity(nameof(BlazeInferno), CardRarity.Uncommon), BalanceTarget(nameof(BlazeInferno), TargetType.AllEnemies)) { }
 
     // 用 PowerVar 表示燃烧层数：既让卡面 {Burning:diff()} 在锻造时预览 7→9 升级，
     // 又自动关联燃烧效果的悬浮提示。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<BurningPower>("Burning", 7m)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new PowerVar<BurningPower>("Burning", BalanceDecimal("BaseBurning", 7m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -32,7 +32,7 @@ public class BlazeInferno : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => DynamicVars["Burning"].UpgradeValueBy(2m); // 7 -> 9
+    protected override void OnUpgrade() => DynamicVars["Burning"].UpgradeValueBy(BalanceDelta("BaseBurning", "UpgradeBurning", 2m)); // 7 -> 9
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：豪炎", "对所有敌人施加 {Burning:diff()} 层[gold]燃烧[/gold]。")

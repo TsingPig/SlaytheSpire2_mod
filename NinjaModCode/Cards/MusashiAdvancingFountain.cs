@@ -16,14 +16,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiAdvancingFountain : NinjaModCard
 {
-    public MusashiAdvancingFountain() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public MusashiAdvancingFountain() : base(BalanceCost(nameof(MusashiAdvancingFountain), 1), BalanceType(nameof(MusashiAdvancingFountain), CardType.Skill), BalanceRarity(nameof(MusashiAdvancingFountain), CardRarity.Uncommon), BalanceTarget(nameof(MusashiAdvancingFountain), TargetType.Self)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiAdvancingFountain), true);
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new HealVar(4m), new IntVar("Energy", 1m)];
+        [new HealVar(BalanceDecimal("BaseHeal", 4m)), new IntVar("Energy", BalanceDecimal("BaseEnergy", 1m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -32,7 +32,7 @@ public class MusashiAdvancingFountain : NinjaModCard
             DynamicVars["Energy"].IntValue, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars["Energy"].UpgradeValueBy(1m); // 1 -> 2
+    protected override void OnUpgrade() => DynamicVars["Energy"].UpgradeValueBy(BalanceDelta("BaseEnergy", "UpgradeEnergy", 1m)); // 1 -> 2
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：前进喷泉", "回复 {Heal} 点生命，下个回合额外获得 {Energy:diff()} 点能量。")

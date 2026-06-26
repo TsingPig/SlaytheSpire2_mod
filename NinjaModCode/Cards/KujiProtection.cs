@@ -17,19 +17,19 @@ namespace NinjaMod.NinjaModCode.Cards;
 public class KujiProtection : NinjaModCard
 {
     // 初始抵挡层数（常量）。
-    private const int Resist = 3;
+    private int Resist => BalanceConst(nameof(KujiProtection), nameof(Resist), 3);
 
-    public KujiProtection() : base(2, CardType.Power, CardRarity.Uncommon, TargetType.Self) { }
+    public KujiProtection() : base(BalanceCost(nameof(KujiProtection), 2), BalanceType(nameof(KujiProtection), CardType.Power), BalanceRarity(nameof(KujiProtection), CardRarity.Uncommon), BalanceTarget(nameof(KujiProtection), TargetType.Self)) { }
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, Resist, Owner.Creature, this);
-        await PowerCmd.Apply<KujiProtectionPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<KujiProtectionPower>(choiceContext, Owner.Creature, BalanceValue("BaseKujiProtection", 1), Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(KujiProtection), -1)); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("九字护身法", $"获得 {Resist} 点[gold]抵挡[/gold]。每回合开始时，额外获得当前[gold]抵挡[/gold]层数 2 倍的格挡。")

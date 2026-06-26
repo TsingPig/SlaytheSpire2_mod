@@ -18,7 +18,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EarthRend : NinjaModCard
 {
-    public EarthRend() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public EarthRend() : base(BalanceCost(nameof(EarthRend), 1), BalanceType(nameof(EarthRend), CardType.Skill), BalanceRarity(nameof(EarthRend), CardRarity.Uncommon), BalanceTarget(nameof(EarthRend), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 

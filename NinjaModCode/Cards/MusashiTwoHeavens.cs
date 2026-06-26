@@ -21,15 +21,15 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiTwoHeavens : NinjaModCard
 {
-    public MusashiTwoHeavens() : base(3, CardType.Skill, CardRarity.Rare, TargetType.AnyEnemy) { }
+    public MusashiTwoHeavens() : base(BalanceCost(nameof(MusashiTwoHeavens), 3), BalanceType(nameof(MusashiTwoHeavens), CardType.Skill), BalanceRarity(nameof(MusashiTwoHeavens), CardRarity.Rare), BalanceTarget(nameof(MusashiTwoHeavens), TargetType.AnyEnemy)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiTwoHeavens), true);
 
     protected override IEnumerable<IHoverTip> ExtraHoverTips =>
         base.ExtraHoverTips.Concat([StunIntent.GetStaticHoverTip()]);
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(16m, ValueProp.Move), new RepeatVar(2)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 16m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 2))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -49,7 +49,7 @@ public class MusashiTwoHeavens : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 3 -> 2
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(MusashiTwoHeavens), -1)); // 3 -> 2
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：二天一流", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段。若目标同时拥有[gold]流血[/gold]与[gold]燃烧[/gold]，则使其[gold]眩晕[/gold]。")

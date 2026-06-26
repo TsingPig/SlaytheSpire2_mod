@@ -17,7 +17,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EightTechniques : NinjaModCard
 {
-    public EightTechniques() : base(1, CardType.Skill, CardRarity.Rare, TargetType.Self) { }
+    public EightTechniques() : base(BalanceCost(nameof(EightTechniques), 1), BalanceType(nameof(EightTechniques), CardType.Skill), BalanceRarity(nameof(EightTechniques), CardRarity.Rare), BalanceTarget(nameof(EightTechniques), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
@@ -27,14 +27,18 @@ public class EightTechniques : NinjaModCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this); // 力量
-        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);   // 抵抗
-        await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);     // 活力/敏捷
-        await PlayerCmd.GainEnergy(1m, Owner);                                                         // 能量
-        await CreatureCmd.GainBlock(Owner.Creature, 1, ValueProp.Move, cardPlay);                      // 格挡
-        await Kunai.CreateInHand(Owner, CombatState);                                                  // 飞刀
-        await CreatureCmd.GainMaxHp(Owner.Creature, 1);                                                // 最大生命
-        await CreatureCmd.Heal(Owner.Creature, 1, true);                                               // 生命恢复
+        int amount = BalanceValue("BaseEightTechniquesAmount", 1);
+        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this); // ??
+        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);   // ??
+        await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);     // ??/??
+        await PlayerCmd.GainEnergy(amount, Owner);                                                         // ??
+        await CreatureCmd.GainBlock(Owner.Creature, amount, ValueProp.Move, cardPlay);                      // ??
+        for (int i = 0; i < amount; i++)
+        {
+            await Kunai.CreateInHand(Owner, CombatState);                                                  // ??
+        }
+        await CreatureCmd.GainMaxHp(Owner.Creature, amount);                                                // ????
+        await CreatureCmd.Heal(Owner.Creature, amount, true);                                               // ????
     }
 
     protected override void OnUpgrade() { } // 升级仅移除消耗（由 CanonicalKeywords 根据 IsUpgraded 处理）

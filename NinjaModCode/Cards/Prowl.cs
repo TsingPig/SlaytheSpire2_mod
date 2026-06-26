@@ -17,16 +17,16 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class Prowl : NinjaModCard
 {
-    public Prowl() : base(0, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+    public Prowl() : base(BalanceCost(nameof(Prowl), 0), BalanceType(nameof(Prowl), CardType.Skill), BalanceRarity(nameof(Prowl), CardRarity.Common), BalanceTarget(nameof(Prowl), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(4m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new BlockVar(BalanceDecimal("BaseBlock", 4m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         await CreatureCmd.GainBlock(Owner.Creature, DynamicVars.Block, cardPlay);
-        await PowerCmd.Apply<ProwlPower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<ProwlPower>(choiceContext, Owner.Creature, BalanceValue("BaseProwl", 1), Owner.Creature, this);
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

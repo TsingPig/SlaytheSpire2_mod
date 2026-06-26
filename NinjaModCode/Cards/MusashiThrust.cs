@@ -18,15 +18,15 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class MusashiThrust : NinjaModCard
 {
-    private const int Bleed = 2;
+    private int Bleed => BalanceConst(nameof(MusashiThrust), nameof(Bleed), 2);
 
-    public MusashiThrust() : base(0, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public MusashiThrust() : base(BalanceCost(nameof(MusashiThrust), 0), BalanceType(nameof(MusashiThrust), CardType.Attack), BalanceRarity(nameof(MusashiThrust), CardRarity.Common), BalanceTarget(nameof(MusashiThrust), TargetType.AnyEnemy)) { }
 
-    public override bool IsMusashi => true;
+    public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiThrust), true);
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(9m, ValueProp.Move)];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 9m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

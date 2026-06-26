@@ -18,7 +18,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class StoneSummon : NinjaModCard
 {
-    public StoneSummon() : base(1, CardType.Skill, CardRarity.Common, TargetType.Self) { }
+    public StoneSummon() : base(BalanceCost(nameof(StoneSummon), 1), BalanceType(nameof(StoneSummon), CardType.Skill), BalanceRarity(nameof(StoneSummon), CardRarity.Common), BalanceTarget(nameof(StoneSummon), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
@@ -31,13 +31,13 @@ public class StoneSummon : NinjaModCard
             var owner = ResolvePlayerCreatureForDisplay(card);
             if (owner == null) return 0m;
             int resist = owner.GetPower<ResistPower>()?.Amount ?? 0;
-            return resist * (card.IsUpgraded ? 5 : 4);
+            return resist * (card.IsUpgraded ? BalanceValue(nameof(StoneSummon), "UpgradeStoneSummonMultiplier", 5) : BalanceValue(nameof(StoneSummon), "BaseStoneSummonMultiplier", 4));
         }, 1, ValueProp.Move);
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         int resist = Owner.Creature.GetPower<ResistPower>()?.Amount ?? 0;
-        int block = resist * (IsUpgraded ? 5 : 4);
+        int block = resist * (IsUpgraded ? BalanceValue("UpgradeStoneSummonMultiplier", 5) : BalanceValue("BaseStoneSummonMultiplier", 4));
         if (block > 0)
         {
             await CreatureCmd.GainBlock(Owner.Creature, block, ValueProp.Move, cardPlay);

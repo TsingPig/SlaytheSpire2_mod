@@ -17,12 +17,12 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class StoneGatherThrust : NinjaModCard
 {
-    public StoneGatherThrust() : base(1, CardType.Attack, CardRarity.Common, TargetType.AnyEnemy) { }
+    public StoneGatherThrust() : base(BalanceCost(nameof(StoneGatherThrust), 1), BalanceType(nameof(StoneGatherThrust), CardType.Attack), BalanceRarity(nameof(StoneGatherThrust), CardRarity.Common), BalanceTarget(nameof(StoneGatherThrust), TargetType.AnyEnemy)) { }
 
     public override bool GainsBlock => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(6m, ValueProp.Move), new BlockVar(6m, ValueProp.Move)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 6m), ValueProp.Move), new BlockVar(BalanceDecimal("BaseBlock", 6m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -37,8 +37,8 @@ public class StoneGatherThrust : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(3m);  // 6 -> 9
-        DynamicVars.Block.UpgradeValueBy(3m);   // 6 -> 9
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));  // 6 -> 9
+        DynamicVars.Block.UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 3m));   // 6 -> 9
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

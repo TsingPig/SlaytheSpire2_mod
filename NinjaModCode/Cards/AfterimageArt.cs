@@ -15,14 +15,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class AfterimageArt : NinjaModCard
 {
-    public AfterimageArt() : base(2, CardType.Power, CardRarity.Rare, TargetType.Self) { }
+    public AfterimageArt() : base(BalanceCost(nameof(AfterimageArt), 2), BalanceType(nameof(AfterimageArt), CardType.Power), BalanceRarity(nameof(AfterimageArt), CardRarity.Rare), BalanceTarget(nameof(AfterimageArt), TargetType.Self)) { }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<AfterimagePower>(choiceContext, Owner.Creature, 1, Owner.Creature, this);
+        await PowerCmd.Apply<AfterimagePower>(choiceContext, Owner.Creature, BalanceValue("BaseAfterimage", 1), Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 2 -> 1
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(AfterimageArt), -1)); // 2 -> 1
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("残影术", "获得 1 层[gold]残影[/gold]。")

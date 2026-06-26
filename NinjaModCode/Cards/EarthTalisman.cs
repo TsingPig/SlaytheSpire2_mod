@@ -17,7 +17,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EarthTalisman : NinjaModCard
 {
-    public EarthTalisman() : base(1, CardType.Skill, CardRarity.Uncommon, TargetType.Self) { }
+    public EarthTalisman() : base(BalanceCost(nameof(EarthTalisman), 1), BalanceType(nameof(EarthTalisman), CardType.Skill), BalanceRarity(nameof(EarthTalisman), CardRarity.Uncommon), BalanceTarget(nameof(EarthTalisman), TargetType.Self)) { }
 
     public override bool GainsBlock => true;
 
@@ -41,7 +41,7 @@ public class EarthTalisman : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(-1); // 1 -> 0
+    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(EarthTalisman), -1)); // 1 -> 0
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("土忍：土护符", "获得 {CalculatedBlock:diff()} 点格挡（等同于当前消耗牌堆中的牌数）。")
