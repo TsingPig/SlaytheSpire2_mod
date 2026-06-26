@@ -5,6 +5,7 @@ using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using BaseLib.Abstracts;
 
 namespace NinjaMod.NinjaModCode.Cards;
@@ -14,18 +15,20 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// </summary>
 public class EarthEscape : NinjaModCard
 {
-    private int _resist = BalanceValue(nameof(EarthEscape), "BaseResist", 1);
+    public EarthEscape() : base(0, CardType.Power, CardRarity.Common, TargetType.Self) { }
 
-    public EarthEscape() : base(BalanceCost(nameof(EarthEscape), 0), BalanceType(nameof(EarthEscape), CardType.Power), BalanceRarity(nameof(EarthEscape), CardRarity.Common), BalanceTarget(nameof(EarthEscape), TargetType.Self)) { }
+    protected override IEnumerable<DynamicVar> CanonicalVars =>
+        [new PowerVar<ResistPower>("Resist", 1m)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, _resist, Owner.Creature, this);
+        var amount = (int)DynamicVars["Resist"].BaseValue;
+        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => _resist = BalanceValue("UpgradeResist", 2);
+    protected override void OnUpgrade() => DynamicVars["Resist"].UpgradeValueBy(1m); // 1 -> 2
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：土遁", $"获得 {_resist} 层抵挡。")
-        : new CardLoc("Earth Ninjutsu: Earth Escape", $"Gain {_resist} Resist.");
+        ? new CardLoc("土忍：土遁", "获得 {Resist:diff()} 层[gold]抵挡[/gold]。")
+        : new CardLoc("Earth Ninjutsu: Earth Escape", "Gain {Resist:diff()} [gold]Resist[/gold].");
 }
