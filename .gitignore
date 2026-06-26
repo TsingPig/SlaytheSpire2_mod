@@ -18,6 +18,9 @@ local.props
 # Build / export artifacts and generated game references (never commit game DLLs).
 *.pck
 *.pdb
+
+# Excel lock files
+~$*
 sts2.dll
 0Harmony.dll
 

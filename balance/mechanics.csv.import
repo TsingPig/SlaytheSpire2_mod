@@ -1,0 +1,17 @@
+[remap]
+
+importer="csv_translation"
+type="Translation"
+uid="uid://bo5w53fvjlb1p"
+
+[deps]
+
+files=["res://balance/mechanics.KeywordEn.translation", "res://balance/mechanics.Kind.translation", "res://balance/mechanics.DesignerMeaning.translation", "res://balance/mechanics.ImplementationNotes.translation"]
+
+source_file="res://balance/mechanics.csv"
+dest_files=["res://balance/mechanics.KeywordEn.translation", "res://balance/mechanics.Kind.translation", "res://balance/mechanics.DesignerMeaning.translation", "res://balance/mechanics.ImplementationNotes.translation"]
+
+[params]
+
+compress=true
+delimiter=0
