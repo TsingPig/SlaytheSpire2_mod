@@ -18,6 +18,8 @@ public class KiBreath : NinjaModCard
 {
     public KiBreath() : base(BalanceCost(nameof(KiBreath), 1), BalanceType(nameof(KiBreath), CardType.Skill), BalanceRarity(nameof(KiBreath), CardRarity.Common), BalanceTarget(nameof(KiBreath), TargetType.Self)) { }
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
     protected override IEnumerable<DynamicVar> CanonicalVars => [new HealVar(BalanceDecimal("BaseHeal", 4m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)

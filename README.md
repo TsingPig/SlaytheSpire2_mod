@@ -164,7 +164,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/kunai_throw.png" width="120"><br><b>苦无</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害。如果目标有流血，恢复 1 点能量。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/iai_strike.png" width="120"><br><b>居合</b><br>2⚡ 攻击<br><small>造成 10(15) 点伤害。若打出后仍有能量，额外造成 5(8) 点伤害并附加 3 层流血。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/ki_breath.png" width="120"><br><b>气合</b><br>1⚡ 技能<br><small>回复 4(6) 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/ki_breath.png" width="120"><br><b>气合</b><br>1⚡ 技能 · 消耗<br><small>回复 4(6) 点生命。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/swallow_return.png" width="120"><br><b>燕返</b><br>1⚡ 攻击<br><small>造成 4(7) 点伤害。如果伤害被完全格挡，获得 1 点能量。</small></td>
 </tr>
 <tr align="center">
