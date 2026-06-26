@@ -52,7 +52,7 @@ public class BleedPower : NinjaModPower
     }
 
     /// <summary>每回合减少 1 层流血。</summary>
-    public override async Task AfterSideTurnStart(PlayerChoiceContext ctx, CombatSide side,
+    public override async Task AfterSideTurnStart(CombatSide side,
         IReadOnlyList<Creature> creatures, ICombatState combatState)
     {
         if (Amount <= 0) return;
