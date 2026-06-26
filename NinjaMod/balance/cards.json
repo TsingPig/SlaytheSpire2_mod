@@ -39,8 +39,8 @@
         "IsMusashi":  false,
         "HasSilence":  false,
         "Values":  {
-                       "BaseBurning":  7,
-                       "UpgradeBurning":  9
+                       "BaseBurning":  4,
+                       "UpgradeBurning":  7
                    },
         "Text":  {
                      "DescriptionZh":  "对所有敌人施加 7(9) 层【燃烧】。",
@@ -273,14 +273,14 @@
         "IsMusashi":  false,
         "HasSilence":  false,
         "Values":  {
-                       "Const.Resist":  3,
-                       "ConstResist":  3,
+                       "Const.Resist":  2,
+                       "ConstResist":  2,
                        "BaseKujiProtection":  1
                    },
         "Text":  {
-                     "DescriptionZh":  "获得 3 层【抵挡】；每回合开始额外获得当前抵挡层数 2 倍的格挡。",
+                     "DescriptionZh":  "获得2 层【抵挡】；每回合开始额外获得当前抵挡层数 2 倍的格挡。",
                      "DescriptionEn":  "",
-                     "MechanicNotes":  "获得 3 层【抵挡】；每回合开始额外获得当前抵挡层数 2 倍的格挡。",
+                     "MechanicNotes":  "获得 2 层【抵挡】；每回合开始额外获得当前抵挡层数 2 倍的格挡。",
                      "DesignerNotes":  ""
                  },
         "CodeFile":  "NinjaModCode/Cards/KujiProtection.cs"
@@ -357,8 +357,8 @@
         "IsMusashi":  false,
         "HasSilence":  false,
         "Values":  {
-                       "BaseBurning":  5,
-                       "UpgradeBurning":  8
+                       "BaseBurning":  6,
+                       "UpgradeBurning":  9
                    },
         "Text":  {
                      "DescriptionZh":  "给予目标 5(8) 层【燃烧】。",
@@ -465,8 +465,8 @@
         "HasSilence":  false,
         "Values":  {
                        "BaseDamage":  11,
-                       "BaseDex":  3,
-                       "UpgradeDex":  4,
+                       "BaseDex":  1,
+                       "UpgradeDex":  2,
                        "Extra.Dex":  3,
                        "UpgradeDamage":  15
                    },
@@ -630,8 +630,8 @@
         "IsMusashi":  false,
         "HasSilence":  false,
         "Values":  {
-                       "UpgradeBlock":  3,
-                       "BaseBlock":  2
+                       "UpgradeBlock":  4,
+                       "BaseBlock":  3
                    },
         "Text":  {
                      "DescriptionZh":  "每回合开始时，获得 2(3) 点格挡。",
@@ -915,15 +915,16 @@
         "Rarity":  "Rare",
         "Type":  "Skill",
         "Target":  "AnyEnemy",
-        "Cost":  "3",
-        "UpgradeCost":  "2",
+        "Cost":  "2",
+        "UpgradeCost":  "",
         "Keywords":  "",
         "IsToken":  false,
         "IsMusashi":  true,
         "HasSilence":  false,
         "Values":  {
+                       "BaseRepeat":  2,
                        "BaseDamage":  16,
-                       "BaseRepeat":  2
+                       "UpgradeDamage":  21
                    },
         "Text":  {
                      "DescriptionZh":  "造成 16 点伤害 ×2 段。若目标同时拥有流血与燃烧，则使其眩晕。【武藏】牌。",
@@ -949,10 +950,10 @@
         "HasSilence":  false,
         "Values":  {
                        "Extra.Resist":  1,
-                       "BaseDamage":  15,
+                       "BaseDamage":  13,
                        "BaseResist":  1,
                        "UpgradeResist":  2,
-                       "UpgradeDamage":  21
+                       "UpgradeDamage":  18
                    },
         "Text":  {
                      "DescriptionZh":  "造成 15(21) 点伤害，获得 1(2) 层【抵挡】。【武藏】牌。",
@@ -1191,10 +1192,10 @@
         "IsMusashi":  false,
         "HasSilence":  false,
         "Values":  {
-                       "BaseDamage":  6,
+                       "BaseDamage":  5,
                        "BaseBurning":  4,
                        "UpgradeBurning":  5,
-                       "UpgradeDamage":  9
+                       "UpgradeDamage":  8
                    },
         "Text":  {
                      "DescriptionZh":  "造成 6(9) 点伤害，附加 4(5) 层【燃烧】。",
@@ -1243,7 +1244,7 @@
         "Rarity":  "Common",
         "Type":  "Attack",
         "Target":  "AllEnemies",
-        "Cost":  "1",
+        "Cost":  "2",
         "UpgradeCost":  "",
         "Keywords":  "",
         "IsToken":  false,
@@ -1436,9 +1437,9 @@
         "HasSilence":  false,
         "Values":  {
                        "UpgradeBlock":  9,
-                       "BaseDamage":  6,
+                       "BaseDamage":  3,
                        "BaseBlock":  6,
-                       "UpgradeDamage":  9
+                       "UpgradeDamage":  5
                    },
         "Text":  {
                      "DescriptionZh":  "造成 6(9) 点伤害，获得 6(9) 点格挡。",
