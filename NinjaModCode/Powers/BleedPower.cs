@@ -64,4 +64,7 @@ public class BleedPower : NinjaModPower
         ? new PowerLoc("流血",
             "每当此生物受到未被格挡的攻击伤害时，立即额外失去等同于流血层数的生命（无法被格挡）。每回合减少 1 层。",
             "每当此生物受到未被格挡的攻击伤害时，立即额外失去等同于流血层数的生命（无法被格挡）。每回合减少 1 层。")
+        : new PowerLoc("Bleed",
+            "Whenever this creature takes unblocked attack damage, it loses additional HP equal to its Bleed. Lose 1 stack per turn.",
+            "Whenever this creature takes unblocked attack damage, it loses additional HP equal to its Bleed. Lose 1 stack per turn.");
 }
