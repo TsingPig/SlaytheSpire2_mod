@@ -31,7 +31,12 @@ public class Detonation : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() { } // 升级仅获得保留（由 CanonicalKeywords 处理）
+    protected override void OnUpgrade()
+    {
+        // 升级获得保留。CanonicalKeywords 已用 IsUpgraded 控制，但还需要
+        // AddKeyword 触发 KeywordsChanged 事件让卡面 UI 刷新关键词行。
+        AddKeyword(CardKeyword.Retain);
+    }
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：起爆符", "点燃目标的[gold]燃烧[/gold]（造成燃烧 2 倍的无法格挡伤害并移除）。")

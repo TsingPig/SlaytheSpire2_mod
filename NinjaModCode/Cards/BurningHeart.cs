@@ -63,7 +63,12 @@ public class BurningHeart : NinjaModCard
         }
     }
 
-    protected override void OnUpgrade() { } // 升级仅获得保留（由 CanonicalKeywords 处理）
+    protected override void OnUpgrade()
+    {
+        // 升级获得保留。CanonicalKeywords 已用 IsUpgraded 控制，但还需要
+        // AddKeyword 触发 KeywordsChanged 事件让卡面 UI 刷新关键词行。
+        AddKeyword(CardKeyword.Retain);
+    }
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("火忍：燃心", "进入抽牌堆，消耗最多 X 张牌（K 张），给予所有敌人 K × 3 层[gold]燃烧[/gold]。")
