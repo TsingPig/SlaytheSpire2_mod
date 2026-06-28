@@ -332,6 +332,7 @@ $numericFields = @(
     "BaseRepeat", "UpgradeRepeat", "BaseCards", "UpgradeCards", "BaseBurning", "UpgradeBurning",
     "BaseBleed", "UpgradeBleed", "BaseQuench", "UpgradeQuench", "BaseResist", "UpgradeResist",
     "BaseDex", "UpgradeDex", "BaseEnergy", "UpgradeEnergy", "BurningInfusion",
+    "BaseVigor", "UpgradeVigor", "BaseSelect", "UpgradeSelect", "BaseStealth", "UpgradeStealth",
     "ConstBleed", "ConstBlockPerAttack", "ConstBurningPerCard", "ConstCostReduction",
     "ConstCount", "ConstDamageReductionPct", "ConstHpPerExecute", "ConstKunaiDamage",
     "ConstResist", "ConstStealth", "ConstVigor"

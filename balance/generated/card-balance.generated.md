@@ -15,7 +15,7 @@
 | 火忍：火焰弹幕 | FlameBarrage | Uncommon | 1 | Skill | BaseDamage=2<br>UpgradeDamage=3<br>BaseRepeat=3<br>BaseBurning=3<br>UpgradeBurning=4 | 造成 2(3) 点伤害 ×3 次，然后施加 3(4) 层【燃烧】。 |
 | 火忍：火盾 | FlameShield | Uncommon | 1(0) | Power | BaseFlameShield=1 | 获得 1 层【火盾】：每当你受到攻击时，对攻击者施加等同于火盾层数的【燃烧】。 |
 | 九字护身法 | KujiProtection | Uncommon | 2(1) | Power | BaseKujiProtection=1<br>ConstResist=2 | 获得2 层【抵挡】；每回合开始额外获得当前抵挡层数 2 倍的格挡。 |
-| 锁镰 | KusariGama | Uncommon | 1 | Attack | BaseDamage=9<br>UpgradeDamage=12<br>BaseExtraDamage=4<br>UpgradeExtraDamage=6 | 造成 9(12) 点伤害；若目标有【流血】，额外造成 4(6) 点伤害。 |
+| 锁镰 | KusariGama | Uncommon | 1 | Attack | BaseDamage=8<br>UpgradeDamage=11 | 造成 8(11) 点伤害；若目标拥有【流血】，额外给予 2 层【虚弱】。 |
 | 细雪 | LightSnow | Uncommon | 1 | Attack | BaseDamage=1<br>BaseHeal=2<br>UpgradeHeal=3<br>BaseRepeat=4 | 造成 1 点伤害 ×4 段，回复 2(3) 点生命。 |
 | 火忍：离火符 | Lihuo | Uncommon | 0 | Skill | BaseBurning=6<br>UpgradeBurning=9 | 给予目标 5(8) 层【燃烧】。 |
 | 武藏：前进喷泉 | MusashiAdvancingFountain | Uncommon | 1 | Skill | BaseHeal=4<br>BaseEnergy=1<br>UpgradeEnergy=2 | 回复 4 点生命，下个回合额外获得 1(2) 点能量。【武藏】牌。 |
@@ -25,7 +25,7 @@
 | 土忍：石化术 | Petrification | Uncommon | 2(1) | Skill | BaseBlock=13 | 获得 13 点格挡，并清除自身所有负面效果。 |
 | 多重罗生门 | Rashomon | Uncommon | 2 | Skill | BaseCards=3<br>UpgradeCards=4<br>ConstBlockPerAttack=9 | 抽 3(4) 张牌；抽到的牌中每有一张攻击牌，获得 9 点格挡。 |
 | 起承拳 | RisingFist | Uncommon | 1 | Attack | BaseDamage=6<br>UpgradeDamage=9 | 造成 6(9) 点伤害；若手牌中有飞刀，自动免费打出一张飞刀。 |
-| 追魂 | SoulChase | Uncommon | 3 | Skill | BaseSoulChaseBleed=1<br>BaseCards=2<br>UpgradeCards=3<br>ConstKunaiDamage=5 | 对目标打出消耗牌堆中的所有【飞刀】（每张造成其伤害+流血）；若成功击杀，抽 2(3) 张牌。 |
+| 追魂 | SoulChase | Uncommon | 2 | Skill | BaseSoulChaseBleed=1<br>ConstKunaiDamage=5 | 对目标打出消耗牌堆中的所有【飞刀】（含残影飞刀），每张造成其伤害并附加流血；升级后获得保留。 |
 | 索命 | SoulReap | Uncommon | 2 | Skill | BaseRemove=8<br>UpgradeRemove=12<br>BaseSoulReapRewardCards=1<br>BaseSoulReapRewardEnergy=1 | 移除目标身上最多 8(12) 层【流血】，回复等同于移除层数的生命。若移除后目标没有流血，抽 1 张牌并回复 1 点能量。 |
 | 八咫镜 | YataMirror | Uncommon | 1 | Power | BaseBlock=3<br>UpgradeBlock=4 | 每回合开始时，获得 2(3) 点格挡。 |
 | 残影 | AfterimageAttack | Token | 0 | Attack |  | 造成（复制源攻击牌伤害减半）点伤害。动态伤害。 |
@@ -44,7 +44,7 @@
 | 影分身 | ShadowClone | Rare | 3(2) | Skill | BaseShadowClone=2<br>ConstDamageReductionPct=40 | 本回合及下回合：① 每张非影分身卡额外结算一次；② 受到的攻击伤害减少 40%；③ 荆棘反击。 |
 | 影心刺 | ShadowPierce | Rare | 0 | Attack | BaseDamage=9<br>UpgradeDamage=14<br>BaseBleed=5<br>UpgradeBleed=6 | 造成 9(14) 点伤害，附加 5(6) 层【流血】。【静默】。 |
 | 隐身法 | StealthArt | Rare | 2(1) | Power | ConstStealth=3<br>ConstVigor=1 | 获得 1 点【活力】，并获得 3 层【隐身】。 |
-| 须佐能乎 | Susanoo | Rare | 3 | Attack | BaseDamage=7<br>UpgradeDamage=9<br>BaseSusanooBleedPerHit=1<br>BaseRepeat=6 | 造成 7(9) 点伤害 ×6 段；每段追加 1 层【流血】。 |
+| 须佐能乎 | Susanoo | Rare | 3 | Attack | BaseDamage=7<br>UpgradeDamage=9<br>BaseSusanooBleedPerHit=1<br>BaseRepeat=6 | 造成 7(9) 点伤害，共 6 段；每段伤害后立即追加 1 层【流血】（逐段结算，后续段吃到累积流血）。 |
 | 火忍：起爆符 | Detonation | Common | 0 | Skill |  | 点燃目标的【燃烧】（造成燃烧 2 倍无法格挡伤害并移除）。 |
 | 土忍：土遁 | EarthEscape | Common | 0 | Power | BaseResist=1<br>UpgradeResist=2 | 获得 1(2) 层【抵挡】。 |
 | 土忍：土墙 | EarthWall | Common | 1 | Skill | BaseBlock=7<br>UpgradeBlock=10<br>BaseDebuffImmunity=2 | 获得 7(10) 点格挡，并获得【免疫负面】2 个回合。 |
@@ -59,8 +59,25 @@
 | 土忍：碎石 | RockShatter | Common | 1 | Skill | BaseBlock=8<br>UpgradeBlock=13<br>BaseRockShatterResistLoss=1 | 获得 8(13) 点格挡；自动免费打出手牌中所有「忍者防御」，随后移除 1 层【抵挡】。 |
 | 土忍：聚石刺 | StoneGatherThrust | Common | 1 | Attack | BaseDamage=3<br>UpgradeDamage=5<br>BaseBlock=6<br>UpgradeBlock=9 | 造成 6(9) 点伤害，获得 6(9) 点格挡。 |
 | 土忍：唤石 | StoneSummon | Common | 1 | Skill | BaseStoneSummonMultiplier=4<br>UpgradeStoneSummonMultiplier=5 | 获得（当前抵挡层数 × 4(5)）点格挡。动态格挡。 |
-| 燕返 | SwallowReturn | Common | 1 | Attack | BaseDamage=4<br>UpgradeDamage=7<br>BaseSwallowReturnEnergy=1 | 造成 4(7) 点伤害；若伤害被完全格挡，获得 1 点能量。 |
+| 燕返 | SwallowReturn | Common | 0 | Attack | BaseDamage=4<br>UpgradeDamage=7<br>BaseCards=1<br>UpgradeCards=2 | 造成 4(7) 点伤害；若目标拥有【流血】，抽 1(2) 张牌。 |
 | 暗杀 | Assassination | Basic | 1 | Attack | BaseDamage=7<br>UpgradeDamage=10 | 无视格挡，造成 7(10) 点伤害。【静默】。 |
 | 忍者防御 | NinjaDefend | Basic | 1 | Skill | BaseBlock=5<br>UpgradeBlock=8 | 获得 5(8) 点格挡。 |
 | 忍者打击 | NinjaStrike | Basic | 1 | Attack | BaseDamage=6<br>UpgradeDamage=9 | 造成 6(9) 点伤害。 |
 | 手里剑 | Shuriken | Basic | 2 | Attack | BaseDamage=10<br>UpgradeDamage=13<br>BaseBleed=2<br>UpgradeBleed=3 | 造成 10(13) 点伤害；未被完全格挡则施加 2(3) 层【流血】。 |
+| 忍具整理 | NinjaToolPrep | Common | 0 | Skill | BaseVigor=2<br>UpgradeVigor=4 | 抽 1 张牌；若抽到攻击牌，获得 2(4) 点【活力】。 |
+| 换手 | HandSwap | Common | 1 | Skill | BaseBlock=4<br>UpgradeBlock=7 | 从手牌中选择最多 2 张牌放回抽牌堆顶部，获得 4(7) 点格挡。 |
+| 火忍：火势蔓延 | FireSpread | Common | 1(0) | Skill |  | 将目标身上的【燃烧】扩散给所有其他敌人。 |
+| 火忍：余烬回收 | EmberRecovery | Uncommon | 1(0) | Skill | BaseEnergy=1 | 点燃目标身上的【燃烧】；若成功点燃，获得 1 点能量并抽 1 张牌。 |
+| 火忍：扇风 | FanWind | Uncommon | 2(1) | Skill |  | 将目标的【燃烧】层数翻倍。 |
+| 武藏：神梦一击 | MusashiDreamStrike | Uncommon | 4 | Attack | BaseDamage=46<br>UpgradeDamage=62 | 造成 46(62) 点伤害。 |
+| 武藏：猩红 | MusashiCrimson | Uncommon | 0 | Skill | BaseQuench=2 | 获得 2 层【淬火】。 |
+| 刀意流转 | BladeFlow | Uncommon | 2(1) | Skill |  | 对目标打出手牌中的所有【飞刀】与【手里剑】（含残影复制牌）。 |
+| 火忍：燎原 | Wildfire | Uncommon | 1 | Power | BaseBurning=2<br>UpgradeBurning=3 | 你的回合开始时，给予所有敌人 2(3) 层【燃烧】。 |
+| 土忍：石隐术 | StoneHide | Rare | 2 | Power | BaseResist=2<br>UpgradeResist=3<br>ConstStealth=1 | 获得 1 层【隐身】，获得 2(3) 层【抵挡】。 |
+| 武藏：无双 | MusashiPeerless | Rare | 3(2) | Skill |  | 下回合开始获得 2 点能量，将各一张【武藏：二天一流】【武藏：猩红】【武藏：刺】放入抽牌堆顶部。 |
+| 火忍：血火转印 | BloodFireTransfer | Rare | 2 | Skill |  | 给予目标等同于其当前【燃烧】层数的【流血】，并移除目标身上的【燃烧】；升级后移除消耗。 |
+| 影息术 | ShadowBreath | Rare | 1 | Skill | BaseCards=1<br>UpgradeCards=2<br>BaseEnergy=1 | 若你处于【隐身】状态，抽 1(2) 张牌并获得 1 点能量。 |
+| 轻盈舞步 | NimbleStep | Rare | 2(1) | Power |  | 每当你打出一张 0 费牌，抽 1 张牌。 |
+| 保密行动 | CovertOps | Rare | 2 | Skill | BaseSelect=2<br>UpgradeSelect=3<br>BaseStealth=1<br>UpgradeStealth=2 | 获得 1(2) 层【隐身】；从抽牌堆中选择 2(3) 张牌，给其追加【静默】。 |
+| 火忍：火焰之舞 | FlameDance | Rare | 1 | Power | BaseEnergy=1<br>UpgradeEnergy=2 | 每回合第一次打出【火忍】牌时，获得 1(2) 点能量。 |
+| 土忍：地震 | Earthquake | Rare | 5 | Skill | BaseDamage=8<br>UpgradeDamage=12 | 对所有敌人造成 8(12) 点伤害，并使所有敌人【眩晕】。 |

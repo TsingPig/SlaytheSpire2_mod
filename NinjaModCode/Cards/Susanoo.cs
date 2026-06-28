@@ -25,16 +25,20 @@ public class Susanoo : NinjaModCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
-        // 用单个多段攻击指令（WithHitCount）代替 6 次逐个 await 的独立攻击，
-        // 各段之间几乎无间隔，出招明显更快；多段结束后统一追加等数量的流血（结果等同于每段 1 层）。
+        // 逐段结算：每打出一段伤害后立即追加 1 层流血，使后续每一段都能吃到累积的流血伤害。
+        // 例如 7 -> (1流血) -> 7+1 -> (2流血) -> 7+2 ... 而不是 6 段全部打完后才一次性追加流血。
         int hits = DynamicVars.Repeat.IntValue;
-        await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
-            .Targeting(cardPlay.Target)
-            .WithHitCount(hits)
-            .WithHitFx(NinjaConstants.SlashVfx)
-            .Execute(choiceContext);
-        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, hits * BalanceValue("BaseSusanooBleedPerHit", 1), Owner.Creature, this);
+        int bleedPerHit = BalanceValue("BaseSusanooBleedPerHit", 1);
+        for (int i = 0; i < hits; i++)
+        {
+            if (cardPlay.Target.CurrentHp <= 0) break;
+            await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
+                .FromCard(this)
+                .Targeting(cardPlay.Target)
+                .WithHitFx(NinjaConstants.SlashVfx)
+                .Execute(choiceContext);
+            await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, bleedPerHit, Owner.Creature, this);
+        }
     }
 
     protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 2m)); // 7 -> 9

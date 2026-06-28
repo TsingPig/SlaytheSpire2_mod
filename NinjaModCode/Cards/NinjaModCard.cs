@@ -62,7 +62,28 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     /// 【静默】机制：拥有静默的卡牌打出后不会破除你的隐身。默认 false。
     /// 需要静默的卡牌重写为 true；接口预留：也可写成 => IsUpgraded 实现“升级后获得静默”。
     /// </summary>
-    public virtual bool HasSilence => CardBalance.Find(GetType().Name)?.HasSilence ?? false;
+    public virtual bool HasSilence => GrantedSilence || (CardBalance.Find(GetType().Name)?.HasSilence ?? false);
+
+    /// <summary>
+    /// 运行时动态授予【静默】（如【保密行动】对抽牌堆中选中的卡牌追加静默）。
+    /// 一旦置为 true，<see cref="HasSilence"/> 即返回 true，并自动追加静默悬浮提示。
+    /// </summary>
+    public bool GrantedSilence { get; set; }
+
+    /// <summary>
+    /// 是否为“火忍”系列卡牌（用于【火忍：火焰之舞】判定“每回合第一次打出火忍牌”）。
+    /// 通过卡名是否以“火忍”/“Fire Ninjutsu”开头自动识别，无需逐张标记。
+    /// </summary>
+    public virtual bool IsFireNinjutsu
+    {
+        get
+        {
+            var loc = Localization;
+            if (loc == null || loc.Count == 0) return false;
+            string name = loc[0].Item1 ?? string.Empty;
+            return name.Contains("火忍") || name.Contains("Fire Ninjutsu");
+        }
+    }
 
     /// <summary>
     /// 卡面预览/悬浮刷新时，BaseLib 的 CalculatedBlock 回调可能拿到的是 canonical card，
