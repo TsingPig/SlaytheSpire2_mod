@@ -10,6 +10,7 @@ using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.HoverTips;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
 using MegaCrit.Sts2.Core.MonsterMoves.Intents;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using BaseLib.Abstracts;
 
@@ -19,8 +20,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// 武藏：二天一流（Musashi: Two Heavens）——技能牌。
 /// 3（升级 2）费，造成 16 点伤害，共 2 段。若目标同时拥有流血和燃烧，则使其眩晕。
 /// </summary>
-public class MusashiTwoHeavens : NinjaModCard
+public class MusashiTwoHeavens : NinjaModCard, ITomeCard
 {
+    public CharacterModel TomeCharacter => ModelDb.Character<Ninja>();
+
     public MusashiTwoHeavens() : base(BalanceCost(nameof(MusashiTwoHeavens), 3), BalanceType(nameof(MusashiTwoHeavens), CardType.Skill), BalanceRarity(nameof(MusashiTwoHeavens), CardRarity.Rare), BalanceTarget(nameof(MusashiTwoHeavens), TargetType.AnyEnemy)) { }
 
     public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiTwoHeavens), true);

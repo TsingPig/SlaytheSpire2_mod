@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using NinjaMod.NinjaModCode.Cards;
+using NinjaMod.NinjaModCode.Extensions;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.Entities.Relics;
@@ -19,6 +20,9 @@ namespace NinjaMod.NinjaModCode.Relics;
 public class HiddenBlade : NinjaModRelic
 {
     public override RelicRarity Rarity => RelicRarity.Starter;
+    public override string PackedIconPath => "relic.png".RelicImagePath();
+    protected override string PackedIconOutlinePath => "relic_outline.png".RelicImagePath();
+    protected override string BigIconPath => "relic.png".BigRelicImagePath();
 
     public override async Task BeforeHandDraw(Player player, PlayerChoiceContext choiceContext, ICombatState combatState)
     {

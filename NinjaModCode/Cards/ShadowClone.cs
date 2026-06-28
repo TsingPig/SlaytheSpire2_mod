@@ -5,6 +5,7 @@ using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using BaseLib.Abstracts;
 
 namespace NinjaMod.NinjaModCode.Cards;
@@ -14,8 +15,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// Activate a clone power for the current turn and the next turn; while active, every
 /// non-Shadow-Clone card you play resolves one extra time. See <see cref="ShadowClonePower"/>.
 /// </summary>
-public class ShadowClone : NinjaModCard
+public class ShadowClone : NinjaModCard, ITomeCard
 {
+    public CharacterModel TomeCharacter => ModelDb.Character<Ninja>();
+
     // 与 ShadowClonePower 中的伤害减少比例保持一致。
     private int DamageReductionPct => BalanceConst(nameof(ShadowClone), nameof(DamageReductionPct), 40);
 

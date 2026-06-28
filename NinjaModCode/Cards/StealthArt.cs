@@ -5,6 +5,7 @@ using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using BaseLib.Abstracts;
 
@@ -14,8 +15,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// 隐身法（Stealth Art）——能力牌（稀有）。
 /// 2（升级 1）费，获得 1 点活力（敏捷），并进入隐身状态（<see cref="StealthPower"/>）。
 /// </summary>
-public class StealthArt : NinjaModCard
+public class StealthArt : NinjaModCard, ITomeCard
 {
+    public CharacterModel TomeCharacter => ModelDb.Character<Ninja>();
+
     // 活力层数（常量）。
     private int Vigor => BalanceConst(nameof(StealthArt), nameof(Vigor), 1);
 

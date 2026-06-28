@@ -7,6 +7,7 @@ using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Localization.DynamicVars;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
 using BaseLib.Abstracts;
 
@@ -16,8 +17,10 @@ namespace NinjaMod.NinjaModCode.Cards;
 /// 须佐能乎（Susanoo）——攻击牌（稀有）。
 /// 3 费，造成 7（升级 9）点伤害，共 6 段；每段伤害后立即追加 1 层流血。
 /// </summary>
-public class Susanoo : NinjaModCard
+public class Susanoo : NinjaModCard, ITomeCard
 {
+    public CharacterModel TomeCharacter => ModelDb.Character<Ninja>();
+
     public Susanoo() : base(BalanceCost(nameof(Susanoo), 3), BalanceType(nameof(Susanoo), CardType.Attack), BalanceRarity(nameof(Susanoo), CardRarity.Rare), BalanceTarget(nameof(Susanoo), TargetType.AnyEnemy)) { }
 
     protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 7m), ValueProp.Move), new RepeatVar(BalanceValue("BaseRepeat", 6))];
