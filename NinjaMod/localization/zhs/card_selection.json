@@ -1,0 +1,4 @@
+{
+  "NINJAMOD_COVERTOPS_PROMPT": "选择最多 {MaxCount} 张牌追加静默。",
+  "NINJAMOD_HANDSWAP_PROMPT": "选择最多 {MaxCount} 张牌放回抽牌堆顶部。"
+}

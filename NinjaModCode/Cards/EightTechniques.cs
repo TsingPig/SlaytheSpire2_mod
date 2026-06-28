@@ -12,7 +12,7 @@ using BaseLib.Abstracts;
 namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
-/// 忍者八法（Eight Techniques）——技能牌（稀有），消耗（升级后移除消耗）。
+/// 忍者八法（Eight Techniques）——技能牌（稀有），消耗（升级后追加【保留】）。
 /// 1 费，获得各 1 点：力量、抵抗、活力（敏捷）、能量、格挡、飞刀、最大生命、生命恢复。
 /// </summary>
 public class EightTechniques : NinjaModCard
@@ -21,9 +21,9 @@ public class EightTechniques : NinjaModCard
 
     public override bool GainsBlock => true;
 
-    // 升级后移除消耗：CanonicalKeywords 随 IsUpgraded 实时变化（卡面关键词行自动增删）。
+    // 升级追加【保留】：基础保留【消耗】，升级后变为【消耗 + 保留】（卡面关键词行自动增改）。
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [] : [CardKeyword.Exhaust];
+        IsUpgraded ? [CardKeyword.Exhaust, CardKeyword.Retain] : [CardKeyword.Exhaust];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -41,7 +41,7 @@ public class EightTechniques : NinjaModCard
         await CreatureCmd.Heal(Owner.Creature, amount, true);                                               // ????
     }
 
-    protected override void OnUpgrade() { } // 升级仅移除消耗（由 CanonicalKeywords 根据 IsUpgraded 处理）
+    protected override void OnUpgrade() => AddKeyword(CardKeyword.Retain); // 升级追加【保留】（AddKeyword 触发卡面关键词行刷新）
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("忍者八法", "获得 1 点[gold]力量[/gold]、1 点[gold]抵挡[/gold]、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。")

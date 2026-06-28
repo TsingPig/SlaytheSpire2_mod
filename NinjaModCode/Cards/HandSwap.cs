@@ -34,10 +34,13 @@ public class HandSwap : NinjaModCard
         if (hand.Count > 0)
         {
             int maxSelect = System.Math.Min(MaxCards, hand.Count);
-            var prompt = new LocString("NINJAMOD_HANDSWAP_PROMPT",
-                Lang.Zh ? "选择最多 2 张牌放回抽牌堆顶部" : "Choose up to 2 cards to put on top of your draw pile");
-            var prefs = new CardSelectorPrefs(prompt, 0, maxSelect);
-            var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null!, this)).ToList();
+            var prompt = new LocString("card_selection", "NINJAMOD_HANDSWAP_PROMPT");
+            var prefs = new CardSelectorPrefs(prompt, 0, maxSelect)
+            {
+                RequireManualConfirmation = true,
+                Cancelable = true,
+            };
+            var selected = (await CardSelectCmd.FromHand(choiceContext, Owner, prefs, null, null!)).ToList();
             foreach (var card in selected)
             {
                 await CardPileCmd.Add(card, PileType.Draw, CardPilePosition.Top, this, false);

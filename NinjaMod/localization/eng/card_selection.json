@@ -1,0 +1,4 @@
+{
+  "NINJAMOD_COVERTOPS_PROMPT": "Choose up to {MaxCount} cards to grant Silence.",
+  "NINJAMOD_HANDSWAP_PROMPT": "Choose up to {MaxCount} cards to put on top of your draw pile."
+}

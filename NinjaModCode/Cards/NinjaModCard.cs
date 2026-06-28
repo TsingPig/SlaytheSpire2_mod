@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BaseLib.Abstracts;
 using BaseLib.Extensions;
+using BaseLib.Patches.Localization;
 using BaseLib.Patches.UI;
 using BaseLib.Utils;
 using Godot;
@@ -45,6 +46,16 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     public override string PortraitPath => $"{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
     public override string BetaPortraitPath => $"beta/{Id.Entry.RemovePrefix().ToLowerInvariant()}.png".CardImagePath();
 
+    private static bool _descriptionOverridesRegistered;
+
+    public static void RegisterDescriptionOverrides()
+    {
+        if (_descriptionOverridesRegistered) return;
+
+        DescriptionOverrides.CustomizeDescription += AppendGrantedSilenceDescription;
+        _descriptionOverridesRegistered = true;
+    }
+
     /// <summary>
     /// 燃烧追加（Burning Infusion）——本 mod 自定义的卡牌效果关键词。
     /// 表示本卡的攻击命中敌人后，额外对其施加对应层数的燃烧。默认 0（无此效果）。
@@ -69,6 +80,21 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
     /// 一旦置为 true，<see cref="HasSilence"/> 即返回 true，并自动追加静默悬浮提示。
     /// </summary>
     public bool GrantedSilence { get; set; }
+
+    private static void AppendGrantedSilenceDescription(CardModel card, Creature? target, ref string description)
+    {
+        if (card is not NinjaModCard { HasSilence: true }) return;
+        if (DescriptionMentionsSilence(description)) return;
+
+        string silenceText = Lang.Zh ? "[gold]静默[/gold]。" : "[gold]Silence[/gold].";
+        description = string.IsNullOrWhiteSpace(description)
+            ? silenceText
+            : $"{description}\n{silenceText}";
+    }
+
+    private static bool DescriptionMentionsSilence(string description) =>
+        description.Contains("静默", StringComparison.Ordinal)
+        || description.Contains("Silence", StringComparison.OrdinalIgnoreCase);
 
     /// <summary>
     /// 是否为“火忍”系列卡牌（用于【火忍：火焰之舞】判定“每回合第一次打出火忍牌”）。

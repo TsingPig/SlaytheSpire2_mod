@@ -168,7 +168,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <td width="25%"><img src="NinjaMod/images/card_portraits/swallow_return.png" width="120"><br><b>燕返</b><br>0⚡ 攻击<br><small>造成 4(7) 点伤害。如果目标拥有流血，抽 1(2) 张牌。</small></td>
 </tr>
 <tr align="center">
-<td width="25%"><img src="NinjaMod/images/card_portraits/stone_summon.png" width="120"><br><b>土忍：唤石</b><br>1⚡ 技能<br><small>获得动态格挡（随当前抵挡层数提升）。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/stone_summon.png" width="120"><br><b>土忍：唤石</b><br>1⚡ 技能<br><small>获得当前抵挡层数 × 4(5) 点格挡（卡面动态显示实际值）。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/earth_escape.png" width="120"><br><b>土忍：土遁</b><br>0⚡ 能力<br><small>获得 1(2) 层抵挡。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/earth_wall.png" width="120"><br><b>土忍：土墙</b><br>1⚡ 技能<br><small>获得 7(10) 点格挡，并获得免疫负面效果 2 个回合。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/detonation.png" width="120"><br><b>火忍：起爆符</b><br>0⚡ 技能<br><small>点燃目标的燃烧（造成燃烧 2 倍的无法格挡伤害并移除）。</small></td>
@@ -176,7 +176,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/forge_flame_thrust.png" width="120"><br><b>火忍：锻火刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，附加 4(5) 层燃烧。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/stone_gather_thrust.png" width="120"><br><b>土忍：聚石刺</b><br>1⚡ 攻击<br><small>造成 6(9) 点伤害，获得 6(9) 点格挡。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_thrust.png" width="120"><br><b>武藏：刺</b><br>0⚡ 攻击 · 消耗<br><small>造成 9 点伤害，附加 2 层流血。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_thrust.png" width="120"><br><b>武藏：刺</b><br>0⚡ 攻击 · 消耗<br><small>造成 9(12) 点伤害，附加 2(3) 层流血。</small></td>
 </tr>
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/ninja_tool_prep.png" width="120"><br><b>忍具整理</b><br>0⚡ 技能<br><small>抽 1 张牌；若抽到攻击牌，获得 2(4) 点活力。</small></td>
@@ -228,7 +228,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <td width="25%"><img src="NinjaMod/images/card_portraits/ember_recovery.png" width="120"><br><b>火忍：余烬回收</b><br>1(0)⚡ 技能<br><small>点燃目标身上的燃烧；若成功点燃，获得 1 点能量并抽 1 张牌。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/fan_wind.png" width="120"><br><b>火忍：扇风</b><br>2(1)⚡ 技能<br><small>将目标的燃烧层数翻倍。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/musashi_dream_strike.png" width="120"><br><b>武藏：神梦一击</b><br>4⚡ 攻击 · 消耗<br><small>造成 46(62) 点伤害。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_crimson.png" width="120"><br><b>武藏：猩红</b><br>0⚡ 技能 · 消耗<br><small>获得 2 层淬火。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/musashi_crimson.png" width="120"><br><b>武藏：猩红</b><br>0⚡ 技能 · 消耗<br><small>获得 2(3) 层淬火。</small></td>
 </tr>
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/blade_flow.png" width="120"><br><b>刀意流转</b><br>2(1)⚡ 技能<br><small>对目标打出手牌中的所有飞刀与手里剑。</small></td>
@@ -246,7 +246,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 <td width="25%"><img src="NinjaMod/images/card_portraits/seppuku.png" width="120"><br><b>切腹</b><br>X⚡ 技能<br><small>失去 2X 点生命，获得 X 点能量、抽 X 张牌、获得 X 点力量。</small></td>
 </tr>
 <tr align="center">
-<td width="25%"><img src="NinjaMod/images/card_portraits/eight_techniques.png" width="120"><br><b>忍者八法</b><br>1⚡ 技能<br><small>获得 1 点力量、1 点抵挡、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/eight_techniques.png" width="120"><br><b>忍者八法</b><br>1⚡ 技能 · 消耗<br><small>获得 1 点力量、1 点抵挡、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。（升级追加保留）</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/susanoo.png" width="120"><br><b>须佐能乎</b><br>3⚡ 攻击<br><small>造成 7(9) 点伤害，共 6 段，每段追加 1 层流血。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/absolute_defense.png" width="120"><br><b>回天：绝对防御</b><br>2⚡ 技能<br><small>获得 20(30) 点格挡，回复 4(6) 点生命。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/shadow_clone.png" width="120"><br><b>影分身</b><br>3(2)⚡ 技能<br><small>本回合及下回合：①每张非影分身卡额外结算一次；②受到的攻击伤害减少 40%；③若你有荆棘，克隆体对攻击者造成等量反击。</small></td>

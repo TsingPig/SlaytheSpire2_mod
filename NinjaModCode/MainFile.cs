@@ -1,6 +1,7 @@
 using Godot;
 using HarmonyLib;
 using MegaCrit.Sts2.Core.Modding;
+using NinjaMod.NinjaModCode.Cards;
 
 namespace NinjaMod.NinjaModCode;
 
@@ -20,5 +21,6 @@ public partial class MainFile : Node
         Harmony harmony = new(ModId);
 
         harmony.PatchAll();
+        NinjaModCard.RegisterDescriptionOverrides();
     }
 }

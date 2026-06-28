@@ -5,6 +5,8 @@ using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
+using MegaCrit.Sts2.Core.HoverTips;
+using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Models.Powers;
 using BaseLib.Abstracts;
 
@@ -21,6 +23,27 @@ public class MusashiInheritance : NinjaModCard
     public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiInheritance), true);
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
+    // 悬浮提示：展示加入手牌的三张牌（神速 / 空明斩 / 刺）的卡牌预览。
+    protected override IEnumerable<IHoverTip> ExtraHoverTips
+    {
+        get
+        {
+            var tips = new List<IHoverTip>();
+            var baseTips = base.ExtraHoverTips;
+            if (baseTips != null) tips.AddRange(baseTips);
+            AddCardTip<MusashiGodspeed>(tips);
+            AddCardTip<MusashiVoidSlash>(tips);
+            AddCardTip<MusashiThrust>(tips);
+            return tips;
+        }
+    }
+
+    private static void AddCardTip<T>(List<IHoverTip> tips) where T : NinjaModCard
+    {
+        var card = ModelDb.Card<T>();
+        if (card != null) tips.Add(new CardHoverTip(card));
+    }
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

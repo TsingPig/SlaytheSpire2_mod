@@ -30,13 +30,24 @@ public class CovertOps : NinjaModCard
 
         var drawPile = CardPile.Get(PileType.Draw, Owner);
         if (drawPile.IsEmpty) return;
-        int maxSelect = System.Math.Min(DynamicVars["Select"].IntValue, drawPile.Cards.Count);
+
+        var selectable = drawPile.Cards
+            .OfType<NinjaModCard>()
+            .Where(card => !card.HasSilence)
+            .ToList();
+        if (selectable.Count == 0) return;
+
+        int maxSelect = System.Math.Min(DynamicVars["Select"].IntValue, selectable.Count);
         if (maxSelect <= 0) return;
 
-        var prompt = new LocString("NINJAMOD_COVERTOPS_PROMPT",
-            Lang.Zh ? "选择卡牌追加【静默】" : "Choose cards to grant Silence");
-        var prefs = new CardSelectorPrefs(prompt, 0, maxSelect);
-        var selected = await CardSelectCmd.FromCombatPile(choiceContext, drawPile, Owner, prefs);
+        var prompt = new LocString("card_selection", "NINJAMOD_COVERTOPS_PROMPT");
+        var prefs = new CardSelectorPrefs(prompt, 0, maxSelect)
+        {
+            RequireManualConfirmation = true,
+            Cancelable = true,
+        };
+
+        var selected = (await CardSelectCmd.FromSimpleGrid(choiceContext, selectable, Owner, prefs)).ToList();
         foreach (var card in selected.OfType<NinjaModCard>())
         {
             card.GrantedSilence = true;
@@ -50,6 +61,6 @@ public class CovertOps : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("保密行动", "获得 {Stealth:diff()} 层[gold]隐身[/gold]。从抽牌堆中选择 {Select:diff()} 张牌，给其追加[gold]静默[/gold]。")
-        : new CardLoc("Covert Ops", "Gain {Stealth:diff()} [gold]Stealth[/gold]. Choose {Select:diff()} cards from your draw pile and grant them [gold]Silence[/gold].");
+        ? new CardLoc("保密行动", "获得 {Stealth:diff()} 层[gold]隐身[/gold]。从抽牌堆中选择最多 {Select:diff()} 张牌，给其追加[gold]静默[/gold]。")
+        : new CardLoc("Covert Ops", "Gain {Stealth:diff()} [gold]Stealth[/gold]. Choose up to {Select:diff()} cards from your draw pile and grant them [gold]Silence[/gold].");
 }

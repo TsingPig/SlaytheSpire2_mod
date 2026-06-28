@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
 using NinjaMod.NinjaModCode.Powers;
@@ -32,7 +33,12 @@ public class StoneSummon : NinjaModCard
             if (owner == null) return 0m;
             int resist = owner.GetPower<ResistPower>()?.Amount ?? 0;
             return resist * (card.IsUpgraded ? BalanceValue(nameof(StoneSummon), "UpgradeStoneSummonMultiplier", 5) : BalanceValue(nameof(StoneSummon), "BaseStoneSummonMultiplier", 4));
-        }, 1, ValueProp.Move);
+        }, 1, ValueProp.Move)
+        // 倍率 4(5) 用 IntVar 显示在卡面（{Mult:diff()} 支持升级预览）。
+        .Append(new IntVar("Mult", BalanceValue(nameof(StoneSummon), "BaseStoneSummonMultiplier", 4)));
+
+    protected override void OnUpgrade() =>
+        DynamicVars["Mult"].UpgradeValueBy(BalanceDelta("BaseStoneSummonMultiplier", "UpgradeStoneSummonMultiplier", 1m)); // 4 -> 5
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -45,6 +51,6 @@ public class StoneSummon : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：唤石", "获得 {CalculatedBlock:diff()} 点格挡（随当前[gold]抵挡[/gold]层数提升）。")
-        : new CardLoc("Earth Ninjutsu: Stone Summon", "Gain {CalculatedBlock:diff()} Block (scales with your [gold]Resist[/gold]).");
+        ? new CardLoc("土忍：唤石", "获得 {CalculatedBlock:diff()} 点格挡。获得当前[gold]抵挡[/gold]层数 × {Mult:diff()} 点格挡。")
+        : new CardLoc("Earth Ninjutsu: Stone Summon", "Gain {CalculatedBlock:diff()} Block. Gain Block equal to your [gold]Resist[/gold] × {Mult:diff()}.");
 }
