@@ -14,18 +14,19 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 武藏：刺（Musashi: Thrust）——攻击牌，消耗。
-/// 0 费，造成 9 点伤害，附加 2 层流血。
+/// 0 费，造成 7（升级 11）点伤害，附加 2 层流血。
 /// </summary>
 public class MusashiThrust : NinjaModCard
 {
+    private int Bleed => BalanceConst(nameof(MusashiThrust), nameof(Bleed), 2);
+
     public MusashiThrust() : base(BalanceCost(nameof(MusashiThrust), 0), BalanceType(nameof(MusashiThrust), CardType.Attack), BalanceRarity(nameof(MusashiThrust), CardRarity.Common), BalanceTarget(nameof(MusashiThrust), TargetType.AnyEnemy)) { }
 
     public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiThrust), true);
 
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
-    // 伤害 9->12、流血 2->3 均为 DynamicVar，{:diff()} 可显示升级预览。
-    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 9m), ValueProp.Move), new PowerVar<BleedPower>("Bleed", BalanceDecimal("BaseBleed", 2m))];
+    protected override IEnumerable<DynamicVar> CanonicalVars => [new DamageVar(BalanceDecimal("BaseDamage", 7m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -35,16 +36,13 @@ public class MusashiThrust : NinjaModCard
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
-        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, DynamicVars["Bleed"].IntValue, Owner.Creature, this);
+        await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, Bleed, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade()
-    {
-        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m)); // 9 -> 12
-        DynamicVars["Bleed"].UpgradeValueBy(BalanceDelta("BaseBleed", "UpgradeBleed", 1m)); // 2 -> 3
-    }
+    protected override void OnUpgrade() =>
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 4m)); // 7 -> 11
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("武藏：刺", "造成 {Damage:diff()} 点伤害，附加 {Bleed:diff()} 层[gold]流血[/gold]。")
-        : new CardLoc("Musashi: Thrust", "Deal {Damage:diff()} damage. Apply {Bleed:diff()} [gold]Bleed[/gold].");
+        ? new CardLoc("武藏：刺", $"造成 {{Damage:diff()}} 点伤害，附加 {Bleed} 层[gold]流血[/gold]。")
+        : new CardLoc("Musashi: Thrust", $"Deal {{Damage:diff()}} damage. Apply {Bleed} [gold]Bleed[/gold].");
 }

@@ -25,9 +25,11 @@ public class NimbleStepPower : NinjaModPower
         if (cardPlay.Card.Owner?.Creature != Owner) return;
         if (cardPlay.Card.EnergyCost.GetResolved() != 0) return; // 仅 0 费牌触发
         if (CombatManager.Instance == null || CombatManager.Instance.IsOverOrEnding) return;
+        var player = Owner.Player;
+        if (player == null) return;
 
         Flash();
-        await CardPileCmd.Draw(choiceContext, Owner.Player);
+        await CardPileCmd.Draw(choiceContext, player);
     }
 
     public override List<(string, string)>? Localization => Lang.Zh

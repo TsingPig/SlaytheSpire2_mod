@@ -22,10 +22,13 @@ public class FireSpread : NinjaModCard
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
+        var combatState = CombatState;
+        if (combatState == null) return;
+
         int burning = cardPlay.Target.GetPower<BurningPower>()?.Amount ?? 0;
         if (burning <= 0) return;
 
-        foreach (var enemy in CombatState.HittableEnemies.ToList())
+        foreach (var enemy in combatState.HittableEnemies.ToList())
         {
             if (enemy == cardPlay.Target) continue; // 目标已拥有燃烧，扩散给其余敌人
             await PowerCmd.Apply<BurningPower>(choiceContext, enemy, burning, Owner.Creature, this);

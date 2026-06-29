@@ -39,3 +39,4 @@ logs/
 # mod (DLL + JSON + PCK with all textures). Overrides the broad *.pck / *.pdb rules above.
 !dist/
 !dist/**
+/tmp

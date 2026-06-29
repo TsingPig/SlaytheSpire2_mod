@@ -13,7 +13,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 土忍：聚石刺（Earth Ninjutsu: Stone Gather Thrust）——攻击牌。
-/// 1 费，造成 6（升级 9）点伤害，获得 6（升级 9）点格挡。
+/// 1 费，造成 3（升级 5）点伤害，获得 6（升级 9）点格挡。
 /// </summary>
 public class StoneGatherThrust : NinjaModCard
 {
@@ -22,7 +22,7 @@ public class StoneGatherThrust : NinjaModCard
     public override bool GainsBlock => true;
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(BalanceDecimal("BaseDamage", 6m), ValueProp.Move), new BlockVar(BalanceDecimal("BaseBlock", 6m), ValueProp.Move)];
+        [new DamageVar(BalanceDecimal("BaseDamage", 3m), ValueProp.Move), new BlockVar(BalanceDecimal("BaseBlock", 6m), ValueProp.Move)];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -37,7 +37,7 @@ public class StoneGatherThrust : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 3m));  // 6 -> 9
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 2m));  // 3 -> 5
         DynamicVars.Block.UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 3m));   // 6 -> 9
     }
 

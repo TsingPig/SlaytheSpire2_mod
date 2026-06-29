@@ -23,7 +23,7 @@ public class MusashiSwiftTriangle : NinjaModCard
     public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiSwiftTriangle), true);
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(BalanceDecimal("BaseDamage", 11m), ValueProp.Move), new IntVar("Dex", BalanceDecimal("BaseDex", 3m))];
+        [new DamageVar(BalanceDecimal("BaseDamage", 11m), ValueProp.Move), new IntVar("Dex", BalanceDecimal("BaseDex", 1m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {

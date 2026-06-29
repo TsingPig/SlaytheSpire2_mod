@@ -35,6 +35,6 @@ public class BloodFireTransfer : NinjaModCard
     protected override void OnUpgrade() { } // 升级仅移除消耗（由 CanonicalKeywords 处理）
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：血火转印", "给予目标等同于其当前[gold]燃烧[/gold]层数的[gold]流血[/gold]，并移除目标身上的[gold]燃烧[/gold]。")
+        ? new CardLoc("火忍：血火转印", "对目标施加等同于其当前[gold]燃烧[/gold]层数的[gold]流血[/gold]，然后移除其[gold]燃烧[/gold]。")
         : new CardLoc("Fire Ninjutsu: Blood-Fire Transfer", "Apply [gold]Bleed[/gold] equal to the target's [gold]Burning[/gold], then remove its [gold]Burning[/gold].");
 }

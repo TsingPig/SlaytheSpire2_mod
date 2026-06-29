@@ -29,6 +29,7 @@ public class CovertOps : NinjaModCard
         await PowerCmd.Apply<StealthPower>(choiceContext, Owner.Creature, DynamicVars["Stealth"].IntValue, Owner.Creature, this);
 
         var drawPile = CardPile.Get(PileType.Draw, Owner);
+        if (drawPile == null) return;
         if (drawPile.IsEmpty) return;
 
         var selectable = drawPile.Cards
@@ -61,6 +62,6 @@ public class CovertOps : NinjaModCard
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("保密行动", "获得 {Stealth:diff()} 层[gold]隐身[/gold]。从抽牌堆中选择最多 {Select:diff()} 张牌，给其追加[gold]静默[/gold]。")
+        ? new CardLoc("保密行动", "获得 {Stealth:diff()} 层[gold]隐身[/gold]。从抽牌堆中选择最多 {Select:diff()} 张牌，给予它们[gold]静默[/gold]。")
         : new CardLoc("Covert Ops", "Gain {Stealth:diff()} [gold]Stealth[/gold]. Choose up to {Select:diff()} cards from your draw pile and grant them [gold]Silence[/gold].");
 }

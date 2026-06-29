@@ -18,7 +18,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 武藏：二天一流（Musashi: Two Heavens）——技能牌。
-/// 3（升级 2）费，造成 16 点伤害，共 2 段。若目标同时拥有流血和燃烧，则使其眩晕。
+/// 2 费，造成 16（升级 21）点伤害，共 2 段。若目标同时拥有流血和燃烧，则使其眩晕。
 /// </summary>
 public class MusashiTwoHeavens : NinjaModCard, ITomeCard
 {
@@ -52,7 +52,7 @@ public class MusashiTwoHeavens : NinjaModCard, ITomeCard
         }
     }
 
-    protected override void OnUpgrade() => EnergyCost.UpgradeBy(BalanceUpgradeCostDelta(nameof(MusashiTwoHeavens), -1)); // 3 -> 2
+    protected override void OnUpgrade() => DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 5m)); // 16 -> 21
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：二天一流", "造成 {Damage:diff()} 点伤害，共 {Repeat} 段。若目标同时拥有[gold]流血[/gold]与[gold]燃烧[/gold]，则使其[gold]眩晕[/gold]。")

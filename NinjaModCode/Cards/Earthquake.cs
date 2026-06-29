@@ -28,13 +28,16 @@ public class Earthquake : NinjaModCard
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        var combatState = CombatState;
+        if (combatState == null) return;
+
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
             .FromCard(this)
-            .TargetingAllOpponents(CombatState)
+            .TargetingAllOpponents(combatState)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
 
-        foreach (var enemy in CombatState.HittableEnemies.Where(e => e.IsAlive).ToList())
+        foreach (var enemy in combatState.HittableEnemies.Where(e => e.IsAlive).ToList())
         {
             await CreatureCmd.Stun(enemy);
         }

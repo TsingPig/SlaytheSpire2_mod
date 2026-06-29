@@ -59,7 +59,10 @@ public class MusashiPeerless : NinjaModCard
     private async Task AddToDrawTop<T>() where T : NinjaModCard
     {
         if (CombatManager.Instance.IsOverOrEnding) return;
-        var card = CombatState.CreateCard<T>(Owner);
+        var combatState = CombatState;
+        if (combatState == null) return;
+
+        var card = combatState.CreateCard<T>(Owner);
         await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Draw, Owner, CardPilePosition.Top);
     }
 

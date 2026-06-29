@@ -30,6 +30,6 @@ public class Wildfire : NinjaModCard
     protected override void OnUpgrade() => DynamicVars["Burning"].UpgradeValueBy(BalanceDelta("BaseBurning", "UpgradeBurning", 1m)); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("火忍：燎原", "你的回合开始时，给予所有敌人 {Burning:diff()} 层[gold]燃烧[/gold]。")
+        ? new CardLoc("火忍：燎原", "在你的回合开始时，对所有敌人施加 {Burning:diff()} 层[gold]燃烧[/gold]。")
         : new CardLoc("Fire Ninjutsu: Wildfire", "At the start of your turn, apply {Burning:diff()} [gold]Burning[/gold] to ALL enemies.");
 }

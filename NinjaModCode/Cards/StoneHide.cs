@@ -33,6 +33,6 @@ public class StoneHide : NinjaModCard
     protected override void OnUpgrade() => DynamicVars["Resist"].UpgradeValueBy(BalanceDelta("BaseResist", "UpgradeResist", 1m)); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("土忍：石隐术", $"获得 {Stealth} 层[gold]隐身[/gold]，获得 {{Resist:diff()}} 层[gold]抵挡[/gold]。")
+        ? new CardLoc("土忍：石隐术", $"获得 {Stealth} 层[gold]隐身[/gold]和 {{Resist:diff()}} 层[gold]抵挡[/gold]。")
         : new CardLoc("Earth Ninjutsu: Stone Hide", $"Gain {Stealth} [gold]Stealth[/gold] and {{Resist:diff()}} [gold]Resist[/gold].");
 }

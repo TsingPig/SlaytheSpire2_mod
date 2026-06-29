@@ -31,10 +31,12 @@ public class FlameDancePower : NinjaModPower
         if (cardPlay.Card.Owner?.Creature != Owner) return;
         if (cardPlay.Card is not NinjaModCard { IsFireNinjutsu: true }) return;
         if (CombatManager.Instance == null || CombatManager.Instance.IsOverOrEnding) return;
+        var player = Owner.Player;
+        if (player == null) return;
 
         _triggeredThisTurn = true;
         Flash();
-        await PlayerCmd.GainEnergy(Amount, Owner.Player);
+        await PlayerCmd.GainEnergy(Amount, player);
     }
 
     public override Task AfterPlayerTurnStart(PlayerChoiceContext choiceContext, Player player)

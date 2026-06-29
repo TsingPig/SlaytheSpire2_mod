@@ -12,7 +12,7 @@ using BaseLib.Abstracts;
 namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
-/// 忍者八法（Eight Techniques）——技能牌（稀有），消耗（升级后追加【保留】）。
+/// 忍者八法（Eight Techniques）——技能牌（稀有），消耗（升级后移除消耗）。
 /// 1 费，获得各 1 点：力量、抵抗、活力（敏捷）、能量、格挡、飞刀、最大生命、生命恢复。
 /// </summary>
 public class EightTechniques : NinjaModCard
@@ -21,27 +21,27 @@ public class EightTechniques : NinjaModCard
 
     public override bool GainsBlock => true;
 
-    // 升级追加【保留】：基础保留【消耗】，升级后变为【消耗 + 保留】（卡面关键词行自动增改）。
     public override IEnumerable<CardKeyword> CanonicalKeywords =>
-        IsUpgraded ? [CardKeyword.Exhaust, CardKeyword.Retain] : [CardKeyword.Exhaust];
+        IsUpgraded ? [] : [CardKeyword.Exhaust];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
+        var combatState = CombatState;
         int amount = BalanceValue("BaseEightTechniquesAmount", 1);
-        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this); // ??
-        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);   // ??
-        await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);     // ??/??
-        await PlayerCmd.GainEnergy(amount, Owner);                                                         // ??
-        await CreatureCmd.GainBlock(Owner.Creature, amount, ValueProp.Move, cardPlay);                      // ??
-        for (int i = 0; i < amount; i++)
+        await PowerCmd.Apply<StrengthPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<ResistPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
+        await PlayerCmd.GainEnergy(amount, Owner);
+        await CreatureCmd.GainBlock(Owner.Creature, amount, ValueProp.Move, cardPlay);
+        for (int i = 0; combatState != null && i < amount; i++)
         {
-            await Kunai.CreateInHand(Owner, CombatState);                                                  // ??
+            await Kunai.CreateInHand(Owner, combatState);
         }
-        await CreatureCmd.GainMaxHp(Owner.Creature, amount);                                                // ????
-        await CreatureCmd.Heal(Owner.Creature, amount, true);                                               // ????
+        await CreatureCmd.GainMaxHp(Owner.Creature, amount);
+        await CreatureCmd.Heal(Owner.Creature, amount, true);
     }
 
-    protected override void OnUpgrade() => AddKeyword(CardKeyword.Retain); // 升级追加【保留】（AddKeyword 触发卡面关键词行刷新）
+    protected override void OnUpgrade() { } // 升级仅移除消耗（由 CanonicalKeywords 处理）
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("忍者八法", "获得 1 点[gold]力量[/gold]、1 点[gold]抵挡[/gold]、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。")

@@ -57,7 +57,10 @@ public class MusashiInheritance : NinjaModCard
     private async Task AddToHand<T>() where T : NinjaModCard
     {
         if (CombatManager.Instance.IsOverOrEnding) return;
-        var card = CombatState.CreateCard<T>(Owner);
+        var combatState = CombatState;
+        if (combatState == null) return;
+
+        var card = combatState.CreateCard<T>(Owner);
         await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Hand, Owner);
     }
 

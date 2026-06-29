@@ -14,7 +14,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 武藏：空明斩（Musashi: Void Slash）——攻击牌，消耗。
-/// 0 费，造成 15（升级 21）点伤害，获得 1（升级 2）点抵挡。
+/// 0 费，造成 13（升级 18）点伤害，获得 1（升级 2）点抵挡。
 /// </summary>
 public class MusashiVoidSlash : NinjaModCard
 {
@@ -25,7 +25,7 @@ public class MusashiVoidSlash : NinjaModCard
     public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
 
     protected override IEnumerable<DynamicVar> CanonicalVars =>
-        [new DamageVar(BalanceDecimal("BaseDamage", 15m), ValueProp.Move), new IntVar("Resist", BalanceDecimal("BaseResist", 1m))];
+        [new DamageVar(BalanceDecimal("BaseDamage", 13m), ValueProp.Move), new IntVar("Resist", BalanceDecimal("BaseResist", 1m))];
 
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
@@ -41,7 +41,7 @@ public class MusashiVoidSlash : NinjaModCard
 
     protected override void OnUpgrade()
     {
-        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 6m));   // 15 -> 21
+        DynamicVars.Damage.UpgradeValueBy(BalanceDelta("BaseDamage", "UpgradeDamage", 5m));   // 13 -> 18
         DynamicVars["Resist"].UpgradeValueBy(BalanceDelta("BaseResist", "UpgradeResist", 1m)); // 1 -> 2
     }
 
