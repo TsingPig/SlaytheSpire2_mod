@@ -98,16 +98,23 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
 
     /// <summary>
     /// 是否为“火忍”系列卡牌（用于【火忍：火焰之舞】判定“每回合第一次打出火忍牌”）。
-    /// 通过卡名是否以“火忍”/“Fire Ninjutsu”开头自动识别，无需逐张标记。
+    /// 使用余额表 ChineseName/EnglishName 判定，与 IsMusashi 保持相同的查找方式，
+    /// 避免在 AfterCardPlayed 上下文中依赖不稳定的 Localization 属性。
     /// </summary>
     public virtual bool IsFireNinjutsu
     {
         get
         {
+            var entry = CardBalance.Find(GetType().Name);
+            if (entry != null)
+                return entry.ChineseName.Contains("火忍", StringComparison.Ordinal)
+                    || entry.EnglishName.Contains("Fire Ninjutsu", StringComparison.OrdinalIgnoreCase);
+            // 未登记到余额表的卡（极少数）回退到 Localization 检查。
             var loc = Localization;
             if (loc == null || loc.Count == 0) return false;
             string name = loc[0].Item1 ?? string.Empty;
-            return name.Contains("火忍") || name.Contains("Fire Ninjutsu");
+            return name.Contains("火忍", StringComparison.Ordinal)
+                || name.Contains("Fire Ninjutsu", StringComparison.OrdinalIgnoreCase);
         }
     }
 

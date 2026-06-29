@@ -29,6 +29,9 @@ public class FlameDancePower : NinjaModPower
         if (_triggeredThisTurn) return;
         if (Amount <= 0) return;
         if (cardPlay.Card.Owner?.Creature != Owner) return;
+        // 打出"火焰之舞"牌本身时不触发——该牌的作用是施加此 Buff，
+        // 从下一次打出其他火忍牌才开始计算。
+        if (cardPlay.Card is FlameDance) return;
         if (cardPlay.Card is not NinjaModCard { IsFireNinjutsu: true }) return;
         if (CombatManager.Instance == null || CombatManager.Instance.IsOverOrEnding) return;
         var player = Owner.Player;
