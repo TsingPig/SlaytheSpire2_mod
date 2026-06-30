@@ -46,6 +46,13 @@
         <AdditionalFiles Include="NinjaMod/localization/**/*.json"/> <!-- Used by analyzer -->
     </ItemGroup>
 
+    <!-- Source sharing: 引入父级仓库的共享开发工具层（RunminSts2ModKit）。
+         仅做源码级共享，不产生第三个运行时 mod。NinjaMod 仍是独立 mod，可单独 build。
+         共享类型位于 RunminSts2ModKit 命名空间，与 NinjaMod.* 不冲突。 -->
+    <ItemGroup Condition="Exists('..\shared\RunminSts2ModKit')">
+        <Compile Include="..\shared\RunminSts2ModKit\**\*.cs" LinkBase="Shared" />
+    </ItemGroup>
+
     <ItemGroup>
         <Compile Remove="NinjaMod/**" />
         <Compile Remove="materials/**" />

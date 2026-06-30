@@ -1,3 +1,20 @@
 {
-    "explorer.excludeGitIgnore": false
+    "explorer.excludeGitIgnore": false,
+    "files.exclude": {
+        "**/*.cs.uid": true,
+        "**/*.uid": true,
+        "**/.godot": true,
+        "**/bin": true,
+        "**/obj": true,
+        "**/tmp": true,
+        "**/temp": true
+    },
+    "search.exclude": {
+        "**/*.uid": true,
+        "**/.godot": true,
+        "**/bin": true,
+        "**/obj": true,
+        "**/tmp": true,
+        "**/temp": true
+    }
 }
