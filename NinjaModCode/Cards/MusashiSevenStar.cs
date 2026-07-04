@@ -12,7 +12,7 @@ using BaseLib.Abstracts;
 namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
-/// 武藏：七星光芒斩（Musashi: Seven Star Radiance）——技能牌。
+/// 武藏：七星光芒斩（Musashi: Seven Star Radiance）——攻击牌。
 /// 2 费，造成 7 点伤害，共 7 段。
 /// 升级后追加第 8 段斩杀伤害：目标每损失 5 点生命，造成 1 点伤害。
 /// </summary>
@@ -21,7 +21,7 @@ public class MusashiSevenStar : NinjaModCard
     // 每损失多少生命提供 1 点斩杀加成。
     private int HpPerExecute => BalanceConst(nameof(MusashiSevenStar), nameof(HpPerExecute), 5);
 
-    public MusashiSevenStar() : base(BalanceCost(nameof(MusashiSevenStar), 2), BalanceType(nameof(MusashiSevenStar), CardType.Skill), BalanceRarity(nameof(MusashiSevenStar), CardRarity.Rare), BalanceTarget(nameof(MusashiSevenStar), TargetType.AnyEnemy)) { }
+    public MusashiSevenStar() : base(BalanceCost(nameof(MusashiSevenStar), 2), BalanceType(nameof(MusashiSevenStar), CardType.Attack), BalanceRarity(nameof(MusashiSevenStar), CardRarity.Rare), BalanceTarget(nameof(MusashiSevenStar), TargetType.AnyEnemy)) { }
 
     public override bool IsMusashi => BalanceIsMusashi(nameof(MusashiSevenStar), true);
 

@@ -12,7 +12,8 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 刀意流转（Blade Flow）——技能牌（罕见）。
-/// 2（升级 1）费，对目标自动免费打出手牌中的所有【飞刀】与【手里剑】。
+/// 2（升级 1）费，对目标自动免费打出手牌中的所有【飞刀】与【手里剑】，
+/// 包含【注入手里剑】（燃烧追加）以及【残影】复制出的飞刀 / 手里剑。
 /// </summary>
 public class BladeFlow : NinjaModCard
 {
@@ -25,8 +26,10 @@ public class BladeFlow : NinjaModCard
         var hand = CardPile.Get(PileType.Hand, Owner);
         if (hand == null) return;
 
+        // 飞刀（Kunai）、手里剑（Shuriken）以及注入手里剑（InfusedShuriken，燃烧追加）。
+        // 残影复制牌是这些类的克隆实例，类型不变，因此同样会被匹配并打出。
         var cardsToPlay = hand.Cards
-            .Where(c => c is Kunai or Shuriken)
+            .Where(c => c is Kunai or Shuriken or InfusedShuriken)
             .ToList();
 
         foreach (var card in cardsToPlay)

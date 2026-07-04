@@ -12,7 +12,7 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 武藏：猩红（Musashi: Crimson）——技能牌（罕见），消耗。
-/// 0 费，获得 2 层【淬火】。
+/// 0 费，获得 2（升级 3）层【淬火】。
 /// </summary>
 public class MusashiCrimson : NinjaModCard
 {
@@ -31,7 +31,7 @@ public class MusashiCrimson : NinjaModCard
         await PowerCmd.Apply<QuenchingPower>(choiceContext, Owner.Creature, amount, Owner.Creature, this);
     }
 
-    protected override void OnUpgrade() => DynamicVars["Quench"].UpgradeValueBy(BalanceDelta("BaseQuench", "UpgradeQuench", 0m));
+    protected override void OnUpgrade() => DynamicVars["Quench"].UpgradeValueBy(BalanceDelta("BaseQuench", "UpgradeQuench", 1m)); // 2 -> 3
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("武藏：猩红", "获得 {Quench:diff()} 层[gold]淬火[/gold]。本回合，攻击牌每次造成伤害额外附加等同于淬火层数的[gold]燃烧[/gold]。")
