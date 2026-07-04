@@ -13,12 +13,14 @@ namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
 /// 骨法（Bone Art）——技能牌。
-/// 1 费，获得 11 点格挡，并获得 2 点活力（Vigor，即“敏捷”——下次攻击附加伤害）。
+/// 1 费，获得 11（升级 15）点格挡，并获得 2（升级 3）点活力（Vigor，即“敏捷”——下次攻击附加伤害）。
 /// </summary>
 public class BoneArt : NinjaModCard
 {
-    // 活力层数（常量）。
-    private int Vigor => BalanceConst(nameof(BoneArt), nameof(Vigor), 2);
+    // 活力层数（常量）：基础 2，升级后 3。
+    private int Vigor => IsUpgraded
+        ? BalanceConst(nameof(BoneArt), "VigorUpgraded", 3)
+        : BalanceConst(nameof(BoneArt), nameof(Vigor), 2);
 
     public BoneArt() : base(BalanceCost(nameof(BoneArt), 1), BalanceType(nameof(BoneArt), CardType.Skill), BalanceRarity(nameof(BoneArt), CardRarity.Uncommon), BalanceTarget(nameof(BoneArt), TargetType.Self)) { }
 
@@ -32,6 +34,10 @@ public class BoneArt : NinjaModCard
         // 施加基础游戏的活力 Power。
         await PowerCmd.Apply<VigorPower>(choiceContext, Owner.Creature, Vigor, Owner.Creature, this);
     }
+
+    /// <summary>升级：格挡 11 -> 15；活力 2 -> 3（由 Vigor 属性根据升级状态读取）。</summary>
+    protected override void OnUpgrade() =>
+        DynamicVars.Block.UpgradeValueBy(BalanceDelta("BaseBlock", "UpgradeBlock", 4m)); // 11 -> 15
 
     public override List<(string, string)>? Localization => Lang.Zh
         ? new CardLoc("骨法", $"获得 {{Block:diff()}} 点格挡，并获得 {Vigor} 点[gold]活力[/gold]。")

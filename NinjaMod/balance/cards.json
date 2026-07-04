@@ -66,13 +66,15 @@
         "HasSilence":  false,
         "Values":  {
                        "Const.Vigor":  2,
+                       "UpgradeBlock":  15,
                        "ConstVigor":  2,
+                       "Const.VigorUpgraded":  3,
                        "BaseBlock":  11
                    },
         "Text":  {
-                     "DescriptionZh":  "获得 11 点格挡，并获得 2 点【活力】。",
+                     "DescriptionZh":  "获得 11(15) 点格挡，并获得 2(3) 点【活力】。",
                      "DescriptionEn":  "",
-                     "MechanicNotes":  "获得 11 点格挡，并获得 2 点【活力】。",
+                     "MechanicNotes":  "获得 11(15) 点格挡，并获得 2(3) 点【活力】。",
                      "DesignerNotes":  ""
                  },
         "CodeFile":  "NinjaModCode/Cards/BoneArt.cs"
@@ -881,7 +883,7 @@
         "ChineseName":  "武藏：七星光芒斩",
         "EnglishName":  "Musashi: Seven Star Radiance",
         "Rarity":  "Rare",
-        "Type":  "Skill",
+        "Type":  "Attack",
         "Target":  "AnyEnemy",
         "Cost":  "2",
         "UpgradeCost":  "",
@@ -1777,12 +1779,13 @@
         "IsMusashi":  true,
         "HasSilence":  false,
         "Values":  {
-                       "BaseQuench":  2
+                       "BaseQuench":  2,
+                       "UpgradeQuench":  3
                    },
         "Text":  {
-                     "DescriptionZh":  "获得 2 层【淬火】。",
+                     "DescriptionZh":  "获得 2(3) 层【淬火】。",
                      "DescriptionEn":  "Gain {Quench:diff()} [gold]Quenching[/gold].",
-                     "MechanicNotes":  "获得 2 层【淬火】。",
+                     "MechanicNotes":  "获得 2(3) 层【淬火】。",
                      "DesignerNotes":  ""
                  },
         "CodeFile":  "NinjaModCode/Cards/MusashiCrimson.cs"

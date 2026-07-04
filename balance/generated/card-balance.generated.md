@@ -6,7 +6,7 @@
 |---|---|---|---|---|---|---|
 | 火忍：灰烬 | Ashes | Uncommon | 1(0) | Skill |  | 引爆所有敌人身上的【燃烧】（造成燃烧 2 倍无法格挡伤害并移除）；若成功引爆，抽 1 张牌。 |
 | 火忍：豪炎 | BlazeInferno | Uncommon | 0 | Skill | BaseBurning=4<br>UpgradeBurning=7 | 对所有敌人施加 7(9) 层【燃烧】。 |
-| 骨法 | BoneArt | Uncommon | 1 | Skill | BaseBlock=11<br>ConstVigor=2 | 获得 11 点格挡，并获得 2 点【活力】。 |
+| 骨法 | BoneArt | Uncommon | 1 | Skill | BaseBlock=11<br>UpgradeBlock=15<br>ConstVigor=2 | 获得 11(15) 点格挡，并获得 2(3) 点【活力】。 |
 | 守鹤之盾 | CraneShield | Uncommon | 2(1) | Skill |  | 获得（当前已损失生命值）点格挡。动态格挡。 |
 | 火忍：凤仙花爪红 | CrimsonClaw | Uncommon | 1 | Skill | ConstCount=2 | 在手牌中生成 2 张注入手里剑（燃烧追加 6、保留、消耗）。 |
 | 火忍：火魔爆 | DemonFlameBurst | Uncommon | 2 | Skill | BaseDamage=12<br>UpgradeDamage=16 | 造成 12(16) 点伤害，然后引爆目标身上的所有【燃烧】。 |
@@ -37,7 +37,7 @@
 | 火忍：燃心 | BurningHeart | Rare | X | Skill | ConstBurningPerCard=3 | 进入抽牌堆界面，选择消耗最多 X 张牌（K 张），对所有敌人施加 K × 3 层【燃烧】。 |
 | 忍者八法 | EightTechniques | Rare | 1 | Skill | BaseEightTechniquesAmount=1 | 获得 1 点力量、1 层抵挡、1 点活力、1 点能量、1 点格挡、1 张飞刀、1 点最大生命，并回复 1 点生命。 |
 | 武藏：承袭 | MusashiInheritance | Rare | 3(2) | Skill |  | 将各一张【神速】【空明斩】【刺】加入手牌。下回合开始获得 3 点能量。【武藏】牌。 |
-| 武藏：七星光芒斩 | MusashiSevenStar | Rare | 2 | Skill | BaseDamage=7<br>BaseExecutePerFive=0<br>UpgradeExecutePerFive=1<br>BaseRepeat=7<br>ConstHpPerExecute=5 | 造成 7 点伤害 ×7 段。升级后追加第 8 段斩杀：目标每损失 5 点生命，额外造成 1 点伤害。【武藏】牌。 |
+| 武藏：七星光芒斩 | MusashiSevenStar | Rare | 2 | Attack | BaseDamage=7<br>BaseExecutePerFive=0<br>UpgradeExecutePerFive=1<br>BaseRepeat=7<br>ConstHpPerExecute=5 | 造成 7 点伤害 ×7 段。升级后追加第 8 段斩杀：目标每损失 5 点生命，额外造成 1 点伤害。【武藏】牌。 |
 | 武藏：二天一流 | MusashiTwoHeavens | Rare | 2 | Skill | BaseDamage=16<br>UpgradeDamage=21<br>BaseRepeat=2 | 造成 16 点伤害 ×2 段。若目标同时拥有流血与燃烧，则使其眩晕。【武藏】牌。 |
 | 武藏：空明斩 | MusashiVoidSlash | Rare | 0 | Attack | BaseDamage=13<br>UpgradeDamage=18<br>BaseResist=1<br>UpgradeResist=2 | 造成 13(18) 点伤害，获得 1(2) 层【抵挡】。【武藏】牌。 |
 | 切腹 | Seppuku | Rare | X | Skill | BaseSeppukuHpMultiplier=2 | 失去 2X 点生命，获得 X 点能量、抽 X 张牌、获得 X 点力量（X = 打出时剩余能量）。 |
@@ -70,7 +70,7 @@
 | 火忍：余烬回收 | EmberRecovery | Uncommon | 1(0) | Skill | BaseEnergy=1 | 点燃目标身上的【燃烧】；若成功点燃，获得 1 点能量并抽 1 张牌。 |
 | 火忍：扇风 | FanWind | Uncommon | 2(1) | Skill |  | 将目标的【燃烧】层数翻倍。 |
 | 武藏：神梦一击 | MusashiDreamStrike | Uncommon | 4 | Attack | BaseDamage=46<br>UpgradeDamage=62 | 造成 46(62) 点伤害。 |
-| 武藏：猩红 | MusashiCrimson | Uncommon | 0 | Skill | BaseQuench=2 | 获得 2 层【淬火】。 |
+| 武藏：猩红 | MusashiCrimson | Uncommon | 0 | Skill | BaseQuench=2<br>UpgradeQuench=3 | 获得 2(3) 层【淬火】。 |
 | 刀意流转 | BladeFlow | Uncommon | 2(1) | Skill |  | 对目标打出手牌中的所有【飞刀】与【手里剑】（含残影复制牌）。 |
 | 火忍：燎原 | Wildfire | Uncommon | 1 | Power | BaseBurning=2<br>UpgradeBurning=3 | 你的回合开始时，给予所有敌人 2(3) 层【燃烧】。 |
 | 土忍：石隐术 | StoneHide | Rare | 2 | Power | BaseResist=2<br>UpgradeResist=3<br>ConstStealth=1 | 获得 1 层【隐身】，获得 2(3) 层【抵挡】。 |
