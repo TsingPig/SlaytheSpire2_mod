@@ -47,7 +47,7 @@ template's `Sts2PathDiscovery.props` tries to auto-detect Steam.
 
 ---
 
-## Build / install / play
+## Build / play / publish
 
 All commands are Windows PowerShell, run from the repo root.
 
@@ -62,42 +62,28 @@ This validates the game path, the mods folder and the .NET SDK, and installs **B
 downloads). If you already manage BaseLib via the official Steam Workshop release, that is used
 instead.
 
-### 2. Build
+### 2. Build (and auto-install)
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File scripts\build.ps1            # Debug (default)
 powershell -ExecutionPolicy Bypass -File scripts\build.ps1 -Configuration Release
 ```
 
-### 3. Install into the game
+Build outputs (`NinjaMod.dll`, `NinjaMod.json`, `NinjaMod.pck`) are automatically copied to
+your game's mods folder and to `dist\NinjaMod\` — no separate install step needed.
 
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\install.ps1
-```
-
-Copies `NinjaMod.dll`, `NinjaMod.json`, `NinjaMod.pck` and `NinjaMod.pdb` into
-`<ModsDir>\NinjaMod`. It never deletes other mods.
-
-
-
-### 4. Build + install in one step
-
-```powershell
-powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1
-```
-
-> The build also auto-copies outputs to the mods folder via an MSBuild post-build target, so a
-> plain `dotnet build NinjaMod.csproj` installs the DLL/JSON/PCK too.
-
-### 5. Publish to Steam Workshop
+### 3. Publish to Steam Workshop
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File workshop\upload.ps1
 ```
 
-Requires: Steam account owning Slay the Spire 2 + Steam Guard app on phone.
+Automatically syncs files from `dist\NinjaMod\` to the Workshop content folder, then uploads
+to Steam. Requires: Steam account owning Slay the Spire 2 + Steam Guard app on phone.
 Enter credentials + Guard code when prompted. First upload creates a new workshop item;
 update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
+
+### Installed layout
 
 ### Installed layout
 

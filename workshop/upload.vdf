@@ -2,10 +2,10 @@
 {
 	"appid"		"2868840"
 	"publishedfileid"		"3754826164"
-	"contentfolder"		"E:\\__RunminG-Lab\\SlaytheSpire2_mod\\workshop\\content\\NinjaMod"
-	"previewfile"		"E:\\__RunminG-Lab\\SlaytheSpire2_mod\\workshop\\preview.png"
+	"contentfolder"		"D:\\--UnityProject\\RunminG-Lab\\SlaytheSpire2_mod\\workshop\\content\\NinjaMod"
+	"previewfile"		"D:\\--UnityProject\\RunminG-Lab\\SlaytheSpire2_mod\\workshop\\preview.upload.jpg"
 	"visibility"		"0"
 	"title"		"Ninja - Bleed / Fire Ninjutsu / Stealth Character Mod"
 	"description"		"Adds Ninja as a playable character to Slay the Spire 2. Built on BaseLib.\n\nCharacter:\n- 72 max HP, 3 energy per turn\n- Starting relic: Hidden Blade, which adds a Kunai to your hand each turn\n- Starting deck: 4x Ninja Strike, 4x Ninja Defend, 1x Shuriken, 1x Assassination\n\nCard pool:\n- 60+ cards across multiple rarities\n- Bleed pressure with Kunai, Shuriken, and multi-hit attacks\n- Fire Ninjutsu cards using Burning and Ignite-style burst turns\n- Earth Ninjutsu cards using Resist and defensive conversion\n- Stealth and Silence cards for attack avoidance and setup turns\n- Musashi sub-archetype with Enmei healing support\n\nCustom mechanics:\n- Bleed: extra HP loss when taking unblocked attack damage\n- Burning: delayed damage that can be ignited for burst damage\n- Resist: flat per-hit damage reduction before Block\n- Stealth: enemies cannot attack you; attacking normally breaks it\n- Silence: playing the card does not break Stealth\n- Burning Infusion: attacks apply extra Burning\n- Quenching: attacks this turn apply Burning\n- Flame Shield: counter with Burning when hit\n- Shadow Clone: duplicate card plays with damage reduction\n- Enmei: heal when playing Musashi cards\n- Afterimage: generate temporary low-cost attack copies\n\nRequires BaseLib 3.3.2+.\n\nGitHub: https://github.com/RunminG/SlaytheSpire2_mod"
-	"changenote"		"V1.3.2 - Current public release. Includes updated NinjaMod package, card/power assets, and balance data."
+	"changenote"		"V1.3.3 - 修复**流血**在特定情况下不触发的问题；- **骨法**：格挡 11 → 11(15)，活力 2 → 2(3)；- **武藏：猩红**：淬火 2 → 2(3)，修复升级后数值不增长的问题；- **武藏：七星光芒斩**：从技能牌改为攻击牌；- **刀意流转**：现在也会打出**注入手里剑**和**残影**复制的手里剑/飞镖"
 }

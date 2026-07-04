@@ -19,7 +19,7 @@ powershell -ExecutionPolicy Bypass -File scripts\generate-balance.ps1
 如需进游戏测试，再运行：
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File scripts\build-and-install.ps1 -Configuration Release
+powershell -ExecutionPolicy Bypass -File scripts\build.ps1 -Configuration Release
 ```
 
 路径规则：
