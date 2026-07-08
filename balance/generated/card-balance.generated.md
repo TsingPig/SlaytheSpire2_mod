@@ -9,7 +9,7 @@
 | 骨法 | BoneArt | Uncommon | 1 | Skill | BaseBlock=11<br>UpgradeBlock=15<br>ConstVigor=2 | 获得 11(15) 点格挡，并获得 2(3) 点【活力】。 |
 | 守鹤之盾 | CraneShield | Uncommon | 2(1) | Skill |  | 获得（当前已损失生命值）点格挡。动态格挡。 |
 | 火忍：凤仙花爪红 | CrimsonClaw | Uncommon | 1 | Skill | ConstCount=2 | 在手牌中生成 2 张注入手里剑（燃烧追加 6、保留、消耗）。 |
-| 火忍：火魔爆 | DemonFlameBurst | Uncommon | 2 | Skill | BaseDamage=12<br>UpgradeDamage=16 | 造成 12(16) 点伤害，然后引爆目标身上的所有【燃烧】。 |
+| 火忍：火魔爆 | DemonFlameBurst | Uncommon | 1 | Skill | BaseDamage=9<br>UpgradeDamage=14 | 造成 12(16) 点伤害，然后引爆目标身上的所有【燃烧】。 |
 | 土忍：裂地 | EarthRend | Uncommon | 1 | Skill |  | 获得等同于所有敌人负面效果（Debuff）层数之和的格挡。动态格挡。 |
 | 土忍：土护符 | EarthTalisman | Uncommon | 1(0) | Skill |  | 获得（当前消耗牌堆中牌数）点格挡。动态格挡。 |
 | 火忍：火焰弹幕 | FlameBarrage | Uncommon | 1 | Skill | BaseDamage=2<br>UpgradeDamage=3<br>BaseRepeat=3<br>BaseBurning=3<br>UpgradeBurning=4 | 造成 2(3) 点伤害 ×3 次，然后施加 3(4) 层【燃烧】。 |

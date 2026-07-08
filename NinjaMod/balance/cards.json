@@ -138,15 +138,15 @@
         "Rarity":  "Uncommon",
         "Type":  "Skill",
         "Target":  "AnyEnemy",
-        "Cost":  "2",
+        "Cost":  "1",
         "UpgradeCost":  "",
         "Keywords":  "",
         "IsToken":  false,
         "IsMusashi":  false,
         "HasSilence":  false,
         "Values":  {
-                       "BaseDamage":  12,
-                       "UpgradeDamage":  16
+                       "BaseDamage":  9,
+                       "UpgradeDamage":  14
                    },
         "Text":  {
                      "DescriptionZh":  "造成 12(16) 点伤害，然后引爆目标身上的所有【燃烧】。",
@@ -1135,7 +1135,7 @@
         "Target":  "Self",
         "Cost":  "0",
         "UpgradeCost":  "",
-        "Keywords":  "消耗",
+        "Keywords":  "",
         "IsToken":  false,
         "IsMusashi":  false,
         "HasSilence":  false,
