@@ -29,8 +29,13 @@ public class AfterimageAffliction : AfflictionModel, ICustomModel, ILocalization
         }
     }
 
+#if STS2_PUBLIC_BETA
+    public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+#else
     public override decimal ModifyDamageMultiplicative(Creature? target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource)
+#endif
     {
         if (!HasCard) return 1m;
         if (cardSource != Card) return 1m;

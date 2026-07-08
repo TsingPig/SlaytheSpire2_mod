@@ -57,6 +57,11 @@ function Set-VdfValue([string]$Text, [string]$Key, [string]$Value) {
     return [regex]::Replace($Text, '(?m)^}', "`t`"$Key`"`t`t`"$escapedValue`"`r`n}", 1)
 }
 
+function Remove-VdfValue([string]$Text, [string]$Key) {
+    $escapedKey = [regex]::Escape($Key)
+    return [regex]::Replace($Text, '(?m)^\s*"' + $escapedKey + '"\s*".*"\r?\n?', '', 1)
+}
+
 function Test-PlaceholderCredential([string]$Value) {
     if ([string]::IsNullOrWhiteSpace($Value)) { return $true }
     $normalized = $Value.Trim().ToLowerInvariant()
@@ -213,7 +218,8 @@ foreach ($name in $requiredFiles) {
 }
 
 # 清空旧的 content 目录，用最新文件替换
-$contentFolder = Join-Path $PSScriptRoot "content\NinjaMod"
+$contentRoot = Join-Path $PSScriptRoot "content"
+$contentFolder = Join-Path $contentRoot "NinjaMod"
 if (Test-Path -LiteralPath $contentFolder) {
     Remove-Item -LiteralPath $contentFolder -Recurse -Force
 }
@@ -236,7 +242,7 @@ if (-not (Test-Path $vdfPath)) {
 $vdfText = Read-Utf8Text $vdfPath
 
 # 填入 contentfolder 和 previewfile 的实际路径
-$vdfText = Set-VdfValue $vdfText "contentfolder" ([System.IO.Path]::GetFullPath($contentFolder))
+$vdfText = Set-VdfValue $vdfText "contentfolder" ([System.IO.Path]::GetFullPath($contentRoot))
 $previewSourceFile = Join-Path $PSScriptRoot "preview.png"
 $previewUploadFile = Join-Path $PSScriptRoot "preview.upload.jpg"
 $previewFile = New-WorkshopPreviewFile $previewSourceFile $previewUploadFile $steamPreviewMaxBytes
@@ -262,6 +268,15 @@ $vdfText = Set-VdfValue $vdfText "changenote" $changeNote
 
 [System.IO.File]::WriteAllText($vdfPath, $vdfText, $utf8NoBom)
 
+$publishedIdMatch = [regex]::Match($vdfText, '"publishedfileid"\s+"([^"]+)"')
+$isExistingWorkshopItem = $publishedIdMatch.Success -and $publishedIdMatch.Groups[1].Value -ne "0"
+$steamUploadVdfPath = $vdfPath
+if ($isExistingWorkshopItem) {
+    $steamUploadVdfPath = Join-Path $PSScriptRoot "upload.generated.vdf"
+    $steamUploadVdfText = Remove-VdfValue (Remove-VdfValue $vdfText "title") "description"
+    [System.IO.File]::WriteAllText($steamUploadVdfPath, $steamUploadVdfText, $utf8NoBom)
+}
+
 # ==================================================================
 # 第三步：校验
 # ==================================================================
@@ -281,11 +296,13 @@ foreach ($name in $requiredFiles) {
 Write-Host "======== NinjaMod Workshop 上传 ========" -ForegroundColor Cyan
 Write-Host "游戏：   Slay the Spire 2（App ID: 2868840）" -ForegroundColor Cyan
 Write-Host "版本：   $($manifest.version)" -ForegroundColor Cyan
-Write-Host "配置：   $vdfPath" -ForegroundColor Cyan
+Write-Host "配置：   $steamUploadVdfPath" -ForegroundColor Cyan
+if ($isExistingWorkshopItem) {
+    Write-Host "保护：   本次不会覆盖 Steam 网页上的标题和描述" -ForegroundColor Cyan
+}
 Write-Host ""
 
 # 首次上传提醒
-$publishedIdMatch = [regex]::Match($vdfText, '"publishedfileid"\s+"([^"]+)"')
 if ($publishedIdMatch.Success -and $publishedIdMatch.Groups[1].Value -eq "0") {
     Write-Host "首次上传：将创建新的 Workshop 条目。" -ForegroundColor Yellow
     Write-Host "上传成功后，请把返回的 Workshop ID 填回 workshop/upload.vdf 中。" -ForegroundColor Yellow
@@ -337,10 +354,10 @@ Write-Host ""
 
 $cmdArgs = @(
     "+login", $user, $pass,
-    "+workshop_build_item", $vdfPath,
+    "+workshop_build_item", $steamUploadVdfPath,
     "+quit"
 )
-Write-Host "执行：steamcmd +login $user *** +workshop_build_item ...\upload.vdf +quit" -ForegroundColor DarkGray
+Write-Host "执行：steamcmd +login $user *** +workshop_build_item $(Split-Path $steamUploadVdfPath -Leaf) +quit" -ForegroundColor DarkGray
 Write-Host ""
 
 # SteamCMD 连接内容分发服务器（steamcontent.com）时经常因网络波动超时，

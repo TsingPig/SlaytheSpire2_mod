@@ -29,15 +29,20 @@ public class KusariGama : NinjaModCard
         bool hadBleed = cardPlay.Target.GetPower<BleedPower>() is { Amount: > 0 };
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
 
         if (hadBleed)
         {
+#if STS2_PUBLIC_BETA
+            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
+                ValueProp.Move, Owner.Creature, this, cardPlay);
+#else
             await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
                 ValueProp.Move, Owner.Creature, this);
+#endif
         }
     }
 

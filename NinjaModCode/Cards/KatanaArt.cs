@@ -26,7 +26,7 @@ public class KatanaArt : NinjaModCard
     {
         // 对所有敌人造成多段伤害（TargetingAllOpponents 需要战斗状态）。
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .TargetingAllOpponents(CombatState)
             .WithHitCount(DynamicVars.Repeat.IntValue)
             .WithHitFx(NinjaConstants.SlashVfx)

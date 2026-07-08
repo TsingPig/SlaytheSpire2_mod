@@ -42,7 +42,7 @@ public class SoulChase : NinjaModCard
             // 真正复刻飞刀被完整打出一遍：造成该飞刀的伤害，未被完全格挡则施加 1 层流血。
             int dmg = kunai.DynamicVars.Damage?.IntValue ?? KunaiDamage;
             var attack = await DamageCmd.Attack(dmg)
-                .FromCard(this)
+                .FromCardCompat(this, cardPlay)
                 .Targeting(cardPlay.Target)
                 .WithHitFx(NinjaConstants.SlashVfx)
                 .Execute(choiceContext);

@@ -40,8 +40,13 @@ public class BleedPower : NinjaModPower
         try
         {
             Flash();
+#if STS2_PUBLIC_BETA
+            await CreatureCmd.Damage(choiceContext, Owner, Amount,
+                ValueProp.Unblockable | ValueProp.Unpowered, dealer, null, null);
+#else
             await CreatureCmd.Damage(choiceContext, Owner, Amount,
                 ValueProp.Unblockable | ValueProp.Unpowered, dealer, null);
+#endif
         }
         finally
         {

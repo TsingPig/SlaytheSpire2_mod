@@ -32,7 +32,7 @@ public class IaiStrike : NinjaModCard
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         // 主伤害。
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);
@@ -40,8 +40,13 @@ public class IaiStrike : NinjaModCard
         // 释放后若仍有剩余能量（> 0），追加伤害与流血。
         if (Owner.PlayerCombatState.Energy > 0)
         {
+#if STS2_PUBLIC_BETA
+            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
+                ValueProp.Move, Owner.Creature, this, cardPlay);
+#else
             await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
                 ValueProp.Move, Owner.Creature, this);
+#endif
             await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, Bleed, Owner.Creature, this);
         }
     }

@@ -26,7 +26,7 @@ public class LightSnow : NinjaModCard
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitCount(DynamicVars.Repeat.IntValue)
             .WithHitFx(NinjaConstants.SlashVfx)

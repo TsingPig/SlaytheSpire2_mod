@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.Models;
@@ -18,8 +19,13 @@ public class ResistPower : NinjaModPower
     public override PowerType Type => PowerType.Buff;
     public override PowerStackType StackType => PowerStackType.Counter;
 
+#if STS2_PUBLIC_BETA
+    public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+#else
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource)
+#endif
     {
         if (target != Owner) return 0m;        // only reduce damage aimed at the owner
         if (dealer == Owner) return 0m;         // don't reduce the owner's own damage

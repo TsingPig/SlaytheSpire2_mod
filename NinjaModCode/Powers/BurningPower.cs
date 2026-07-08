@@ -32,8 +32,13 @@ public class BurningPower : NinjaModPower
         if (CombatManager.Instance == null || CombatManager.Instance.IsOverOrEnding) return;
 
         Flash();
+#if STS2_PUBLIC_BETA
+        await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), Owner, Amount,
+            ValueProp.Unblockable | ValueProp.Unpowered, null, null, null);
+#else
         await CreatureCmd.Damage(new ThrowingPlayerChoiceContext(), Owner, Amount,
             ValueProp.Unblockable | ValueProp.Unpowered, null, null);
+#endif
         await PowerCmd.Remove(this);
     }
 
@@ -50,8 +55,13 @@ public class BurningPower : NinjaModPower
         }
 
         Flash();
+#if STS2_PUBLIC_BETA
+        await CreatureCmd.Damage(choiceContext, Owner, Amount * 2,
+            ValueProp.Unblockable | ValueProp.Unpowered, dealer, null, null);
+#else
         await CreatureCmd.Damage(choiceContext, Owner, Amount * 2,
             ValueProp.Unblockable | ValueProp.Unpowered, dealer, null);
+#endif
         await PowerCmd.Remove(this);
     }
 

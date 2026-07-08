@@ -26,7 +26,7 @@ public class SwallowReturn : NinjaModCard
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         var attack = await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);

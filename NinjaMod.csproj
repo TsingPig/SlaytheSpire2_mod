@@ -20,6 +20,13 @@
         <!-- STS001: optional "Architect" character banter localization. BaseLib provides runtime
              fallbacks (UnknownCharacterPatches/MissingLocPatch), so this is non-fatal flavor only. -->
         <NoWarn>$(NoWarn);STS001</NoWarn>
+        <!--
+          StS2 public-beta v0.108.0 changed several combat API signatures. Keep the
+          source compatible with both API lines by compiling with the right profile:
+          PublicBeta for v0.108.0+, Main for the older main branch API.
+        -->
+        <Sts2Compat Condition="'$(Sts2Compat)' == ''">PublicBeta</Sts2Compat>
+        <DefineConstants Condition="'$(Sts2Compat)' == 'PublicBeta'">$(DefineConstants);STS2_PUBLIC_BETA</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup Condition="Exists('$(Sts2DataDir)')" >

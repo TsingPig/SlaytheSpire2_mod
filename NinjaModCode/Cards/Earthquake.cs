@@ -32,7 +32,7 @@ public class Earthquake : NinjaModCard
         if (combatState == null) return;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .TargetingAllOpponents(combatState)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);

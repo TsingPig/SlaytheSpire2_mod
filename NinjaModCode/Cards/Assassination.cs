@@ -28,8 +28,13 @@ public class Assassination : NinjaModCard
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         // Move => counts as an attack (triggers Bleed); Unblockable => ignores the target's Block.
+#if STS2_PUBLIC_BETA
+        await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
+            ValueProp.Move | ValueProp.Unblockable, Owner.Creature, this, cardPlay);
+#else
         await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
             ValueProp.Move | ValueProp.Unblockable, Owner.Creature, this);
+#endif
     }
 
     protected override void OnUpgrade()

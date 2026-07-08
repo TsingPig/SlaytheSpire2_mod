@@ -30,7 +30,7 @@ public class KunaiThrow : NinjaModCard
         bool hadBleed = cardPlay.Target.GetPower<BleedPower>() != null;
 
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitFx(NinjaConstants.SlashVfx)
             .Execute(choiceContext);

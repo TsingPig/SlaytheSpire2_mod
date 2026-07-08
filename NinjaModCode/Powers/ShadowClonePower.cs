@@ -5,6 +5,7 @@ using BaseLib.Abstracts;
 using NinjaMod.NinjaModCode.Cards;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -41,8 +42,13 @@ public class ShadowClonePower : NinjaModPower
     }
 
     // ── 2. 伤害分担：攻击伤害减少 40%（克隆体承担部分受击）─────────────────────
+#if STS2_PUBLIC_BETA
+    public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+#else
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource)
+#endif
     {
         if (target != Owner) return 0m;
         if (dealer == Owner) return 0m;                    // 不减少自身造成的伤害
@@ -74,8 +80,13 @@ public class ShadowClonePower : NinjaModPower
         try
         {
             Flash(); // 让图标闪烁提示克隆体触发
+#if STS2_PUBLIC_BETA
+            await CreatureCmd.Damage(choiceContext, dealer, thorns.Amount,
+                ValueProp.Unblockable | ValueProp.Unpowered, Owner, null, null);
+#else
             await CreatureCmd.Damage(choiceContext, dealer, thorns.Amount,
                 ValueProp.Unblockable | ValueProp.Unpowered, Owner, null);
+#endif
         }
         finally
         {

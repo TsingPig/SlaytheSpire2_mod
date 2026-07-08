@@ -30,8 +30,13 @@ public class StealthPower : NinjaModPower
     public override PowerStackType StackType => PowerStackType.Counter;
 
     // ── 敌人攻击伤害归零（等价“无法攻击你”）──
+#if STS2_PUBLIC_BETA
+    public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
+        Creature? dealer, CardModel? cardSource, CardPlay? cardPlay)
+#else
     public override decimal ModifyDamageAdditive(Creature? target, decimal amount, ValueProp props,
         Creature? dealer, CardModel? cardSource)
+#endif
     {
         if (target != Owner) return 0m;
         if (dealer == Owner) return 0m;                 // 不影响自身造成的伤害

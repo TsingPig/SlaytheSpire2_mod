@@ -35,7 +35,7 @@ public class MusashiSevenStar : NinjaModCard
 
         // 前 7 段永远是固定的 7 点伤害；升级不再把斩杀加成加到每一段上。
         await DamageCmd.Attack(DynamicVars.Damage.BaseValue)
-            .FromCard(this)
+            .FromCardCompat(this, cardPlay)
             .Targeting(cardPlay.Target)
             .WithHitCount(DynamicVars.Repeat.IntValue)
             .WithHitFx(NinjaConstants.SlashVfx)
@@ -49,7 +49,7 @@ public class MusashiSevenStar : NinjaModCard
             if (executeDamage > 0 && cardPlay.Target.CurrentHp > 0)
             {
                 await DamageCmd.Attack(executeDamage)
-                    .FromCard(this)
+                    .FromCardCompat(this, cardPlay)
                     .Targeting(cardPlay.Target)
                     .WithHitFx(NinjaConstants.SlashVfx)
                     .Execute(choiceContext);
