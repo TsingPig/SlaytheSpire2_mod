@@ -155,7 +155,7 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 </tr>
 <tr align="center">
 <td width="25%"><img src="NinjaMod/images/card_portraits/stone_summon.png" width="120"><br><b>土忍：唤石</b><br>1⚡ 技能<br><small>获得当前抵挡层数 × 4(5) 点格挡（卡面动态显示实际值）。</small></td>
-<td width="25%"><img src="NinjaMod/images/card_portraits/earth_escape.png" width="120"><br><b>土忍：土遁</b><br>0⚡ 能力<br><small>获得 1(2) 层抵挡。</small></td>
+<td width="25%"><img src="NinjaMod/images/card_portraits/earth_escape.png" width="120"><br><b>土忍：土遁</b><br>0⚡ 能力 · 消耗<br><small>获得 1(2) 层抵挡。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/earth_wall.png" width="120"><br><b>土忍：土墙</b><br>1⚡ 技能<br><small>获得 7(10) 点格挡，并获得免疫负面效果 2 个回合。</small></td>
 <td width="25%"><img src="NinjaMod/images/card_portraits/detonation.png" width="120"><br><b>火忍：起爆符</b><br>0⚡ 技能<br><small>点燃目标的燃烧（造成燃烧 2 倍的无法格挡伤害并移除）。</small></td>
 </tr>
@@ -323,4 +323,3 @@ update `workshop\upload.vdf` → `publishedfileid` for subsequent updates.
 - `bin/`, `obj/`, `.godot/`, `*.pck`, `*.pdb`, logs, temp/ are gitignored EXCEPT `dist/NinjaMod/` (committed as release payload).
 - `dist/NinjaMod/` contains the latest DLL+JSON+PCK for friend install: copy this folder into `<game>\mods\`.
 - No copyrighted game assets or DLLs committed.
-

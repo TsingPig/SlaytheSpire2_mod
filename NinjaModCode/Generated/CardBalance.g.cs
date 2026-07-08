@@ -310,7 +310,7 @@ public static partial class CardBalance
                 Target: "Self",
                 Cost: "0",
                 UpgradeCost: "",
-                Keywords: "",
+                Keywords: "消耗",
                 IsToken: false,
                 IsMusashi: false,
                 HasSilence: false,

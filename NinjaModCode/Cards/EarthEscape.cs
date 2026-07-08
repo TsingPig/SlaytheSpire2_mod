@@ -17,6 +17,8 @@ public class EarthEscape : NinjaModCard
 {
     public EarthEscape() : base(BalanceCost(nameof(EarthEscape), 0), BalanceType(nameof(EarthEscape), CardType.Power), BalanceRarity(nameof(EarthEscape), CardRarity.Common), BalanceTarget(nameof(EarthEscape), TargetType.Self)) { }
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
     protected override IEnumerable<DynamicVar> CanonicalVars =>
         [new PowerVar<ResistPower>("Resist", BalanceDecimal("BaseResist", 1m))];
 
