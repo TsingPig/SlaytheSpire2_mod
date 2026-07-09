@@ -25,7 +25,7 @@
           source compatible with both API lines by compiling with the right profile:
           PublicBeta for v0.108.0+, Main for the older main branch API.
         -->
-        <Sts2Compat Condition="'$(Sts2Compat)' == ''">PublicBeta</Sts2Compat>
+        <Sts2Compat Condition="'$(Sts2Compat)' == ''">Main</Sts2Compat>
         <DefineConstants Condition="'$(Sts2Compat)' == 'PublicBeta'">$(DefineConstants);STS2_PUBLIC_BETA</DefineConstants>
     </PropertyGroup>
 
@@ -124,6 +124,10 @@
         <!-- 同时复制 dll/json 到仓库 dist/，PCK 由发布/打包目标补齐。 -->
         <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(DistPath)" />
         <Copy SourceFiles="$(AssemblyName).json" DestinationFolder="$(DistPath)" />
+        <!-- 如果 dist 中有 PCK 且 mods 中尚无，则同步过去，防止纯代码 build 后 mods 目录缺 PCK。 -->
+        <Copy SourceFiles="$(DistPath)$(MSBuildProjectName).pck"
+              DestinationFolder="$(ModsPath)$(MSBuildProjectName)/"
+              Condition="Exists('$(DistPath)$(MSBuildProjectName).pck') And !Exists('$(ModsPath)$(MSBuildProjectName)\$(MSBuildProjectName).pck')" />
     </Target>
 
     <Target Name="CopyQuickPck" AfterTargets="PackPck" Condition="Exists('$(PckPackerOutputPath)') And '$(PckPackerSkipped)' != 'true'">

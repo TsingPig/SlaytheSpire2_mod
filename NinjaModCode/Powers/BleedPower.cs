@@ -8,6 +8,7 @@ using MegaCrit.Sts2.Core.Entities.Powers;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.ValueProps;
+using NinjaMod.NinjaModCode.Compatibility;
 
 namespace NinjaMod.NinjaModCode.Powers;
 
@@ -40,13 +41,8 @@ public class BleedPower : NinjaModPower
         try
         {
             Flash();
-#if STS2_PUBLIC_BETA
-            await CreatureCmd.Damage(choiceContext, Owner, Amount,
+            await VersionCompat.CreatureDamage(choiceContext, Owner, Amount,
                 ValueProp.Unblockable | ValueProp.Unpowered, dealer, null, null);
-#else
-            await CreatureCmd.Damage(choiceContext, Owner, Amount,
-                ValueProp.Unblockable | ValueProp.Unpowered, dealer, null);
-#endif
         }
         finally
         {

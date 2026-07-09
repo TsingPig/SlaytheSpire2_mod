@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
+using NinjaMod.NinjaModCode.Compatibility;
 using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -36,13 +37,8 @@ public class KusariGama : NinjaModCard
 
         if (hadBleed)
         {
-#if STS2_PUBLIC_BETA
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
+            await VersionCompat.CreatureDamage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
                 ValueProp.Move, Owner.Creature, this, cardPlay);
-#else
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
-                ValueProp.Move, Owner.Creature, this);
-#endif
         }
     }
 

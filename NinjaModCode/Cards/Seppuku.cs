@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
+using NinjaMod.NinjaModCode.Compatibility;
 using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -34,13 +35,8 @@ public class Seppuku : NinjaModCard
         if (x <= 0) return;
 
         // 失去 2X 点生命（无法格挡、不受加成影响的自残）。
-#if STS2_PUBLIC_BETA
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, x * BalanceValue("BaseSeppukuHpMultiplier", 2),
+        await VersionCompat.CreatureDamage(choiceContext, Owner.Creature, x * BalanceValue("BaseSeppukuHpMultiplier", 2),
             ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this, cardPlay);
-#else
-        await CreatureCmd.Damage(choiceContext, Owner.Creature, x * BalanceValue("BaseSeppukuHpMultiplier", 2),
-            ValueProp.Unblockable | ValueProp.Unpowered, Owner.Creature, this);
-#endif
 
         // 获得 X 点能量。
         await PlayerCmd.GainEnergy(x, Owner);

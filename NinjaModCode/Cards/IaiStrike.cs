@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
+using NinjaMod.NinjaModCode.Compatibility;
 using NinjaMod.NinjaModCode.Powers;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -40,13 +41,8 @@ public class IaiStrike : NinjaModCard
         // 释放后若仍有剩余能量（> 0），追加伤害与流血。
         if (Owner.PlayerCombatState.Energy > 0)
         {
-#if STS2_PUBLIC_BETA
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
+            await VersionCompat.CreatureDamage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
                 ValueProp.Move, Owner.Creature, this, cardPlay);
-#else
-            await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.ExtraDamage.BaseValue,
-                ValueProp.Move, Owner.Creature, this);
-#endif
             await PowerCmd.Apply<BleedPower>(choiceContext, cardPlay.Target, Bleed, Owner.Creature, this);
         }
     }

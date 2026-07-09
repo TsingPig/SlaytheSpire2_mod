@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
 using NinjaMod.NinjaModCode.Cards;
+using NinjaMod.NinjaModCode.Compatibility;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
@@ -80,13 +81,8 @@ public class ShadowClonePower : NinjaModPower
         try
         {
             Flash(); // 让图标闪烁提示克隆体触发
-#if STS2_PUBLIC_BETA
-            await CreatureCmd.Damage(choiceContext, dealer, thorns.Amount,
+            await VersionCompat.CreatureDamage(choiceContext, dealer, thorns.Amount,
                 ValueProp.Unblockable | ValueProp.Unpowered, Owner, null, null);
-#else
-            await CreatureCmd.Damage(choiceContext, dealer, thorns.Amount,
-                ValueProp.Unblockable | ValueProp.Unpowered, Owner, null);
-#endif
         }
         finally
         {

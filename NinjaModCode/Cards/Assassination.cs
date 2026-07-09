@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using NinjaMod.NinjaModCode.Character;
+using NinjaMod.NinjaModCode.Compatibility;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
@@ -28,13 +29,8 @@ public class Assassination : NinjaModCard
     {
         ArgumentNullException.ThrowIfNull(cardPlay.Target);
         // Move => counts as an attack (triggers Bleed); Unblockable => ignores the target's Block.
-#if STS2_PUBLIC_BETA
-        await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
+        await VersionCompat.CreatureDamage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
             ValueProp.Move | ValueProp.Unblockable, Owner.Creature, this, cardPlay);
-#else
-        await CreatureCmd.Damage(choiceContext, cardPlay.Target, DynamicVars.Damage.BaseValue,
-            ValueProp.Move | ValueProp.Unblockable, Owner.Creature, this);
-#endif
     }
 
     protected override void OnUpgrade()
