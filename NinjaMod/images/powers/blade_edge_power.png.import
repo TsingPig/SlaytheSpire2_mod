@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://c6gel7nukm2a1"
-path="res://.godot/imported/blade_edge_power.png-a7c7a7b5f4fb4b64b361c3c61a65bcb1.ctex"
+path="res://.godot/imported/blade_edge_power.png-baf4813f17fbb78a56d05a1c9917a49f.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://NinjaMod/images/powers/blade_edge_power.png"
-dest_files=["res://.godot/imported/blade_edge_power.png-a7c7a7b5f4fb4b64b361c3c61a65bcb1.ctex"]
+dest_files=["res://.godot/imported/blade_edge_power.png-baf4813f17fbb78a56d05a1c9917a49f.ctex"]
 
 [params]
 

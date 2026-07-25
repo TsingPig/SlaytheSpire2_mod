@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://ce5wmb7qnute4"
-path="res://.godot/imported/wildfire_power.png-a5b7f016a0a34a0aa097c06e83ab2f97.ctex"
+path="res://.godot/imported/wildfire_power.png-33ff0112706498ac2cb252d753085e29.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://NinjaMod/images/powers/wildfire_power.png"
-dest_files=["res://.godot/imported/wildfire_power.png-a5b7f016a0a34a0aa097c06e83ab2f97.ctex"]
+dest_files=["res://.godot/imported/wildfire_power.png-33ff0112706498ac2cb252d753085e29.ctex"]
 
 [params]
 

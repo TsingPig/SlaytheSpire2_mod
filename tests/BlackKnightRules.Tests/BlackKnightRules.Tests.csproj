@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!--
+    黑骑士纯逻辑规则的独立可执行测试（离线，无需 sts2/Godot/BaseLib）。
+    直接把唯一事实来源 BlackKnightRules.cs 编译进本测试程序集，因此可访问其 internal 成员。
+    运行方式见 tests/README。全部通过时退出码 0，任一失败退出码 1。
+  -->
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <Deterministic>true</Deterministic>
+    <!-- 独立测试工程，绝不参与游戏 mod 的构建/打包。 -->
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <!-- 唯一事实来源：与 mod 共享同一份纯规则实现。 -->
+    <Compile Include="..\..\NinjaModCode\Monsters\BlackKnightRules.cs" LinkBase="Shared" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,50 @@
+{
+  "NinjaMod.NinjaModCode.Monsters.BlackKnightEnemy": [
+    {
+      "condition": "true",
+      "stateMachine": [
+        {
+          "name": "BK_CURSE",
+          "isInitialState": true,
+          "followUpState": "BK_DIAGONAL_A"
+        },
+        {
+          "name": "BK_DIAGONAL_A",
+          "followUpState": "BK_DIAGONAL_B"
+        },
+        {
+          "name": "BK_DIAGONAL_B",
+          "followUpState": "BK_HORIZONTAL"
+        },
+        {
+          "name": "BK_HORIZONTAL",
+          "followUpState": "BK_VERTICAL"
+        },
+        {
+          "name": "BK_VERTICAL",
+          "followUpState": "BK_DARK_ARMOR"
+        },
+        {
+          "name": "BK_DARK_ARMOR",
+          "followUpState": "BK_TRUE_FORM"
+        },
+        {
+          "name": "BK_TRUE_FORM",
+          "followUpState": "BK_TF_HORIZONTAL_A"
+        },
+        {
+          "name": "BK_TF_HORIZONTAL_A",
+          "followUpState": "BK_TF_HORIZONTAL_B"
+        },
+        {
+          "name": "BK_TF_HORIZONTAL_B",
+          "followUpState": "BK_TF_VERTICAL"
+        },
+        {
+          "name": "BK_TF_VERTICAL",
+          "followUpState": "BK_CURSE"
+        }
+      ]
+    }
+  ]
+}

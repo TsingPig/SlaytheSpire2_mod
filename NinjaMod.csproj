@@ -65,6 +65,10 @@
         <Compile Remove="materials/**" />
         <Compile Remove="shaders/**" />
         <Compile Remove="images/**" />
+        <!-- 独立测试工程与反编译参考代码不参与 mod 构建（csproj 会 glob **/*.cs）。 -->
+        <Compile Remove="tests/**" />
+        <Compile Remove="temp/**" />
+        <Compile Remove="BlackKnight/**" />
         <EmbeddedResource Remove="NinjaMod/**" />
         <EmbeddedResource Remove="materials/**" />
         <EmbeddedResource Remove="shaders/**" />

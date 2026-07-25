@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://cmjva4jyusfqm"
-path="res://.godot/imported/nimble_step_power.png-f498426bd4324b68aa49d2a6ded695db.ctex"
+path="res://.godot/imported/nimble_step_power.png-62213e1a714ca68f5d12c74c5a89602d.ctex"
 metadata={
 "vram_texture": false
 }
@@ -11,7 +11,7 @@ metadata={
 [deps]
 
 source_file="res://NinjaMod/images/powers/big/nimble_step_power.png"
-dest_files=["res://.godot/imported/nimble_step_power.png-f498426bd4324b68aa49d2a6ded695db.ctex"]
+dest_files=["res://.godot/imported/nimble_step_power.png-62213e1a714ca68f5d12c74c5a89602d.ctex"]
 
 [params]
 
