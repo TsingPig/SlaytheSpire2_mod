@@ -21,6 +21,13 @@ internal static class BlackKnightIntents
     {
         public CurseCast() : base(BlackKnightConfig.CurseCardCount) => BlackKnightLoc.EnsureInjected();
         protected override string IntentPrefix => "BK_CURSE";
+
+        // IntentPrefix also drives NIntent's animated-icon lookup. BK_* prefixes
+        // only exist in our localization table, not in the game's IntentAnimData,
+        // so use the canonical Status animation while retaining custom text.
+        public override string GetAnimation(IEnumerable<Creature> targets, Creature owner) =>
+            new StatusIntent(BlackKnightConfig.CurseCardCount).GetAnimation(targets, owner);
+
         protected override LocString GetIntentDescription(IEnumerable<Creature> targets, Creature owner)
         {
             BlackKnightLoc.EnsureInjected();
@@ -38,6 +45,10 @@ internal static class BlackKnightIntents
             BlackKnightLoc.EnsureInjected();
         }
         protected override string IntentPrefix => _prefix;
+
+        public override string GetAnimation(IEnumerable<Creature> targets, Creature owner) =>
+            new SingleAttackIntent(DamageCalc!).GetAnimation(targets, owner);
+
         protected override LocString GetIntentDescription(IEnumerable<Creature> targets, Creature owner)
         {
             BlackKnightLoc.EnsureInjected();
@@ -54,6 +65,10 @@ internal static class BlackKnightIntents
     {
         public Vertical(Func<decimal> damage) : base(damage) => BlackKnightLoc.EnsureInjected();
         protected override string IntentPrefix => "BK_VERTICAL";
+
+        public override string GetAnimation(IEnumerable<Creature> targets, Creature owner) =>
+            new SingleAttackIntent(DamageCalc!).GetAnimation(targets, owner);
+
         protected override LocString GetIntentDescription(IEnumerable<Creature> targets, Creature owner)
         {
             BlackKnightLoc.EnsureInjected();
@@ -73,6 +88,10 @@ internal static class BlackKnightIntents
     {
         public DarkArmor() => BlackKnightLoc.EnsureInjected();
         protected override string IntentPrefix => "BK_DARK_ARMOR";
+
+        public override string GetAnimation(IEnumerable<Creature> targets, Creature owner) =>
+            new DefendIntent().GetAnimation(targets, owner);
+
         protected override LocString GetIntentDescription(IEnumerable<Creature> targets, Creature owner)
         {
             BlackKnightLoc.EnsureInjected();
@@ -85,6 +104,10 @@ internal static class BlackKnightIntents
     {
         public TrueForm() => BlackKnightLoc.EnsureInjected();
         protected override string IntentPrefix => "BK_TRUE_FORM";
+
+        public override string GetAnimation(IEnumerable<Creature> targets, Creature owner) =>
+            new BuffIntent().GetAnimation(targets, owner);
+
         protected override LocString GetIntentDescription(IEnumerable<Creature> targets, Creature owner)
         {
             BlackKnightLoc.EnsureInjected();

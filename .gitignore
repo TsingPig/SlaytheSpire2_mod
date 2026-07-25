@@ -10,6 +10,8 @@ Properties/
 packages/
 .editorconfig
 *.user
+__pycache__/
+*.py[cod]
 
 # Local machine-specific config (game paths, Godot path). Never commit.
 Directory.Build.props
