@@ -55,6 +55,9 @@ internal static class BlackKnightConfig
     /// <summary>诅咒发放阶段洗入抽牌堆的【幽冥诅咒】数量。</summary>
     public const int CurseCardCount = BlackKnightRules.CurseCardCount;
 
+    /// <summary>真身强化回合额外向每名玩家洗入的【幽冥诅咒】数量。</summary>
+    public const int TrueFormCurseCardCount = BlackKnightRules.TrueFormCurseCardCount;
+
     /// <summary>真身强化后固定执行的行动数量（横砍→横砍→竖劈）。</summary>
     public const int TrueFormActionCount = BlackKnightRules.TrueFormActionCount;
 
@@ -81,6 +84,13 @@ internal static class BlackKnightConfig
 
     /// <summary>该状态 ID 是否属于真身阶段（真身进入或真身的三次行动）。用于存档/读档后恢复幽影可见性。</summary>
     public static bool IsTrueFormState(string? stateId) => BlackKnightRules.IsTrueFormState(stateId);
+
+    /// <summary>该状态是否执行完整诅咒效果包（洗牌 + 按成功数量获得噬命诅印）。</summary>
+    public static bool StateAppliesCursePackage(string? stateId) =>
+        BlackKnightRules.StateAppliesCursePackage(stateId);
+
+    /// <summary>从唯一状态机规范取得后继，避免运行时代码与 intentgraph/test 各自漂移。</summary>
+    public static string NextState(string? stateId) => BlackKnightRules.NextState(stateId);
 
     // ─────────────────────────────────────────────────────────────────────
     // 资源路径（相对 NinjaMod/，通过扩展方法拼成 res:// 路径）
@@ -110,8 +120,23 @@ internal static class BlackKnightConfig
     // 关键动画时长 / 命中帧时刻（秒）。命中帧用于把伤害结算与挥斧命中同步。
     public const float IdleLoopSeconds        = 3.0f;
     public const float CurseCastSeconds       = 1.1f;
-    public const float DiagonalWindupSeconds  = 0.42f; // 蓄力 → 命中帧
-    public const float HorizontalWindupSeconds = 0.5f;
+    public const float DiagonalWindupSeconds  = 0.80f; // 斜劈 A：贴近、右上抬斧 → 左下命中
+    public const float DiagonalBWindupSeconds = 0.80f; // 斜劈 B：相同核心方向，略短回收
+    public const float DiagonalApproachDelaySeconds = 0.08f;
+    public const float DiagonalApproachSeconds = 0.18f;
+    public const float DiagonalReturnDelaySeconds = 0.64f;
+    public const float DiagonalReturnSeconds = 0.25f;
+    public const float DiagonalTargetStandoff = 180f;
+    public const float DiagonalMaxLungeDistance = 720f;
+    public const float HorizontalAnimationSeconds = 1.4f;
+    public const float HorizontalWindupSeconds = 0.75f;
+    public const float HorizontalRecoverySeconds = 0.45f;
+    public const float HorizontalApproachDelaySeconds = 0.22f;
+    public const float HorizontalApproachSeconds = 0.24f;
+    public const float HorizontalReturnDelaySeconds = 0.48f;
+    public const float HorizontalReturnSeconds = 0.44f;
+    public const float HorizontalTargetStandoff = 210f;
+    public const float HorizontalMaxLungeDistance = 700f;
     public const float VerticalWindupSeconds  = 0.7f;  // 竖劈高举停顿更久
     public const float DarkArmorSeconds       = 1.0f;
     public const float TrueFormEnterSeconds   = 1.2f;
@@ -138,5 +163,9 @@ internal static class BlackKnightConfig
 
     // 屏幕震动强度 / 时长（竖劈重击）。
     public const float ScreenShakeStrength = 14f;
+    public const float HorizontalScreenShakeStrength = 30f;
+    public const float HorizontalAftershockShakeStrength = 17f;
+    public const float HorizontalBladeWaveLength = 1500f;
+    public const float HorizontalBladeWaveTiltDegrees = 7f;
     public const float ScreenShakeSeconds  = 0.35f;
 }

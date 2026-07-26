@@ -281,6 +281,7 @@ public abstract class NinjaModCard(int cost, CardType type, CardRarity rarity, T
         ("八咫镜",   "Yata Mirror",     () => ModelDb.Power<YataMirrorPower>()?.DumbHoverTip),
         ("残影",     "Afterimage",      () => ModelDb.Power<AfterimagePower>()?.DumbHoverTip),
         ("圆明",     "Enmei",           () => ModelDb.Power<EnmeiPower>()?.DumbHoverTip),
+        ("噬命诅印", "Life-Siphon Sigil", () => ModelDb.Power<LifeSiphonSigilPower>()?.DumbHoverTip),
     };
 
     /// <summary>

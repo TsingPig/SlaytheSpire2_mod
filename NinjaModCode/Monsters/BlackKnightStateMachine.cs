@@ -13,7 +13,8 @@ namespace NinjaMod.NinjaModCode.Monsters;
 /// 因此战斗存档/读取会精确恢复当前阶段与“真身剩余攻击”，而不是靠易错的整数自增。
 ///
 /// 完整循环：
-///   诅咒发放 → 斜劈 → 斜劈 → 横砍 → 竖劈+ → 暗鬼铠甲 → 强化—真身
+///   诅咒发放 → 斜劈 → 斜劈 → 横砍 → 竖劈+ → 暗鬼铠甲
+///   → 强化—真身（永久力量 + 幽冥侵蚀 + 再次诅咒发放/噬命诅印）
 ///   → 横砍 → 横砍 → 竖劈+ → （返回）诅咒发放
 /// </summary>
 internal static class BlackKnightStateMachine
@@ -37,52 +38,55 @@ internal static class BlackKnightStateMachine
         var curse = new MoveState(
             BlackKnightConfig.StateCurse, Guard(a.CurseCast, "诅咒发放"),
             new BlackKnightIntents.CurseCast())
-        { FollowUpStateId = BlackKnightConfig.StateDiagonalA };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateCurse) };
 
         var diagonalA = new MoveState(
             BlackKnightConfig.StateDiagonalA, Guard(a.DiagonalSlashA, "斜劈A"),
             new BlackKnightIntents.Slash(() => BlackKnightConfig.DiagonalSlashDamage, "BK_DIAGONAL"))
-        { FollowUpStateId = BlackKnightConfig.StateDiagonalB };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateDiagonalA) };
 
         var diagonalB = new MoveState(
             BlackKnightConfig.StateDiagonalB, Guard(a.DiagonalSlashB, "斜劈B"),
             new BlackKnightIntents.Slash(() => BlackKnightConfig.DiagonalSlashDamage, "BK_DIAGONAL"))
-        { FollowUpStateId = BlackKnightConfig.StateHorizontal };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateDiagonalB) };
 
         var horizontal = new MoveState(
             BlackKnightConfig.StateHorizontal, Guard(a.HorizontalSlash, "横砍"),
             new BlackKnightIntents.Slash(() => BlackKnightConfig.HorizontalSlashDamage, "BK_HORIZONTAL"))
-        { FollowUpStateId = BlackKnightConfig.StateVertical };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateHorizontal) };
 
         var vertical = new MoveState(
             BlackKnightConfig.StateVertical, Guard(a.VerticalSlash, "竖劈+"),
             new BlackKnightIntents.Vertical(() => BlackKnightConfig.VerticalSlashDamage))
-        { FollowUpStateId = BlackKnightConfig.StateDarkArmor };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateVertical) };
 
         var darkArmor = new MoveState(
             BlackKnightConfig.StateDarkArmor, Guard(a.DarkArmor, "暗鬼铠甲"),
             new BlackKnightIntents.DarkArmor(), new DebuffIntent())
-        { FollowUpStateId = BlackKnightConfig.StateTrueForm };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateDarkArmor) };
 
         var trueForm = new MoveState(
-            BlackKnightConfig.StateTrueForm, Guard(a.TrueForm, "强化真身"),
-            new BlackKnightIntents.TrueForm())
-        { FollowUpStateId = BlackKnightConfig.StateTrueFormHorizA };
+            BlackKnightConfig.StateTrueForm, Guard(a.TrueForm, "强化真身并重施诅咒"),
+            // 同一稳定状态内展示两个意图；不新增中间 StateId，
+            // 旧存档恢复到 BK_TRUE_FORM 后会自然执行完整增量效果。
+            new BlackKnightIntents.TrueForm(),
+            new BlackKnightIntents.CurseCast(BlackKnightConfig.TrueFormCurseCardCount))
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateTrueForm) };
 
         var tfHorizontalA = new MoveState(
-            BlackKnightConfig.StateTrueFormHorizA, Guard(a.TrueFormHorizontalA, "真身横砍A"),
+            BlackKnightConfig.StateTrueFormHorizA, Guard(a.TrueFormHorizontalA, "真身横劈A"),
             new BlackKnightIntents.Slash(() => BlackKnightConfig.HorizontalSlashDamage, "BK_HORIZONTAL"))
-        { FollowUpStateId = BlackKnightConfig.StateTrueFormHorizB };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateTrueFormHorizA) };
 
         var tfHorizontalB = new MoveState(
-            BlackKnightConfig.StateTrueFormHorizB, Guard(a.TrueFormHorizontalB, "真身横砍B"),
+            BlackKnightConfig.StateTrueFormHorizB, Guard(a.TrueFormHorizontalB, "真身横劈B"),
             new BlackKnightIntents.Slash(() => BlackKnightConfig.HorizontalSlashDamage, "BK_HORIZONTAL"))
-        { FollowUpStateId = BlackKnightConfig.StateTrueFormVertical };
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateTrueFormHorizB) };
 
         var tfVertical = new MoveState(
             BlackKnightConfig.StateTrueFormVertical, Guard(a.TrueFormVertical, "真身竖劈+"),
             new BlackKnightIntents.Vertical(() => BlackKnightConfig.VerticalSlashDamage))
-        { FollowUpStateId = BlackKnightConfig.StateCurse }; // 循环回到诅咒发放
+        { FollowUpStateId = BlackKnightConfig.NextState(BlackKnightConfig.StateTrueFormVertical) };
 
         var states = new List<MonsterState>
         {

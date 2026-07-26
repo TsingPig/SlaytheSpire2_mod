@@ -29,6 +29,7 @@ public class CowardicePower : NinjaModPower
 {
     public override PowerType Type => PowerType.Debuff;
     public override PowerStackType StackType => PowerStackType.Counter;
+    protected override bool IsVisibleInternal => false;
 
     public override async Task AfterCardChangedPiles(CardModel card, PileType pile, AbstractModel source)
     {

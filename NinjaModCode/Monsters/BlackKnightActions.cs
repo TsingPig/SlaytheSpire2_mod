@@ -3,12 +3,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
+using MegaCrit.Sts2.Core.Context;
 using MegaCrit.Sts2.Core.Entities.Cards;
 using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.Entities.Players;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using MegaCrit.Sts2.Core.Models.Cards;
 using MegaCrit.Sts2.Core.Models.Powers;
+using MegaCrit.Sts2.Core.Nodes.CommonUi;
 using MegaCrit.Sts2.Core.ValueProps;
 using NinjaMod.NinjaModCode.Cards;
 using NinjaMod.NinjaModCode.Compatibility;
@@ -17,15 +19,8 @@ using NinjaMod.NinjaModCode.Powers;
 namespace NinjaMod.NinjaModCode.Monsters;
 
 /// <summary>
-/// 黑骑士的行动实现（诅咒发放 / 斜劈 / 横砍 / 竖劈+ / 暗鬼铠甲 / 真身强化）。
-/// 每个方法签名匹配 <c>Func&lt;IReadOnlyList&lt;Creature&gt;, Task&gt;</c>，作为状态机中各
-/// <see cref="MegaCrit.Sts2.Core.MonsterMoves.MonsterMoveStateMachine.MoveState"/> 的执行体。
-///
-/// 所有伤害均走游戏正式伤害管线（受力量等修正影响）：
-///  • 可格挡攻击用 <c>DamageCmd.Attack(...).FromMonster(bk)</c>，读取 <c>Results</c> 的
-///    <c>UnblockedDamage</c> 得到“本次实际生命伤害”，用于伤口判定与竖劈治疗。
-///  • 竖劈+ 默认用 <c>ValueProp.Move | ValueProp.Unblockable</c> 绕过格挡（合法 HP 结算），
-///    携带 <see cref="VerticalSlashProtectionPower"/> 时改为可格挡攻击并按实际生命伤害治疗。
+/// 黑暗骑士的战斗动作。所有改变战斗状态的操作都通过游戏命令执行，
+/// 因而由同一条联机战斗动作链同步，客户端不会各自重复结算。
 /// </summary>
 internal sealed class BlackKnightActions
 {
@@ -37,149 +32,236 @@ internal sealed class BlackKnightActions
     private Creature Self => _bk.Creature;
 
     private IEnumerable<Player> AlivePlayers() =>
-        Combat.Players.Where(p => p.Creature is { IsAlive: true });
+        Combat.Players.Where(player => player.Creature is { IsAlive: true });
 
-    /// <summary>本次攻击的主目标：优先活着的玩家角色，其次任意活着的玩家方实体。</summary>
     private Creature? MainTarget()
     {
         var opponents = Combat.GetOpponentsOf(Self);
-        return opponents.FirstOrDefault(c => c.IsAlive && c.IsPlayer)
-               ?? opponents.FirstOrDefault(c => c.IsAlive);
+        return opponents.FirstOrDefault(creature => creature.IsAlive && creature.IsPlayer)
+               ?? opponents.FirstOrDefault(creature => creature.IsAlive);
     }
 
-    /// <summary>玩家方存活实体数量 N（玩家角色 + 其召唤物，均需存活）。</summary>
-    private int PlayerSideCount() => Combat.GetOpponentsOf(Self).Count(c => c.IsAlive);
+    private int PlayerSideCount() => Combat.GetOpponentsOf(Self).Count(creature => creature.IsAlive);
 
-    // ── 阶段 1：诅咒发放 ────────────────────────────────────────────────
     public async Task CurseCast(IReadOnlyList<Creature> targets)
     {
         _bk.Anim.PlayOneShot(BlackKnightConfig.AnimCurseCast);
         _bk.Vfx.CurseCast();
         _bk.Sfx.Curse();
 
+        await ApplyCursePackage(
+            BlackKnightConfig.CurseCardCount,
+            "诅咒发放");
+    }
+
+    /// <summary>
+    /// 首回合与真身强化共同复用的完整诅咒效果包：
+    /// 向每名存活玩家的抽牌堆随机洗入指定数量的幽冥诅咒，
+    /// 再按实际成功加入的总数获得噬命诅印。
+    /// </summary>
+    private async Task ApplyCursePackage(int cardsPerPlayer, string sourceLabel)
+    {
+        int successfulAdds = 0;
+        bool showedLocalPreview = false;
+
         foreach (Player player in AlivePlayers())
         {
-            for (int i = 0; i < BlackKnightConfig.CurseCardCount; i++)
+            var results = new List<CardPileAddResult>(cardsPerPlayer);
+            for (int i = 0; i < cardsPerPlayer; i++)
             {
                 var card = Combat.CreateCard<NetherCurse>(player);
-                await CardPileCmd.AddGeneratedCardToCombat(card, PileType.Draw, player, CardPilePosition.Random);
+                CardPileAddResult result = await CardPileCmd.AddGeneratedCardToCombat(
+                    card,
+                    PileType.Draw,
+                    player,
+                    CardPilePosition.Random);
+                results.Add(result);
+                if (result.success)
+                    successfulAdds++;
+            }
+
+            // 每轮发牌都复用原版“卡牌预览并飞入牌堆”的表现。
+            // PreviewCardPileAdd 内部只会在该玩家的本地客户端显示。
+            if (results.Any(result => result.success) && LocalContext.IsMe(player))
+            {
+                CardCmd.PreviewCardPileAdd(results, 1.2f, CardPreviewStyle.HorizontalLayout);
+                showedLocalPreview = true;
             }
         }
-        BlackKnightLog.Info($"诅咒发放：为每名玩家把 {BlackKnightConfig.CurseCardCount} 张幽冥诅咒洗入抽牌堆。");
+
+        if (showedLocalPreview)
+            await Cmd.Wait(1f);
+
+        int sigilStacks = BlackKnightRules.LifeSiphonSigilsFromCurseAdds(successfulAdds);
+        if (sigilStacks > 0)
+        {
+            await PowerCmd.Apply<LifeSiphonSigilPower>(
+                new ThrowingPlayerChoiceContext(),
+                Self,
+                sigilStacks,
+                Self,
+                null);
+        }
+
+        BlackKnightLog.Info(
+            $"{sourceLabel}：实际加入 {successfulAdds} 张幽冥诅咒，获得 {sigilStacks} 层噬命诅印。");
     }
 
-    // ── 阶段 2/3：斜劈（普通可格挡）──────────────────────────────────────
     public Task DiagonalSlashA(IReadOnlyList<Creature> targets) =>
-        Slash(BlackKnightConfig.DiagonalSlashDamage, BlackKnightConfig.AnimDiagonalSlashA, "斜劈A");
+        Slash(
+            BlackKnightConfig.DiagonalSlashDamage,
+            BlackKnightConfig.AnimDiagonalSlashA,
+            "斜劈A",
+            BlackKnightConfig.DiagonalWindupSeconds,
+            0.34f);
 
     public Task DiagonalSlashB(IReadOnlyList<Creature> targets) =>
-        Slash(BlackKnightConfig.DiagonalSlashDamage, BlackKnightConfig.AnimDiagonalSlashB, "斜劈B");
+        Slash(
+            BlackKnightConfig.DiagonalSlashDamage,
+            BlackKnightConfig.AnimDiagonalSlashB,
+            "斜劈B",
+            BlackKnightConfig.DiagonalBWindupSeconds,
+            0.28f);
 
-    private async Task Slash(int damage, string anim, string label)
+    private async Task Slash(
+        int damage,
+        string animation,
+        string label,
+        float hitDelaySeconds,
+        float recoverySeconds)
     {
-        var target = MainTarget();
-        if (target == null) return;
-        _bk.Anim.PlayOneShot(anim);
-        _bk.Vfx.DiagonalSlash();
+        Creature? target = MainTarget();
+        if (target == null)
+            return;
+
+        _bk.Anim.PlayLunge(animation, target);
         _bk.Sfx.Swing();
-        int hp = await BlockableAttack(target, damage);
-        BlackKnightLog.Info($"{label}：可格挡伤害 {damage}(+力量)，实际生命伤害 {hp}。");
+        await Cmd.Wait(hitDelaySeconds);
+        _bk.Vfx.DiagonalSlash();
+        int hpDamage = await BlockableAttack(target, damage);
+        await Cmd.Wait(recoverySeconds);
+        BlackKnightLog.Info($"{label}：实际生命伤害 {hpDamage}。");
     }
 
-    // ── 阶段 4：横砍（未完全格挡则洗入 1 张伤口）───────────────────────────
-    public Task HorizontalSlash(IReadOnlyList<Creature> targets) => Horizontal("横砍");
-    public Task TrueFormHorizontalA(IReadOnlyList<Creature> targets) => Horizontal("真身横砍A");
-    public Task TrueFormHorizontalB(IReadOnlyList<Creature> targets) => Horizontal("真身横砍B");
+    public Task HorizontalSlash(IReadOnlyList<Creature> targets) => Horizontal("横劈");
+    public Task TrueFormHorizontalA(IReadOnlyList<Creature> targets) => Horizontal("真身横劈A");
+    public Task TrueFormHorizontalB(IReadOnlyList<Creature> targets) => Horizontal("真身横劈B");
 
     private async Task Horizontal(string label)
     {
-        var target = MainTarget();
-        if (target == null) return;
-        _bk.Anim.PlayOneShot(BlackKnightConfig.AnimHorizontalSlash);
-        _bk.Vfx.HorizontalSlash();
-        _bk.Sfx.Swing();
+        Creature? target = MainTarget();
+        if (target == null)
+            return;
 
-        int hp = await BlockableAttack(target, BlackKnightConfig.HorizontalSlashDamage);
-        if (BlackKnightRules.ShouldAddWound(hp))
+        _bk.Anim.PlayHorizontalLunge(BlackKnightConfig.AnimHorizontalSlash, target);
+        await Cmd.Wait(BlackKnightConfig.HorizontalWindupSeconds);
+        _bk.Sfx.Swing();
+        _bk.Vfx.HorizontalSlash(target);
+
+        int hpDamage = await BlockableAttack(target, BlackKnightConfig.HorizontalSlashDamage);
+        _bk.Vfx.HorizontalAftershock(target);
+        if (BlackKnightRules.ShouldAddWound(hpDamage))
         {
-            var wound = Combat.CreateCard<Wound>(target.Player);
-            await CardPileCmd.AddGeneratedCardToCombat(wound, PileType.Draw, target.Player, CardPilePosition.Random);
-            BlackKnightLog.Info($"{label}：未完全格挡（实际生命伤害 {hp}），向抽牌堆洗入 1 张伤口。");
+            Player? owner = target.Player ?? target.PetOwner;
+            if (owner == null)
+                return;
+
+            var wound = Combat.CreateCard<Wound>(owner);
+            CardPileAddResult result = await CardPileCmd.AddGeneratedCardToCombat(
+                wound,
+                PileType.Draw,
+                owner,
+                CardPilePosition.Random);
+
+            // 复用原版“卡牌预览并飞入牌堆”的表现；只在卡牌确实成功加入、
+            // 且目标是本地玩家时播放，避免联机客户端重复显示。
+            if (result.success)
+            {
+                if (LocalContext.IsMe(owner))
+                {
+                    CardCmd.PreviewCardPileAdd(
+                        new List<CardPileAddResult> { result },
+                        0.9f,
+                        CardPreviewStyle.HorizontalLayout);
+                    await Cmd.Wait(0.65f);
+                }
+
+                BlackKnightLog.Info($"{label}：造成 {hpDamage} 点实际生命伤害，加入 1 张伤口。");
+            }
+            else
+            {
+                BlackKnightLog.Info($"{label}：造成 {hpDamage} 点实际生命伤害，但伤口未能加入抽牌堆。");
+            }
         }
-        else
-        {
-            BlackKnightLog.Info($"{label}：完全格挡，不加入伤口。");
-        }
+
+        await Cmd.Wait(BlackKnightConfig.HorizontalRecoverySeconds);
     }
 
-    // ── 阶段 5：竖劈+ ───────────────────────────────────────────────────
     public Task VerticalSlash(IReadOnlyList<Creature> targets) => Vertical(exitTrueForm: false);
     public Task TrueFormVertical(IReadOnlyList<Creature> targets) => Vertical(exitTrueForm: true);
 
     private async Task Vertical(bool exitTrueForm)
     {
-        var target = MainTarget();
         _bk.Anim.PlayOneShot(BlackKnightConfig.AnimVerticalSlash);
         _bk.Vfx.VerticalImpact();
         _bk.Sfx.Cleave();
 
-        if (target != null)
+        List<Creature> playerTargets = AlivePlayers()
+            .Select(player => player.Creature)
+            .ToList();
+        Dictionary<Creature, int> hpBefore = SnapshotHp(playerTargets);
+        var context = new ThrowingPlayerChoiceContext();
+
+        // 一次竖劈可能命中多名玩家，但仍属于一次攻击行为。
+        // 每名玩家分别读取自己回合结束时保存的标记。
+        foreach (Creature target in playerTargets)
         {
-            var protection = Self.GetPower<VerticalSlashProtectionPower>();
-            if (protection != null)
-            {
-                // 已被幽冥诅咒转化：可格挡，并按实际生命伤害治疗黑骑士。
-                int hp = await BlockableAttack(target, BlackKnightConfig.VerticalSlashDamage, hitSfx: false);
-                await PowerCmd.Remove(protection); // 一次性消耗保护
-                int heal = BlackKnightRules.VerticalHeal(hp, warded: true);
-                if (heal > 0)
-                {
-                    await CreatureCmd.Heal(Self, heal, true); // Heal 自动不超过最大生命
-                    _bk.Vfx.Heal();
-                }
-                BlackKnightLog.Info($"竖劈+（已保护）：可格挡，实际生命伤害 {hp}，黑骑士恢复 {heal}。");
-            }
-            else
-            {
-                // 默认不可格挡：通过合法伤害系统结算（Move => 受力量影响，Unblockable => 绕过格挡）。
-                await VersionCompat.CreatureDamage(new ThrowingPlayerChoiceContext(), target,
-                    BlackKnightConfig.VerticalSlashDamage, ValueProp.Move | ValueProp.Unblockable, Self, null, null);
-                _bk.Vfx.BloodBurst(target, BlackKnightConfig.VerticalSlashDamage);
-                BlackKnightLog.Info("竖劈+（不可格挡）：绕过格挡结算，黑骑士不治疗。");
-            }
+            var exposure = target.GetPower<VerticalSlashExposurePower>();
+            ValueProp props = ValueProp.Move;
+            if (exposure != null)
+                props |= ValueProp.Unblockable;
+
+            await VersionCompat.CreatureDamage(
+                context,
+                target,
+                BlackKnightConfig.VerticalSlashDamage,
+                props,
+                Self,
+                null,
+                null);
+
+            if (exposure != null)
+                await PowerCmd.Remove(exposure);
         }
+
+        int hpDamage = TotalHpLost(hpBefore);
+        PlayBloodVfx(hpBefore);
+        await ResolveLifeSiphon(hpDamage);
+        _bk.Sfx.Hit();
+
+        BlackKnightLog.Info($"竖劈：对所有玩家共造成 {hpDamage} 点实际生命伤害。");
 
         if (exitTrueForm)
         {
             _bk.InTrueForm = false;
             _bk.Anim.ShowPhantom(false);
             _bk.Anim.PlayIdle(false);
-            BlackKnightLog.Info("真身阶段结束：幽影消散，返回诅咒发放循环。");
         }
     }
 
-    // ── 阶段 6：暗鬼铠甲 ─────────────────────────────────────────────────
     public async Task DarkArmor(IReadOnlyList<Creature> targets)
     {
         _bk.Anim.PlayOneShot(BlackKnightConfig.AnimDarkArmor);
-        int n = PlayerSideCount();
-        _bk.Vfx.DarkArmor(n);
+        int livingPlayerSideEntities = PlayerSideCount();
+        _bk.Vfx.DarkArmor(livingPlayerSideEntities);
         _bk.Sfx.Armor();
 
-        // 黑骑士获得 50 × N 点格挡。
-        int block = BlackKnightRules.DarkArmorBlock(n);
+        int block = BlackKnightRules.DarkArmorBlock(livingPlayerSideEntities);
         await CreatureCmd.GainBlock(Self, block, ValueProp.Move, null);
 
-        // 每名存活玩家获得 N 层怗懦（单人即当前玩家；多人对每名玩家分别施加）。
-        int cowardice = BlackKnightRules.CowardiceStacks(n);
-        var ctx = new ThrowingPlayerChoiceContext();
-        foreach (Player player in AlivePlayers())
-            await PowerCmd.Apply<CowardicePower>(ctx, player.Creature, cowardice, Self, null);
-
-        BlackKnightLog.Info($"暗鬼铠甲：N={n}，黑骑士 +{block} 格挡，每名玩家 +{cowardice} 层怗懦。");
+        BlackKnightLog.Info($"暗魂铠甲：获得 {block} 点格挡。");
     }
 
-    // ── 阶段 7：强化——真身 ─────────────────────────────────────────────
     public async Task TrueForm(IReadOnlyList<Creature> targets)
     {
         _bk.Anim.PlayOneShot(BlackKnightConfig.AnimTrueFormEnter);
@@ -188,30 +270,83 @@ internal sealed class BlackKnightActions
         _bk.Sfx.TrueForm();
         _bk.InTrueForm = true;
 
-        // 永久获得 5 点力量（允许正常叠加）。
-        var ctx = new ThrowingPlayerChoiceContext();
-        await PowerCmd.Apply<StrengthPower>(ctx, Self, BlackKnightConfig.TrueFormStrength, Self, null);
+        await PowerCmd.Apply<StrengthPower>(
+            new ThrowingPlayerChoiceContext(),
+            Self,
+            BlackKnightConfig.TrueFormStrength,
+            Self,
+            null);
+
+        // 真身显现后，黑暗骑士给自己施加幽冥侵蚀。
+        // 该 Boss Buff 内部按玩家分别记录“每回合首次抽到”的状态。
+        var context = new ThrowingPlayerChoiceContext();
+        await PowerCmd.Apply<NetherErosionPower>(
+            context,
+            Self,
+            1,
+            Self,
+            null);
+
+        // 增量迁移：BK_TRUE_FORM 的稳定状态 ID 与后继保持不变，
+        // 但本回合完整重施首回合的诅咒效果包。
+        _bk.Vfx.CurseCast();
+        _bk.Sfx.Curse();
+        await ApplyCursePackage(
+            BlackKnightConfig.TrueFormCurseCardCount,
+            "强化——真身追加诅咒");
 
         _bk.Anim.PlayIdle(trueForm: true);
-        BlackKnightLog.Info($"强化——真身：永久 +{BlackKnightConfig.TrueFormStrength} 力量，显现真身，接下来 横砍→横砍→竖劈+。");
     }
 
-    // ── 共享：可格挡攻击，返回本次实际生命伤害（UnblockedDamage 之和）──────
-    //
-    // 关键：FromMonster(...) 内部已调用 TargetingAllOpponents(CombatState)，会设置 _combatState。
-    // 因此绝不能再链式 .Targeting(target)——否则 AttackCommand 会抛
-    // "Already set to target opponents of attacker"，使怪物回合在首次攻击时中断卡死。
-    // 单人时 FromMonster 的“所有对手”就是当前玩家，正是我们要打的目标。
-    private async Task<int> BlockableAttack(Creature target, int damage, bool hitSfx = true)
+    private async Task<int> BlockableAttack(Creature primaryTarget, int damage, bool hitSfx = true)
     {
-        var cmd = await DamageCmd.Attack(damage).FromMonster(_bk).Execute(null);
-        int hp = 0;
-        foreach (var results in cmd.Results)
-            foreach (var r in results)
-                hp += r.UnblockedDamage;
-        // 勈砍命中：血液粒子从玩家身上迸射（按实际生命伤害强度）。
-        if (hp > 0) _bk.Vfx.BloodBurst(target, hp);
-        if (hitSfx) _bk.Sfx.Hit();
-        return hp;
+        List<Creature> playerTargets = AlivePlayers()
+            .Select(player => player.Creature)
+            .ToList();
+        Dictionary<Creature, int> hpBefore = SnapshotHp(playerTargets);
+
+        await DamageCmd.Attack(damage).FromMonster(_bk).Execute(null);
+
+        int hpDamage = TotalHpLost(hpBefore);
+        PlayBloodVfx(hpBefore);
+        await ResolveLifeSiphon(hpDamage);
+        if (hitSfx)
+            _bk.Sfx.Hit();
+        return hpDamage;
+    }
+
+    private static Dictionary<Creature, int> SnapshotHp(IEnumerable<Creature> targets) =>
+        targets.ToDictionary(creature => creature, creature => creature.CurrentHp);
+
+    private static int TotalHpLost(IReadOnlyDictionary<Creature, int> hpBefore) =>
+        hpBefore.Sum(pair => System.Math.Max(0, pair.Value - pair.Key.CurrentHp));
+
+    private void PlayBloodVfx(IReadOnlyDictionary<Creature, int> hpBefore)
+    {
+        foreach ((Creature creature, int before) in hpBefore)
+        {
+            int hpLost = System.Math.Max(0, before - creature.CurrentHp);
+            if (hpLost > 0)
+                _bk.Vfx.BloodBurst(creature, hpLost);
+        }
+    }
+
+    private async Task ResolveLifeSiphon(int actualHpDamage)
+    {
+        var sigil = Self.GetPower<LifeSiphonSigilPower>();
+        if (sigil == null || sigil.Amount <= 0)
+            return;
+
+        sigil.Flash();
+        int heal = BlackKnightRules.LifeSiphonHeal(actualHpDamage, sigil.Amount);
+        if (heal > 0)
+        {
+            await CreatureCmd.Heal(Self, heal, true);
+            _bk.Vfx.Heal();
+        }
+
+        // 无论本次攻击是否被完全格挡，只要攻击结算时有层数，就消耗一层。
+        await PowerCmd.Decrement(sigil);
+        BlackKnightLog.Info($"噬命诅印：回复 {heal} 点生命并消耗 1 层。");
     }
 }

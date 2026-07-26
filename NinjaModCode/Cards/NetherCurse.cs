@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BaseLib.Abstracts;
+using MegaCrit.Sts2.Core.Combat;
 using MegaCrit.Sts2.Core.Commands;
 using MegaCrit.Sts2.Core.Entities.Cards;
-using MegaCrit.Sts2.Core.Entities.Creatures;
 using MegaCrit.Sts2.Core.GameActions.Multiplayer;
 using NinjaMod.NinjaModCode.Monsters;
 using NinjaMod.NinjaModCode.Powers;
@@ -12,48 +12,40 @@ using NinjaMod.NinjaModCode.Powers;
 namespace NinjaMod.NinjaModCode.Cards;
 
 /// <summary>
-/// 幽冥诅咒（Nether Curse）——黑骑士【诅咒发放】洗入玩家抽牌堆的状态牌。
-///
-/// 卡牌规则：状态牌、费用 1、可主动打出、不升级、默认不消耗/不虚无/不保留，
-/// 打出后正常进入弃牌堆（除非该实例已被【怯懦】<see cref="CowardicePower"/> 赋予消耗）。
-///
-/// 出牌效果：若黑骑士当前显示的下一意图为【竖劈+】，则为该黑骑士施加一次性的
-/// 竖劈保护 <see cref="VerticalSlashProtectionPower"/>：
-///  • 使该次竖劈从“不可格挡”变为“普通可格挡”，并让黑骑士恢复等同实际生命伤害的生命。
-///  • 保护为 Single 叠层，连续打出多张不会叠加。
-///  • 绑定到“具有竖劈意图的具体黑骑士”，不依赖全局单例；场上有多个黑骑士时分别判断。
-///  • 若下一意图不是竖劈，则不获得保护，但卡牌仍正常消耗 1 点能量并进入弃牌堆。
+/// 黑暗骑士发放的状态牌。保留原有费用、可打出方式和弃牌生命周期，
+/// 仅把核心效果替换为移除黑暗骑士的一层噬命诅印。
 /// </summary>
 public class NetherCurse : NinjaModCard
 {
     public NetherCurse()
         : base(1, CardType.Status, CardRarity.Status, TargetType.None) { }
 
+    public override IEnumerable<CardKeyword> CanonicalKeywords => [CardKeyword.Exhaust];
+
     protected override async Task OnPlay(PlayerChoiceContext choiceContext, CardPlay cardPlay)
     {
-        // 扫描场上所有“下一意图为竖劈+”的黑骑士，为它们绑定一次性竖劈保护。
-        var targets = CombatState.Enemies
-            .Where(c => c.IsAlive
-                        && c.Monster is BlackKnightEnemy bk
-                        && BlackKnightConfig.IsVerticalState(bk.NextMove?.StateId))
-            .ToList();
+        ICombatState? combatState = CombatState;
+        if (combatState == null)
+            return;
 
-        foreach (Creature bkCreature in targets)
-        {
-            await PowerCmd.Apply<VerticalSlashProtectionPower>(
-                choiceContext, bkCreature, 1, Owner.Creature, this);
-        }
+        var sigil = combatState.Enemies
+            .Where(creature => creature.IsAlive && creature.Monster is BlackKnightEnemy)
+            .Select(creature => creature.GetPower<LifeSiphonSigilPower>())
+            .FirstOrDefault(power => power is { Amount: > 0 });
 
-        if (targets.Count > 0)
-        {
-            BlackKnightLog.Info($"NetherCurse 生效：为 {targets.Count} 名黑骑士的下一次竖劈附加保护。");
-        }
-        // 若没有匹配目标：无事发生，卡牌照常消耗能量并进入弃牌堆（由游戏结算处理）。
+        if (sigil == null)
+            return;
+
+        sigil.Flash();
+        await PowerCmd.Decrement(sigil);
+        BlackKnightLog.Info("幽冥诅咒：移除黑暗骑士 1 层噬命诅印。");
     }
 
     public override List<(string, string)>? Localization => Lang.Zh
-        ? new CardLoc("幽冥诅咒",
-            "若黑骑士的下一个意图为竖劈+，使该次竖劈伤害可以被格挡。")
-        : new CardLoc("Nether Curse",
-            "If the Black Knight's next intent is Vertical Slash+, that Vertical Slash becomes blockable.");
+        ? new CardLoc(
+            "幽冥诅咒",
+            "移除黑暗骑士 1 层[gold]噬命诅印[/gold]。")
+        : new CardLoc(
+            "Nether Curse",
+            "Remove 1 [gold]Life-Siphon Sigil[/gold] from the Black Knight.");
 }

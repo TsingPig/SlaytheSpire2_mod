@@ -17,6 +17,12 @@ internal static class BlackKnightRules
     public const int DarkArmorBlockPerEntity = 50;
     public const int TrueFormStrength = 5;
     public const int CurseCardCount = 5;
+    /// <summary>
+    /// 真身强化回合会完整重施一次首回合的诅咒效果。
+    /// 单独保留这个规则名，让状态机/意图/测试明确表达“真身也发诅咒”，
+    /// 同时复用同一个数量源，避免两处平衡数值漂移。
+    /// </summary>
+    public const int TrueFormCurseCardCount = CurseCardCount;
     public const int TrueFormActionCount = 3;
 
     // ── 状态 ID（稳定字符串，用于存档/读档恢复阶段）───────────────────────
@@ -69,6 +75,13 @@ internal static class BlackKnightRules
         stateId == StateTrueForm || stateId == StateTrueFormHorizA
         || stateId == StateTrueFormHorizB || stateId == StateTrueFormVertical;
 
+    /// <summary>
+    /// 会执行“向每名玩家洗入幽冥诅咒，并按成功数量获得噬命诅印”完整效果包的状态。
+    /// 这是状态机语义的一部分：首回合与真身强化回合均会执行。
+    /// </summary>
+    public static bool StateAppliesCursePackage(string? stateId) =>
+        stateId == StateCurse || stateId == StateTrueForm;
+
     /// <summary>给定当前状态，返回循环中的下一个状态 ID（末尾回到诅咒发放）。</summary>
     public static string NextState(string? stateId)
     {
@@ -86,26 +99,43 @@ internal static class BlackKnightRules
     public static int DarkArmorBlock(int playerSideCount) =>
         DarkArmorBlockPerEntity * System.Math.Max(0, playerSideCount);
 
-    /// <summary>暗鬼铠甲：每名玩家获得的怯懦层数 = N。</summary>
-    public static int CowardiceStacks(int playerSideCount) => System.Math.Max(0, playerSideCount);
-
     /// <summary>横砍：仅当本次实际生命伤害 &gt; 0（未完全格挡）时洗入 1 张伤口。</summary>
     public static bool ShouldAddWound(int hpDamageDealt) => hpDamageDealt > 0;
 
     /// <summary>
-    /// 竖劈+ 的治疗量：仅在被【幽冥诅咒】转为可格挡时，按<b>本次实际生命伤害</b>治疗，
-    /// 且不小于 0；不可格挡（未打出诅咒）时不治疗。
+    /// 噬命诅印的治疗量：有至少一层时，仅取本次攻击造成的实际生命损失。
     /// </summary>
-    public static int VerticalHeal(int hpDamageDealt, bool warded) =>
-        warded ? System.Math.Max(0, hpDamageDealt) : 0;
+    public static int LifeSiphonHeal(int actualHpDamage, int sigilStacks) =>
+        sigilStacks > 0 ? System.Math.Max(0, actualHpDamage) : 0;
+
+    /// <summary>每次独立攻击最多消耗一层噬命诅印。</summary>
+    public static int LifeSiphonStacksConsumed(int sigilStacks) =>
+        sigilStacks > 0 ? 1 : 0;
+
+    /// <summary>发牌失败不计层数；噬命诅印严格等于本次实际成功加入的诅咒总数。</summary>
+    public static int LifeSiphonSigilsFromCurseAdds(int successfulAdds) =>
+        System.Math.Max(0, successfulAdds);
+
+    /// <summary>玩家回合结束时手牌里有幽冥诅咒，则下一次竖劈对该玩家不可格挡。</summary>
+    public static bool VerticalIsUnblockable(bool handContainsNetherCurse) => handContainsNetherCurse;
 
     /// <summary>
-    /// 怯懦消耗：拥有 <paramref name="cowardiceStacks"/> 层怯懦时，
-    /// 接下来 <paramref name="cursesEnteringHand"/> 张进入手牌的幽冥诅咒中，
-    /// 会有 min(层数, 张数) 张获得【消耗】（每张消耗 1 层）。
+    /// 意图 UI 在玩家回合中读取实时手牌，回合结束后读取已保存的竖劈标记。
     /// </summary>
-    public static int CowardiceExhaustCount(int cowardiceStacks, int cursesEnteringHand) =>
-        System.Math.Min(System.Math.Max(0, cowardiceStacks), System.Math.Max(0, cursesEnteringHand));
+    public static bool VerticalIntentIsUnblockable(
+        bool handContainsNetherCurse,
+        bool hasSavedExposure) =>
+        handContainsNetherCurse || hasSavedExposure;
+
+    /// <summary>
+    /// 幽冥侵蚀仅处理本回合第一张真正从抽牌堆进入手牌的幽冥诅咒。
+    /// </summary>
+    public static bool ShouldRemoveNetherCurseExhaust(
+        bool triggeredThisTurn,
+        bool isNetherCurse,
+        bool movedFromDrawPile,
+        bool endedInHand) =>
+        !triggeredThisTurn && isNetherCurse && movedFromDrawPile && endedInHand;
 
     /// <summary>
     /// 调试首战替换判定：仅当开关打开、处于第一幕（0-based act 0）、房间为普通战斗、

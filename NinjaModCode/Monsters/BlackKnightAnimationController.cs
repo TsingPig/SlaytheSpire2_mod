@@ -18,6 +18,9 @@ internal sealed class BlackKnightAnimationController
 {
     private readonly Creature _creature;
     private AnimationPlayer? _anim;
+    private Node2D? _motionRoot;
+    private Tween? _lungeTween;
+    private Vector2 _lungeOrigin;
     private CanvasItem? _phantom;
     private bool _resolved;
 
@@ -34,6 +37,9 @@ internal sealed class BlackKnightAnimationController
         if (visuals == null) return;
 
         _anim = FindAnimationPlayer(visuals);
+        _motionRoot = _anim?.GetParent() as Node2D;
+        if (_motionRoot != null)
+            _lungeOrigin = _motionRoot.Position;
         _phantom = visuals.FindChild("Phantom", recursive: true, owned: false) as CanvasItem
                    ?? visuals.FindChild("%Phantom", recursive: true, owned: false) as CanvasItem;
         _resolved = _anim != null;
@@ -55,6 +61,7 @@ internal sealed class BlackKnightAnimationController
     {
         Resolve();
         if (_anim == null) return;
+        ResetLunge();
         try
         {
             if (_anim.HasAnimation(animName))
@@ -67,11 +74,109 @@ internal sealed class BlackKnightAnimationController
         catch { /* 视觉节点可能在动画切换瞬间失效，忽略。 */ }
     }
 
+    /// <summary>
+    /// 播放斜劈并按目标的实时位置快速贴近。位移驱动整个 Visuals 节点，
+    /// 因此身体与真身幽影会一起移动；攻击结束后自动回到出发点。
+    /// </summary>
+    public void PlayLunge(string animName, Creature target)
+        => PlayLunge(
+            animName,
+            target,
+            BlackKnightConfig.DiagonalApproachDelaySeconds,
+            BlackKnightConfig.DiagonalApproachSeconds,
+            BlackKnightConfig.DiagonalReturnDelaySeconds,
+            BlackKnightConfig.DiagonalReturnSeconds,
+            BlackKnightConfig.DiagonalTargetStandoff,
+            BlackKnightConfig.DiagonalMaxLungeDistance);
+
+    /// <summary>
+    /// 播放横劈：先快速贴近目标，在挥刀与命中停帧期间保持位置，
+    /// 再以略慢于接近的速度后滑回原位。
+    /// </summary>
+    public void PlayHorizontalLunge(string animName, Creature target)
+        => PlayLunge(
+            animName,
+            target,
+            BlackKnightConfig.HorizontalApproachDelaySeconds,
+            BlackKnightConfig.HorizontalApproachSeconds,
+            BlackKnightConfig.HorizontalReturnDelaySeconds,
+            BlackKnightConfig.HorizontalReturnSeconds,
+            BlackKnightConfig.HorizontalTargetStandoff,
+            BlackKnightConfig.HorizontalMaxLungeDistance);
+
+    private void PlayLunge(
+        string animName,
+        Creature target,
+        float approachDelaySeconds,
+        float approachSeconds,
+        float returnDelaySeconds,
+        float returnSeconds,
+        float targetStandoff,
+        float maxLungeDistance)
+    {
+        PlayOneShot(animName);
+        Resolve();
+        if (_motionRoot == null || !GodotObject.IsInstanceValid(_motionRoot)) return;
+
+        try
+        {
+            NCreature? targetNode = NCombatRoom.Instance?.GetCreatureNode(target);
+            if (targetNode == null) return;
+
+            float targetDeltaX = targetNode.GlobalPosition.X - _motionRoot.GlobalPosition.X;
+            float direction = Mathf.Sign(targetDeltaX);
+            float travel = Mathf.Clamp(
+                Mathf.Abs(targetDeltaX) - targetStandoff,
+                0f,
+                maxLungeDistance);
+            if (travel <= 1f) return;
+
+            Vector2 attackPosition = _lungeOrigin + new Vector2(direction * travel, 0f);
+            _lungeTween = _motionRoot.CreateTween();
+            _lungeTween.TweenInterval(approachDelaySeconds);
+            _lungeTween.TweenProperty(
+                    _motionRoot,
+                    new NodePath("position"),
+                    attackPosition,
+                    approachSeconds)
+                .SetTrans(Tween.TransitionType.Quart)
+                .SetEase(Tween.EaseType.Out);
+            _lungeTween.TweenInterval(returnDelaySeconds);
+            _lungeTween.TweenProperty(
+                    _motionRoot,
+                    new NodePath("position"),
+                    _lungeOrigin,
+                    returnSeconds)
+                .SetTrans(Tween.TransitionType.Quad)
+                .SetEase(Tween.EaseType.InOut);
+        }
+        catch
+        {
+            ResetLunge();
+        }
+    }
+
+    private void ResetLunge()
+    {
+        try
+        {
+            _lungeTween?.Kill();
+            if (_motionRoot != null && GodotObject.IsInstanceValid(_motionRoot))
+                _motionRoot.Position = _lungeOrigin;
+        }
+        catch { }
+        finally
+        {
+            _lungeTween = null;
+        }
+    }
+
     /// <summary>切换 Idle（普通 / 真身）。</summary>
     public void PlayIdle(bool trueForm)
     {
         Resolve();
         if (_anim == null) return;
+        ResetLunge();
         string name = trueForm && _anim.HasAnimation(BlackKnightConfig.AnimTrueFormIdle)
             ? BlackKnightConfig.AnimTrueFormIdle
             : BlackKnightConfig.AnimIdle;

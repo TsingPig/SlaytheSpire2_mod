@@ -1,9 +1,81 @@
-[gd_scene load_steps=18 format=3]
+[gd_scene load_steps=90 format=3]
 
-[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_00.png" id="2_idle0"]
-[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_01.png" id="3_idle1"]
-[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_02.png" id="4_idle2"]
-[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_03.png" id="5_idle3"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_00.png" id="idle00"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_01.png" id="idle01"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_02.png" id="idle02"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_03.png" id="idle03"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_04.png" id="idle04"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_05.png" id="idle05"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_06.png" id="idle06"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_07.png" id="idle07"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_08.png" id="idle08"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_09.png" id="idle09"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_10.png" id="idle10"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_11.png" id="idle11"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_12.png" id="idle12"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_13.png" id="idle13"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_14.png" id="idle14"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_15.png" id="idle15"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_16.png" id="idle16"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_17.png" id="idle17"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_18.png" id="idle18"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_19.png" id="idle19"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_20.png" id="idle20"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_21.png" id="idle21"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_22.png" id="idle22"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_idle/idle_23.png" id="idle23"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_00.png" id="diag00"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_01.png" id="diag01"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_02.png" id="diag02"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_03.png" id="diag03"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_04.png" id="diag04"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_05.png" id="diag05"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_06.png" id="diag06"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_07.png" id="diag07"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_08.png" id="diag08"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_09.png" id="diag09"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_10.png" id="diag10"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_11.png" id="diag11"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_12.png" id="diag12"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_13.png" id="diag13"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_14.png" id="diag14"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_15.png" id="diag15"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_16.png" id="diag16"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_17.png" id="diag17"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_18.png" id="diag18"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_19.png" id="diag19"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_20.png" id="diag20"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_21.png" id="diag21"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_22.png" id="diag22"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_23.png" id="diag23"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_00.png" id="horiz00"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_01.png" id="horiz01"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_02.png" id="horiz02"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_03.png" id="horiz03"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_04.png" id="horiz04"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_05.png" id="horiz05"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_06.png" id="horiz06"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_07.png" id="horiz07"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_08.png" id="horiz08"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_09.png" id="horiz09"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_10.png" id="horiz10"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_11.png" id="horiz11"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_12.png" id="horiz12"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_13.png" id="horiz13"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_14.png" id="horiz14"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_15.png" id="horiz15"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_16.png" id="horiz16"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_17.png" id="horiz17"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_18.png" id="horiz18"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_19.png" id="horiz19"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_20.png" id="horiz20"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_21.png" id="horiz21"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_22.png" id="horiz22"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_23.png" id="horiz23"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_24.png" id="horiz24"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_25.png" id="horiz25"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_26.png" id="horiz26"]
+[ext_resource type="Texture2D" path="res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_27.png" id="horiz27"]
 
 [sub_resource type="Animation" id="Anim_0"]
 resource_name = "Idle"
@@ -40,10 +112,10 @@ tracks/2/path = NodePath("Body:texture")
 tracks/2/interp = 1
 tracks/2/loop_wrap = true
 tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.375, 1.5, 1.625, 1.75, 1.875, 2, 2.125, 2.25, 2.375, 2.5, 2.625, 2.75, 2.875, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_idle0"), ExtResource("3_idle1"), ExtResource("4_idle2"), ExtResource("5_idle3"), ExtResource("2_idle0")]
+"values": [ExtResource("idle00"), ExtResource("idle01"), ExtResource("idle02"), ExtResource("idle03"), ExtResource("idle04"), ExtResource("idle05"), ExtResource("idle06"), ExtResource("idle07"), ExtResource("idle08"), ExtResource("idle09"), ExtResource("idle10"), ExtResource("idle11"), ExtResource("idle12"), ExtResource("idle13"), ExtResource("idle14"), ExtResource("idle15"), ExtResource("idle16"), ExtResource("idle17"), ExtResource("idle18"), ExtResource("idle19"), ExtResource("idle20"), ExtResource("idle21"), ExtResource("idle22"), ExtResource("idle23"), ExtResource("idle00")]
 }
 
 [sub_resource type="Animation" id="Anim_1"]
@@ -93,10 +165,10 @@ tracks/3/path = NodePath("Body:texture")
 tracks/3/interp = 1
 tracks/3/loop_wrap = true
 tracks/3/keys = {
-"times": PackedFloat32Array(0, 0.75, 1.5, 2.25, 3),
-"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.125, 0.25, 0.375, 0.5, 0.625, 0.75, 0.875, 1, 1.125, 1.25, 1.375, 1.5, 1.625, 1.75, 1.875, 2, 2.125, 2.25, 2.375, 2.5, 2.625, 2.75, 2.875, 3),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 1,
-"values": [ExtResource("2_idle0"), ExtResource("3_idle1"), ExtResource("4_idle2"), ExtResource("5_idle3"), ExtResource("2_idle0")]
+"values": [ExtResource("idle00"), ExtResource("idle01"), ExtResource("idle02"), ExtResource("idle03"), ExtResource("idle04"), ExtResource("idle05"), ExtResource("idle06"), ExtResource("idle07"), ExtResource("idle08"), ExtResource("idle09"), ExtResource("idle10"), ExtResource("idle11"), ExtResource("idle12"), ExtResource("idle13"), ExtResource("idle14"), ExtResource("idle15"), ExtResource("idle16"), ExtResource("idle17"), ExtResource("idle18"), ExtResource("idle19"), ExtResource("idle20"), ExtResource("idle21"), ExtResource("idle22"), ExtResource("idle23"), ExtResource("idle00")]
 }
 
 [sub_resource type="Animation" id="Anim_2"]
@@ -142,7 +214,7 @@ tracks/2/keys = {
 
 [sub_resource type="Animation" id="Anim_3"]
 resource_name = "DiagonalSlashA"
-length = 0.5
+length = 1.15
 loop_mode = 0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -151,10 +223,10 @@ tracks/0/path = NodePath("Body:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.18, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 1.15),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0, 0.28, -0.34, 0]
+"values": [0, 0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -163,15 +235,27 @@ tracks/1/path = NodePath("Body:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.22, 0.34, 0.48, 0.62, 0.72, 0.8, 0.9, 1.02, 1.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, -232), Vector2(-46, -222), Vector2(0, -232)]
+"values": [Vector2(0, -232), Vector2(0, -232), Vector2(0, -232), Vector2(0, -232), Vector2(0, -228), Vector2(0, -224), Vector2(0, -222), Vector2(0, -216), Vector2(0, -216), Vector2(0, -226), Vector2(0, -232)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("diag00"), ExtResource("diag01"), ExtResource("diag02"), ExtResource("diag03"), ExtResource("diag04"), ExtResource("diag05"), ExtResource("diag06"), ExtResource("diag07"), ExtResource("diag08"), ExtResource("diag09"), ExtResource("diag10"), ExtResource("diag11"), ExtResource("diag12"), ExtResource("diag13"), ExtResource("diag14"), ExtResource("diag15"), ExtResource("diag16"), ExtResource("diag17"), ExtResource("diag18"), ExtResource("diag19"), ExtResource("diag20"), ExtResource("diag21"), ExtResource("diag22"), ExtResource("diag23")]
 }
 
 [sub_resource type="Animation" id="Anim_4"]
 resource_name = "DiagonalSlashB"
-length = 0.5
+length = 1.15
 loop_mode = 0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -180,10 +264,10 @@ tracks/0/path = NodePath("Body:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.18, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 0.34, 0.72, 0.9, 1.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1),
 "update": 0,
-"values": [0, -0.28, 0.34, 0]
+"values": [0, 0.02, 0.04, 0.04, 0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -192,15 +276,27 @@ tracks/1/path = NodePath("Body:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.3, 0.5),
-"transitions": PackedFloat32Array(1, 1, 1),
+"times": PackedFloat32Array(0, 0.1, 0.22, 0.34, 0.48, 0.62, 0.72, 0.8, 0.9, 1.02, 1.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
 "update": 0,
-"values": [Vector2(0, -232), Vector2(-46, -242), Vector2(0, -232)]
+"values": [Vector2(0, -232), Vector2(0, -232), Vector2(0, -232), Vector2(0, -234), Vector2(0, -230), Vector2(0, -226), Vector2(0, -224), Vector2(0, -218), Vector2(0, -218), Vector2(0, -228), Vector2(0, -232)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("diag00"), ExtResource("diag01"), ExtResource("diag02"), ExtResource("diag03"), ExtResource("diag04"), ExtResource("diag05"), ExtResource("diag06"), ExtResource("diag07"), ExtResource("diag08"), ExtResource("diag09"), ExtResource("diag10"), ExtResource("diag11"), ExtResource("diag12"), ExtResource("diag13"), ExtResource("diag14"), ExtResource("diag15"), ExtResource("diag16"), ExtResource("diag17"), ExtResource("diag18"), ExtResource("diag19"), ExtResource("diag20"), ExtResource("diag21"), ExtResource("diag22"), ExtResource("diag23")]
 }
 
 [sub_resource type="Animation" id="Anim_5"]
 resource_name = "HorizontalSlash"
-length = 0.55
+length = 1.4
 loop_mode = 0
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -209,10 +305,10 @@ tracks/0/path = NodePath("Body:rotation")
 tracks/0/interp = 1
 tracks/0/loop_wrap = true
 tracks/0/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.34, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [0, 0.22, -0.3, 0]
+"values": [0, 0]
 }
 tracks/1/type = "value"
 tracks/1/imported = false
@@ -221,10 +317,46 @@ tracks/1/path = NodePath("Body:position")
 tracks/1/interp = 1
 tracks/1/loop_wrap = true
 tracks/1/keys = {
-"times": PackedFloat32Array(0, 0.2, 0.34, 0.55),
-"transitions": PackedFloat32Array(1, 1, 1, 1),
+"times": PackedFloat32Array(0, 1.4),
+"transitions": PackedFloat32Array(1, 1),
 "update": 0,
-"values": [Vector2(0, -232), Vector2(26, -232), Vector2(-60, -232), Vector2(0, -232)]
+"values": [Vector2(0, -232), Vector2(0, -232)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Body:texture")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9, 0.95, 1, 1.05, 1.1, 1.15, 1.2, 1.25, 1.3, 1.35),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+"update": 1,
+"values": [ExtResource("horiz00"), ExtResource("horiz01"), ExtResource("horiz02"), ExtResource("horiz03"), ExtResource("horiz04"), ExtResource("horiz05"), ExtResource("horiz06"), ExtResource("horiz07"), ExtResource("horiz08"), ExtResource("horiz09"), ExtResource("horiz10"), ExtResource("horiz11"), ExtResource("horiz12"), ExtResource("horiz13"), ExtResource("horiz14"), ExtResource("horiz15"), ExtResource("horiz16"), ExtResource("horiz17"), ExtResource("horiz18"), ExtResource("horiz19"), ExtResource("horiz20"), ExtResource("horiz21"), ExtResource("horiz22"), ExtResource("horiz23"), ExtResource("horiz24"), ExtResource("horiz25"), ExtResource("horiz26"), ExtResource("horiz27")]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Body:scale")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0, 0.48, 0.68, 0.75, 0.84, 1.08, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Vector2(0.744, 0.744), Vector2(0.714, 0.781), Vector2(0.69, 0.8), Vector2(0.855, 0.69), Vector2(0.79, 0.73), Vector2(0.744, 0.744), Vector2(0.744, 0.744)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Body:modulate")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0, 0.56, 0.69, 0.75, 0.8, 0.94, 1.4),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(0.72, 0.6, 0.84, 1), Color(0.48, 0.34, 0.62, 1), Color(1.75, 1.45, 1.9, 1), Color(1.22, 0.78, 1.35, 1), Color(1, 1, 1, 1), Color(1, 1, 1, 1)]
 }
 
 [sub_resource type="Animation" id="Anim_6"]
@@ -484,14 +616,14 @@ unique_name_in_owner = true
 
 [node name="Phantom" type="Sprite2D" parent="Visuals"]
 z_index = -2
-texture = ExtResource("2_idle0")
+texture = ExtResource("idle00")
 position = Vector2(36, -300)
 scale = Vector2(1.2797, 1.2797)
 modulate = Color(0.42, 0.25, 0.62, 0)
 visible = false
 
 [node name="Body" type="Sprite2D" parent="Visuals"]
-texture = ExtResource("2_idle0")
+texture = ExtResource("idle00")
 position = Vector2(0, -232)
 scale = Vector2(0.744, 0.744)
 

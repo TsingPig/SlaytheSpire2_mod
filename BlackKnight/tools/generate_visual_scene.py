@@ -20,15 +20,56 @@ Re-runnable. Adjust BODY_* / animation tables below to retune.
 from __future__ import annotations
 
 import os
+from dataclasses import dataclass
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 OUT = os.path.join(ROOT, "NinjaMod", "scenes", "creature_visuals", "blackknight.tscn")
-TEX = "res://NinjaMod/images/character/blackknight_battle.png"
 
 BODY_POS = (0, -232)
 BODY_SCALE = 0.744  # +20% larger than the original 0.62 (monster was too small)
 PHANTOM_POS = (36, -300)
 PHANTOM_SCALE = 1.72 * BODY_SCALE
+
+IDLE_FRAME_COUNT = 24
+DIAGONAL_FRAME_COUNT = 24
+HORIZONTAL_FRAME_COUNT = 28
+HORIZONTAL_SECONDS = 1.4
+
+
+@dataclass(frozen=True)
+class ResourceRef:
+    resource_id: str
+
+
+def resource_ref(resource_id: str) -> ResourceRef:
+    return ResourceRef(resource_id)
+
+
+def frame_keys(prefix: str, count: int, step: float, close_loop: bool = False):
+    keys = [(index * step, resource_ref(f"{prefix}{index:02d}")) for index in range(count)]
+    if close_loop:
+        keys.append((count * step, resource_ref(f"{prefix}00")))
+    return keys
+
+
+def ext_resources() -> list[tuple[str, str]]:
+    resources: list[tuple[str, str]] = []
+    for index in range(IDLE_FRAME_COUNT):
+        resources.append((
+            f"idle{index:02d}",
+            f"res://NinjaMod/images/character/blackknight_idle/idle_{index:02d}.png",
+        ))
+    for index in range(DIAGONAL_FRAME_COUNT):
+        resources.append((
+            f"diag{index:02d}",
+            f"res://NinjaMod/images/character/blackknight_attacks/diagonal_a/diagonal_a_{index:02d}.png",
+        ))
+    for index in range(HORIZONTAL_FRAME_COUNT):
+        resources.append((
+            f"horiz{index:02d}",
+            f"res://NinjaMod/images/character/blackknight_attacks/horizontal/horizontal_{index:02d}.png",
+        ))
+    return resources
 
 
 # ── value formatting ────────────────────────────────────────────────────────
@@ -49,6 +90,8 @@ def _n(x) -> str:
 
 
 def fval(x) -> str:
+    if isinstance(x, ResourceRef):
+        return f'ExtResource("{x.resource_id}")'
     if isinstance(x, tuple) and len(x) == 2:
         return v2(x)
     if isinstance(x, tuple) and len(x) == 4:
@@ -65,28 +108,43 @@ def anims():
         ("Idle", 3.0, 1, [
             ("Body:position", [(0, (BX, BY)), (1.5, (BX, BY - 20)), (3.0, (BX, BY))]),
             ("Body:rotation", [(0, -0.02), (1.5, 0.02), (3.0, -0.02)]),
+            ("Body:texture", frame_keys("idle", IDLE_FRAME_COUNT, 0.125, close_loop=True), 1),
         ]),
         ("TrueFormIdle", 3.0, 1, [
             ("Body:position", [(0, (BX, BY)), (1.5, (BX, BY - 26)), (3.0, (BX, BY))]),
             ("Body:rotation", [(0, -0.025), (1.5, 0.025), (3.0, -0.025)]),
             ("Phantom:position", [(0, PHANTOM_POS), (1.5, (PHANTOM_POS[0], PHANTOM_POS[1] - 18)), (3.0, PHANTOM_POS)]),
+            ("Body:texture", frame_keys("idle", IDLE_FRAME_COUNT, 0.125, close_loop=True), 1),
         ]),
         ("CurseCast", 1.1, 0, [
             ("Body:position", [(0, (BX, BY)), (0.35, (BX, BY - 30)), (0.7, (BX, BY - 30)), (1.1, (BX, BY))]),
             ("Body:scale", [(0, (BODY_SCALE, BODY_SCALE)), (0.5, (BODY_SCALE * 1.06, BODY_SCALE * 1.06)), (1.1, (BODY_SCALE, BODY_SCALE))]),
             ("Body:modulate", [(0, (1, 1, 1, 1)), (0.5, (1.3, 0.7, 1.4, 1)), (1.1, (1, 1, 1, 1))]),
         ]),
-        ("DiagonalSlashA", 0.5, 0, [
-            ("Body:rotation", [(0, 0.0), (0.18, 0.28), (0.30, -0.34), (0.5, 0.0)]),
-            ("Body:position", [(0, (BX, BY)), (0.30, (BX - 46, BY + 10)), (0.5, (BX, BY))]),
+        ("DiagonalSlashA", 1.15, 0, [
+            ("Body:rotation", [(0, 0.0), (1.15, 0.0)]),
+            ("Body:position", [
+                (0, (BX, BY)), (0.10, (BX, BY)), (0.22, (BX, BY)),
+                (0.34, (BX, BY)), (0.48, (BX, BY + 4)), (0.62, (BX, BY + 8)),
+                (0.72, (BX, BY + 10)), (0.80, (BX, BY + 16)),
+                (0.90, (BX, BY + 16)), (1.02, (BX, BY + 6)), (1.15, (BX, BY)),
+            ]),
+            ("Body:texture", frame_keys("diag", DIAGONAL_FRAME_COUNT, 0.05), 1),
         ]),
-        ("DiagonalSlashB", 0.5, 0, [
-            ("Body:rotation", [(0, 0.0), (0.18, -0.28), (0.30, 0.34), (0.5, 0.0)]),
-            ("Body:position", [(0, (BX, BY)), (0.30, (BX - 46, BY - 10)), (0.5, (BX, BY))]),
+        ("DiagonalSlashB", 1.15, 0, [
+            ("Body:rotation", [(0, 0.0), (0.34, 0.02), (0.72, 0.04), (0.90, 0.04), (1.15, 0.0)]),
+            ("Body:position", [
+                (0, (BX, BY)), (0.10, (BX, BY)), (0.22, (BX, BY)),
+                (0.34, (BX, BY - 2)), (0.48, (BX, BY + 2)), (0.62, (BX, BY + 6)),
+                (0.72, (BX, BY + 8)), (0.80, (BX, BY + 14)),
+                (0.90, (BX, BY + 14)), (1.02, (BX, BY + 4)), (1.15, (BX, BY)),
+            ]),
+            ("Body:texture", frame_keys("diag", DIAGONAL_FRAME_COUNT, 0.05), 1),
         ]),
-        ("HorizontalSlash", 0.55, 0, [
-            ("Body:rotation", [(0, 0.0), (0.2, 0.22), (0.34, -0.30), (0.55, 0.0)]),
-            ("Body:position", [(0, (BX, BY)), (0.2, (BX + 26, BY)), (0.34, (BX - 60, BY)), (0.55, (BX, BY))]),
+        ("HorizontalSlash", HORIZONTAL_SECONDS, 0, [
+            ("Body:rotation", [(0, 0.0), (HORIZONTAL_SECONDS, 0.0)]),
+            ("Body:position", [(0, (BX, BY)), (HORIZONTAL_SECONDS, (BX, BY))]),
+            ("Body:texture", frame_keys("horiz", HORIZONTAL_FRAME_COUNT, 0.05), 1),
         ]),
         ("VerticalSlash", 0.7, 0, [
             ("Body:position", [(0, (BX, BY)), (0.34, (BX, BY - 54)), (0.46, (BX, BY + 16)), (0.7, (BX, BY))]),
@@ -133,7 +191,9 @@ def build() -> str:
             f"length = {_n(float(length))}",
             f"loop_mode = {loop}",
         ]
-        for ti, (path, keys) in enumerate(tracks):
+        for ti, track in enumerate(tracks):
+            path, keys = track[0], track[1]
+            update_mode = track[2] if len(track) > 2 else 0
             times = ", ".join(_n(float(t)) for t, _ in keys)
             trans = ", ".join("1" for _ in keys)
             vals = ", ".join(fval(v) for _, v in keys)
@@ -147,7 +207,7 @@ def build() -> str:
                 'tracks/%d/keys = {' % ti,
                 f'"times": PackedFloat32Array({times}),',
                 f'"transitions": PackedFloat32Array({trans}),',
-                '"update": 0,',
+                f'"update": {update_mode},',
                 f'"values": [{vals}]',
                 "}",
             ]
@@ -155,7 +215,13 @@ def build() -> str:
 
     lib = '[sub_resource type="AnimationLibrary" id="AnimLib"]\n_data = {\n' + ",\n".join(lib_entries) + "\n}"
 
-    header = f'[gd_scene load_steps={len(animlist) + 3} format=3]\n\n[ext_resource type="Texture2D" path="{TEX}" id="1_body"]'
+    resources = ext_resources()
+    load_steps = len(resources) + len(animlist) + 2
+    external_lines = [
+        f'[ext_resource type="Texture2D" path="{path}" id="{resource_id}"]'
+        for resource_id, path in resources
+    ]
+    header = f'[gd_scene load_steps={load_steps} format=3]\n\n' + "\n".join(external_lines)
 
     nodes = f'''[node name="BlackKnightVisualRoot" type="Node2D"]
 
@@ -164,14 +230,14 @@ unique_name_in_owner = true
 
 [node name="Phantom" type="Sprite2D" parent="Visuals"]
 z_index = -2
-texture = ExtResource("1_body")
+texture = ExtResource("idle00")
 position = {v2(PHANTOM_POS)}
 scale = {v2((PHANTOM_SCALE, PHANTOM_SCALE))}
 modulate = Color(0.42, 0.25, 0.62, 0)
 visible = false
 
 [node name="Body" type="Sprite2D" parent="Visuals"]
-texture = ExtResource("1_body")
+texture = ExtResource("idle00")
 position = {v2(BODY_POS)}
 scale = {v2((BODY_SCALE, BODY_SCALE))}
 

@@ -1,4 +1,4 @@
-"""Build a four-frame Black Knight idle prototype from the current battle art.
+"""Build a twelve-frame Black Knight idle loop from the current battle art.
 
 The source art has a paper background, so this script first flood-fills that
 background, keeps the largest connected foreground component, then applies
@@ -9,6 +9,7 @@ same canvas and root registration, which makes them safe to swap in Godot.
 from __future__ import annotations
 
 from collections import deque
+import math
 from pathlib import Path
 
 import numpy as np
@@ -98,10 +99,25 @@ def extract_subject(source: Image.Image) -> Image.Image:
     # the cape. Remove only bright, low-chroma pixels in that bottom strip.
     foreground[(np.indices(foreground.shape)[0] > 399) & (rgb.mean(axis=2) > 62) & (channel_spread < 55)] = False
 
-    # Close tiny antialias gaps so pale armor plates remain connected, then
-    # feather only the outermost pixel. The source already uses a light ink rim.
+    # Pull the matte two pixels inward instead of expanding it. The concept art
+    # has a pale ink rim around the silhouette; expanding the old matte made
+    # that rim even more visible in-game.
     matte = Image.fromarray((foreground * 255).astype(np.uint8), "L")
-    matte = matte.filter(ImageFilter.MaxFilter(3)).filter(ImageFilter.GaussianBlur(0.55))
+    matte = matte.filter(ImageFilter.MinFilter(5))
+
+    # Remove the remaining warm, low-chroma rim only where it touches the new
+    # outer edge. This preserves pale armor and axe detail away from the
+    # silhouette while eliminating the cream/white sticker-like border.
+    matte_values = np.asarray(matte).copy()
+    inner = np.asarray(matte.filter(ImageFilter.MinFilter(5)))
+    edge = (matte_values > 0) & (inner == 0)
+    pale_rim = (
+        (rgb.mean(axis=2) > 145)
+        & (channel_spread < 58)
+        & (rgb[:, :, 0] >= rgb[:, :, 2])
+    )
+    matte_values[edge & pale_rim] = 0
+    matte = Image.fromarray(matte_values, "L").filter(ImageFilter.GaussianBlur(0.45))
     rgba = source.convert("RGBA")
     rgba.putalpha(matte)
     return rgba
@@ -129,7 +145,7 @@ def bilinear_sample(image: np.ndarray, source_x: np.ndarray, source_y: np.ndarra
     return np.clip(sampled, 0, 255).astype(np.uint8)
 
 
-def deform(subject: Image.Image, phase: str) -> Image.Image:
+def deform(subject: Image.Image, angle: float) -> Image.Image:
     pixels = np.asarray(subject, dtype=np.float32)
     height, width = pixels.shape[:2]
     yy, xx = np.mgrid[0:height, 0:width].astype(np.float32)
@@ -140,29 +156,63 @@ def deform(subject: Image.Image, phase: str) -> Image.Image:
     claw = np.exp(-(((xx - 63) / 90) ** 2 + ((yy - 205) / 90) ** 2))
     weapon = np.exp(-(((xx - 480) / 245) ** 2 + ((yy - 205) / 105) ** 2))
     cape = np.exp(-(((xx - 245) / 165) ** 2 + ((yy - 338) / 100) ** 2))
+    shoulders = np.exp(-(((xx - 215) / 185) ** 2 + ((yy - 125) / 72) ** 2))
+    soul_tail = np.exp(-(((xx - 215) / 90) ** 2 + ((yy - 365) / 92) ** 2))
 
-    dx = np.zeros_like(xx)
-    dy = np.zeros_like(yy)
-    if phase == "inhale":
-        dx += -0.013 * (xx - 210) * chest
-        dy += 6.0 * chest + 2.2 * head
-        dy += -2.0 * cape
-        dx += 1.8 * claw
-        dy += 1.5 * weapon
-    elif phase == "shift":
-        dx += -4.2 * torso + 1.8 * head
-        dy += 1.2 * chest - 1.4 * cape
-        dx += 1.2 * weapon
-    elif phase == "exhale":
-        dx += 0.011 * (xx - 210) * chest
-        dy += -5.0 * chest - 2.0 * head
-        dx += -2.2 * claw
-        dy += 2.7 * cape - 2.0 * weapon
+    breath = math.sin(angle)
+    weight_shift = math.sin(angle * 2.0) * 0.42
+    arm_lag = math.sin(angle - 0.32)
+    cape_lag = math.sin(angle - 0.68) + 0.28 * math.sin(angle * 2.0 + 0.45)
+    tail_flow = math.sin(angle - 0.95) + 0.35 * math.sin(angle * 3.0)
+    compression = 0.0045 * math.sin(angle * 2.0 + 0.25)
+
+    # Continuous breathing replaces the old four discrete named poses. The
+    # weapon and cape use a phase delay so all parts do not reverse together.
+    dx = -(0.012 * breath + compression) * (xx - 210) * chest
+    dx += -3.8 * weight_shift * torso + 1.5 * weight_shift * head
+    dx += 1.8 * arm_lag * claw + 1.25 * arm_lag * weapon
+    dx += -2.6 * cape_lag * cape + 2.0 * tail_flow * soul_tail
+    dx += 0.9 * arm_lag * shoulders
+
+    dy = 5.6 * breath * chest + 2.0 * breath * head
+    dy += 1.7 * arm_lag * weapon + 1.0 * arm_lag * shoulders
+    dy += -2.4 * cape_lag * cape + 3.2 * tail_flow * soul_tail
+    dy += compression * 190.0 * torso
 
     # The displacement describes where the visible feature moves, so inverse
     # sampling reads from the opposite direction.
     warped = bilinear_sample(pixels, xx - dx, yy - dy)
-    return Image.fromarray(warped, "RGBA")
+    return apply_face_glow(Image.fromarray(warped, "RGBA"), angle)
+
+
+def apply_face_glow(frame: Image.Image, angle: float) -> Image.Image:
+    """Add a localized breathing pulse without changing armor colors."""
+    rgba = np.asarray(frame).copy()
+    yy, xx = np.mgrid[0:rgba.shape[0], 0:rgba.shape[1]]
+    red = rgba[:, :, 0].astype(np.int16)
+    green = rgba[:, :, 1].astype(np.int16)
+    blue = rgba[:, :, 2].astype(np.int16)
+    face = (
+        (xx > 105)
+        & (xx < 245)
+        & (yy > 38)
+        & (yy < 175)
+        & (red > 105)
+        & (red > green * 1.35)
+        & (red > blue * 1.25)
+        & (rgba[:, :, 3] > 20)
+    )
+    pulse = 0.5 + 0.5 * math.sin(angle - 0.4)
+    rgba[:, :, 0][face] = np.clip(red[face] * (1.08 + 0.28 * pulse), 0, 255)
+    rgba[:, :, 1][face] = np.clip(green[face] * (0.9 + 0.12 * pulse), 0, 255)
+
+    lit = Image.fromarray(rgba, "RGBA")
+    mask = Image.fromarray((face.astype(np.uint8) * 255), "L").filter(ImageFilter.GaussianBlur(6.0))
+    mask = mask.point(lambda value: int(value * (0.10 + 0.24 * pulse)))
+    glow = Image.new("RGBA", frame.size, (255, 34, 38, 0))
+    glow.putalpha(mask)
+    lit.alpha_composite(glow)
+    return lit
 
 
 def pad_frame(frame: Image.Image) -> Image.Image:
@@ -178,20 +228,26 @@ def main() -> None:
 
     source = Image.open(SOURCE)
     subject = extract_subject(source)
+    frame_count = 24
     raw_frames = [
-        subject,
-        deform(subject, "inhale"),
-        deform(subject, "shift"),
-        deform(subject, "exhale"),
+        deform(subject, 2.0 * math.pi * index / frame_count)
+        for index in range(frame_count)
     ]
     frames = [pad_frame(frame) for frame in raw_frames]
 
     for index, frame in enumerate(frames):
         frame.save(OUTPUT / f"idle_{index:02d}.png")
 
-    contact = Image.new("RGBA", (CANVAS_SIZE[0] * 2, CANVAS_SIZE[1] * 2), (36, 37, 43, 255))
+    thumb_size = (256, 171)
+    contact = Image.new("RGBA", (thumb_size[0] * 6, thumb_size[1] * 4), (36, 37, 43, 255))
     for index, frame in enumerate(frames):
-        contact.alpha_composite(frame, ((index % 2) * CANVAS_SIZE[0], (index // 2) * CANVAS_SIZE[1]))
+        preview = Image.new("RGBA", CANVAS_SIZE, (36, 37, 43, 255))
+        preview.alpha_composite(frame)
+        preview = preview.resize(thumb_size, Image.Resampling.LANCZOS)
+        contact.alpha_composite(
+            preview,
+            ((index % 6) * thumb_size[0], (index // 6) * thumb_size[1]),
+        )
     contact.convert("RGB").save(CONTACT)
 
     preview_frames = []
@@ -203,7 +259,7 @@ def main() -> None:
         PREVIEW,
         save_all=True,
         append_images=preview_frames[1:],
-        duration=500,
+        duration=125,
         loop=0,
         disposal=2,
     )

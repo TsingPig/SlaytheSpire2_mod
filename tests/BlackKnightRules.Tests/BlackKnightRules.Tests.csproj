@@ -19,6 +19,10 @@
     <Compile Include="Program.cs" />
     <!-- 唯一事实来源：与 mod 共享同一份纯规则实现。 -->
     <Compile Include="..\..\NinjaModCode\Monsters\BlackKnightRules.cs" LinkBase="Shared" />
+    <!-- 发布给游戏的状态图也必须逐节点符合唯一事实来源。 -->
+    <None Include="..\..\NinjaMod\intentgraph.json"
+          Link="intentgraph.json"
+          CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 
 </Project>
