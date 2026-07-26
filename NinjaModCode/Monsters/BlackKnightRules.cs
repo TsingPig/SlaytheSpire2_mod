@@ -9,6 +9,9 @@ namespace NinjaMod.NinjaModCode.Monsters;
 /// </summary>
 internal static class BlackKnightRules
 {
+    /// <summary>游戏幕序号从 0 开始，因此第三幕的索引为 2。</summary>
+    public const int ActThreeIndex = 2;
+
     // ── 关键数值 ─────────────────────────────────────────────────────────
     public const int MaxHp = 500;
     public const int DiagonalSlashDamage = 25;
@@ -136,6 +139,27 @@ internal static class BlackKnightRules
         bool movedFromDrawPile,
         bool endedInHand) =>
         !triggeredThisTurn && isNetherCurse && movedFromDrawPile && endedInHand;
+
+    /// <summary>黑骑士只固定接入第三幕。</summary>
+    public static bool IsActThree(int actIndex) => actIndex == ActThreeIndex;
+
+    /// <summary>
+    /// 双 Boss 模式下第二只才是最终 Boss；否则第一只就是最终 Boss。
+    /// </summary>
+    public static bool IsFinalBossSlot(bool hasSecondBoss, bool isSecondBossSlot) =>
+        hasSecondBoss == isSecondBossSlot;
+
+    /// <summary>
+    /// 旧存档可能已有第二 Boss 遭遇，却缺少对应地图节点；这种状态必须增量迁移。
+    /// </summary>
+    public static bool ShouldAddSecondBossMapPoint(
+        bool hasSecondBossEncounter,
+        bool hasSecondBossMapPoint) =>
+        hasSecondBossEncounter && !hasSecondBossMapPoint;
+
+    /// <summary>第二 Boss 节点紧接在第一 Boss 节点的下一行。</summary>
+    public static int SecondBossMapRow(int firstBossMapRow) =>
+        firstBossMapRow + 1;
 
     /// <summary>
     /// 调试首战替换判定：仅当开关打开、处于第一幕（0-based act 0）、房间为普通战斗、

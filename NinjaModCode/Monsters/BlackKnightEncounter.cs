@@ -7,17 +7,17 @@ using MegaCrit.Sts2.Core.Rooms;
 namespace NinjaMod.NinjaModCode.Monsters;
 
 /// <summary>
-/// 黑骑士单怪遭遇。用于完整性与未来的非调试接入（例如加入某一幕的遭遇池）。
-/// 调试首战替换（<see cref="BlackKnightDebugEncounterOverride"/>）并不依赖本遭遇——
-/// 它直接把首场普通战斗的怪物替换为黑骑士，从而保留原遭遇的地图、奖励与存档结构。
+/// 黑骑士 Boss 遭遇。由 <see cref="BlackKnightActThreeBossOverride"/>
+/// 固定放置在第三幕的最终 Boss 槽位中。
 /// </summary>
 public sealed class BlackKnightEncounter : CustomEncounterModel, ILocalizationProvider
 {
-    // CustomEncounterModel 需要通过构造函数传入房间类型（普通战斗）。
-    public BlackKnightEncounter() : base(RoomType.Monster, false) { }
+    // 必须是 Boss 房间，才能写入 ActModel 的 Boss / SecondBoss 槽位。
+    public BlackKnightEncounter() : base(RoomType.Boss, false) { }
 
-    // 仅供完整性：不自动加入任何幕的遇到池（调试首战直接替换怪物，不依赖本遇到）。
-    public override bool IsValidForAct(ActModel act) => true;
+    // 只允许第三幕；实际固定放置由房间生成/读档迁移补丁负责。
+    public override bool IsValidForAct(ActModel act) =>
+        BlackKnightRules.IsActThree(act.Index);
 
     public override IEnumerable<MonsterModel> AllPossibleMonsters =>
     [

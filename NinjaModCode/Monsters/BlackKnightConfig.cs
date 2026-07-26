@@ -17,13 +17,13 @@ internal static class BlackKnightConfig
     // ─────────────────────────────────────────────────────────────────────
 
     /// <summary>
-    /// 调试测试覆盖：为 true 时，开始一局新游戏并进入第一幕第一场普通战斗时，
+    /// 已停用的快速测试覆盖：为 true 时，开始一局新游戏并进入第一幕第一场普通战斗时，
     /// 原本的敌人会被替换为一名黑骑士，便于立即测试。
     ///
-    /// 关闭后恢复游戏原版遭遇逻辑；不会影响后续任何战斗。
+    /// 发布版本保持 false；黑骑士现在通过正式第三幕最终 Boss 接入。
     /// 该替换只发生一次（见 <see cref="BlackKnightDebugEncounterOverride"/> 的一次性标记）。
     /// </summary>
-    public const bool DebugForceBlackKnightFirstEncounter = true;
+    public const bool DebugForceBlackKnightFirstEncounter = false;
 
     /// <summary>是否输出黑骑士状态机 / 伤害 / 卡牌触发的详细日志。</summary>
     public const bool VerboseLogging = true;

@@ -155,6 +155,35 @@ Check(
     && BlackKnightRules.IsVerticalState(BlackKnightRules.TrueFormSequence[2]));
 
 Check(
+    "Black Knight is assigned only to Act 3",
+    BlackKnightRules.IsActThree(2)
+    && !BlackKnightRules.IsActThree(0)
+    && !BlackKnightRules.IsActThree(1)
+    && !BlackKnightRules.IsActThree(3));
+Check(
+    "Normal mode uses the primary boss as the final slot",
+    BlackKnightRules.IsFinalBossSlot(hasSecondBoss: false, isSecondBossSlot: false)
+    && !BlackKnightRules.IsFinalBossSlot(hasSecondBoss: false, isSecondBossSlot: true));
+Check(
+    "Double Boss mode uses the second boss as the final slot",
+    BlackKnightRules.IsFinalBossSlot(hasSecondBoss: true, isSecondBossSlot: true)
+    && !BlackKnightRules.IsFinalBossSlot(hasSecondBoss: true, isSecondBossSlot: false));
+Check(
+    "Old double-boss saves add a missing second boss map point",
+    BlackKnightRules.ShouldAddSecondBossMapPoint(
+        hasSecondBossEncounter: true,
+        hasSecondBossMapPoint: false)
+    && !BlackKnightRules.ShouldAddSecondBossMapPoint(
+        hasSecondBossEncounter: true,
+        hasSecondBossMapPoint: true)
+    && !BlackKnightRules.ShouldAddSecondBossMapPoint(
+        hasSecondBossEncounter: false,
+        hasSecondBossMapPoint: false));
+Check(
+    "Second boss map point follows the first boss row",
+    BlackKnightRules.SecondBossMapRow(16) == 17);
+
+Check(
     "Debug encounter replacement positive case",
     BlackKnightRules.ShouldReplaceFirstEncounter(true, 0, true, false));
 Check(
