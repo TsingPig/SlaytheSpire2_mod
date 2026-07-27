@@ -144,10 +144,13 @@ internal static class BlackKnightRules
     public static bool IsActThree(int actIndex) => actIndex == ActThreeIndex;
 
     /// <summary>
-    /// 双 Boss 模式下第二只才是最终 Boss；否则第一只就是最终 Boss。
+    /// A10 双 Boss 时黑骑士占第二槽；A9 及以下占唯一的主 Boss 槽。
     /// </summary>
-    public static bool IsFinalBossSlot(bool hasSecondBoss, bool isSecondBossSlot) =>
-        hasSecondBoss == isSecondBossSlot;
+    public static bool IsBlackKnightFinalSlot(
+        int actIndex,
+        bool hasDoubleBoss,
+        bool isSecondBossSlot) =>
+        IsActThree(actIndex) && hasDoubleBoss == isSecondBossSlot;
 
     /// <summary>
     /// 旧存档可能已有第二 Boss 遭遇，却缺少对应地图节点；这种状态必须增量迁移。
@@ -157,9 +160,27 @@ internal static class BlackKnightRules
         bool hasSecondBossMapPoint) =>
         hasSecondBossEncounter && !hasSecondBossMapPoint;
 
+    /// <summary>A9 及以下的旧坏档如果带有第二 Boss 节点，需要将其删除。</summary>
+    public static bool ShouldRemoveSecondBossMapPoint(
+        bool hasDoubleBoss,
+        bool hasSecondBossMapPoint) =>
+        !hasDoubleBoss && hasSecondBossMapPoint;
+
     /// <summary>第二 Boss 节点紧接在第一 Boss 节点的下一行。</summary>
     public static int SecondBossMapRow(int firstBossMapRow) =>
         firstBossMapRow + 1;
+
+    /// <summary>
+    /// A10 第一 Boss 结算时，只要黑骑士仍在第二槽待战，就必须绕过
+    /// 原版终局/建筑师入口；地图节点是否存在只决定进入地图还是直接进战。
+    /// </summary>
+    public static bool ShouldContinueToPendingSecondBoss(
+        int actIndex,
+        bool currentBossIsBlackKnight,
+        bool secondBossIsBlackKnight) =>
+        IsActThree(actIndex)
+        && !currentBossIsBlackKnight
+        && secondBossIsBlackKnight;
 
     /// <summary>
     /// 调试首战替换判定：仅当开关打开、处于第一幕（0-based act 0）、房间为普通战斗、

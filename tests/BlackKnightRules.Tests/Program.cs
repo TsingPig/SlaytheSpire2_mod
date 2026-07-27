@@ -161,13 +161,29 @@ Check(
     && !BlackKnightRules.IsActThree(1)
     && !BlackKnightRules.IsActThree(3));
 Check(
-    "Normal mode uses the primary boss as the final slot",
-    BlackKnightRules.IsFinalBossSlot(hasSecondBoss: false, isSecondBossSlot: false)
-    && !BlackKnightRules.IsFinalBossSlot(hasSecondBoss: false, isSecondBossSlot: true));
+    "A9 and below use Black Knight as the only boss",
+    BlackKnightRules.IsBlackKnightFinalSlot(
+        2,
+        hasDoubleBoss: false,
+        isSecondBossSlot: false)
+    && !BlackKnightRules.IsBlackKnightFinalSlot(
+        2,
+        hasDoubleBoss: false,
+        isSecondBossSlot: true));
 Check(
-    "Double Boss mode uses the second boss as the final slot",
-    BlackKnightRules.IsFinalBossSlot(hasSecondBoss: true, isSecondBossSlot: true)
-    && !BlackKnightRules.IsFinalBossSlot(hasSecondBoss: true, isSecondBossSlot: false));
+    "A10 uses Black Knight as the second boss",
+    BlackKnightRules.IsBlackKnightFinalSlot(
+        2,
+        hasDoubleBoss: true,
+        isSecondBossSlot: true)
+    && !BlackKnightRules.IsBlackKnightFinalSlot(
+        2,
+        hasDoubleBoss: true,
+        isSecondBossSlot: false)
+    && !BlackKnightRules.IsBlackKnightFinalSlot(
+        1,
+        hasDoubleBoss: true,
+        isSecondBossSlot: true));
 Check(
     "Old double-boss saves add a missing second boss map point",
     BlackKnightRules.ShouldAddSecondBossMapPoint(
@@ -182,6 +198,37 @@ Check(
 Check(
     "Second boss map point follows the first boss row",
     BlackKnightRules.SecondBossMapRow(16) == 17);
+Check(
+    "A9 old saves remove an extra second boss map point",
+    BlackKnightRules.ShouldRemoveSecondBossMapPoint(
+        hasDoubleBoss: false,
+        hasSecondBossMapPoint: true)
+    && !BlackKnightRules.ShouldRemoveSecondBossMapPoint(
+        hasDoubleBoss: true,
+        hasSecondBossMapPoint: true)
+    && !BlackKnightRules.ShouldRemoveSecondBossMapPoint(
+        hasDoubleBoss: false,
+        hasSecondBossMapPoint: false));
+Check(
+    "Act 3 first boss continues to the pending Black Knight",
+    BlackKnightRules.ShouldContinueToPendingSecondBoss(
+        2,
+        currentBossIsBlackKnight: false,
+        secondBossIsBlackKnight: true));
+Check(
+    "Second-boss continuation does not loop or affect other acts",
+    !BlackKnightRules.ShouldContinueToPendingSecondBoss(
+        2,
+        currentBossIsBlackKnight: true,
+        secondBossIsBlackKnight: true)
+    && !BlackKnightRules.ShouldContinueToPendingSecondBoss(
+        2,
+        currentBossIsBlackKnight: false,
+        secondBossIsBlackKnight: false)
+    && !BlackKnightRules.ShouldContinueToPendingSecondBoss(
+        1,
+        currentBossIsBlackKnight: false,
+        secondBossIsBlackKnight: true));
 
 Check(
     "Debug encounter replacement positive case",

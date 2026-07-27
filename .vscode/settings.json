@@ -1,5 +1,12 @@
 {
-    "explorer.excludeGitIgnore": false
+    "explorer.excludeGitIgnore": false,
+    "http.proxy": "http://127.0.0.1:15236",
+    "http.proxySupport": "override",
+    "terminal.integrated.env.windows": {
+        "HTTP_PROXY": "http://127.0.0.1:15236",
+        "HTTPS_PROXY": "http://127.0.0.1:15236",
+        "NO_PROXY": "localhost,127.0.0.1"
+    }
     // "files.exclude": {
     //     "**/*.cs.uid": true,
     //     "**/*.uid": true,

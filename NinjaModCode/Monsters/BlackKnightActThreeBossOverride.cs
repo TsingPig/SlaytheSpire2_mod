@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using MegaCrit.Sts2.Core.Entities.Ascension;
 using MegaCrit.Sts2.Core.Map;
 using MegaCrit.Sts2.Core.Models;
 using MegaCrit.Sts2.Core.Runs;
@@ -21,30 +22,63 @@ internal static class BlackKnightActThreeBossOverride
     private static readonly PropertyInfo? RunStateProperty =
         AccessTools.Property(typeof(RunManager), "State");
 
-    private static void AssignToFinalBossSlot(ActModel act, string source)
+    private static void AssignToFinalBossSlot(
+        ActModel act,
+        bool hasDoubleBoss,
+        string source)
     {
-        if (!BlackKnightRules.IsActThree(act.Index))
+        if (!BlackKnightRules.IsBlackKnightFinalSlot(
+                act.Index,
+                hasDoubleBoss,
+                isSecondBossSlot: hasDoubleBoss))
             return;
 
         EncounterModel encounter = ModelDb.Encounter<BlackKnightEncounter>();
-        bool useSecondBossSlot = BlackKnightRules.IsFinalBossSlot(
-            act.HasSecondBoss,
-            isSecondBossSlot: true);
 
-        if (useSecondBossSlot)
+        if (hasDoubleBoss)
+        {
+            // A10 保留原生第一 Boss；如果旧坏档曾把主槽也写成黑骑士，
+            // 则确定性恢复一个原生 Boss，避免连续打两次黑骑士。
+            if (act.BossEncounter.Id == encounter.Id)
+            {
+                EncounterModel? restoredPrimary = act.BossDiscoveryOrder
+                    .FirstOrDefault(candidate => candidate.Id != encounter.Id)
+                    ?? act.AllBossEncounters
+                        .FirstOrDefault(candidate => candidate.Id != encounter.Id);
+                if (restoredPrimary != null)
+                    act.SetBossEncounter(restoredPrimary);
+            }
+
             act.SetSecondBossEncounter(encounter);
+        }
         else
+        {
+            // A9 及以下只有一场 Boss 战，唯一 Boss 固定为黑骑士。
             act.SetBossEncounter(encounter);
+            act.SetSecondBossEncounter(null);
+        }
 
-        string slot = useSecondBossSlot ? "第二 Boss（最终战）" : "Boss（最终战）";
+        string slot = hasDoubleBoss ? "第二 Boss" : "唯一 Boss";
         BlackKnightLog.Important(
-            $"[BlackKnight] 已将第三幕{slot}固定为黑骑士；来源={source}。");
+            $"[BlackKnight] 已将第三幕{slot}（最终战）固定为黑骑士；来源={source}。");
     }
 
-    private static bool MigrateSavedMap(SerializableActMap savedMap)
+    private static bool MigrateSavedMap(
+        SerializableActMap savedMap,
+        bool hasDoubleBoss)
     {
+        if (BlackKnightRules.ShouldRemoveSecondBossMapPoint(
+                hasDoubleBoss,
+                savedMap.SecondBossPoint != null))
+        {
+            MapCoord staleCoord = savedMap.SecondBossPoint!.Coord;
+            savedMap.BossPoint.ChildCoords?.Remove(staleCoord);
+            savedMap.SecondBossPoint = null;
+            return true;
+        }
+
         if (!BlackKnightRules.ShouldAddSecondBossMapPoint(
-                hasSecondBossEncounter: true,
+                hasSecondBossEncounter: hasDoubleBoss,
                 hasSecondBossMapPoint: savedMap.SecondBossPoint != null))
             return false;
 
@@ -83,7 +117,11 @@ internal static class BlackKnightActThreeBossOverride
                 ActModel? thirdAct = runState.Acts.FirstOrDefault(
                     act => BlackKnightRules.IsActThree(act.Index));
                 if (thirdAct != null)
-                    AssignToFinalBossSlot(thirdAct, "新开局");
+                    AssignToFinalBossSlot(
+                        thirdAct,
+                        __instance.AscensionManager.HasLevel(
+                            AscensionLevel.DoubleBoss),
+                        "新开局");
             }
             catch (Exception e)
             {
@@ -100,7 +138,10 @@ internal static class BlackKnightActThreeBossOverride
         {
             try
             {
-                AssignToFinalBossSlot(__instance, "存档迁移");
+                AssignToFinalBossSlot(
+                    __instance,
+                    __instance.HasSecondBoss,
+                    "存档初始迁移");
             }
             catch (Exception e)
             {
@@ -127,8 +168,15 @@ internal static class BlackKnightActThreeBossOverride
 
                 ActModel? thirdAct = runState.Acts.FirstOrDefault(
                     act => BlackKnightRules.IsActThree(act.Index));
-                if (thirdAct == null || !thirdAct.HasSecondBoss)
+                if (thirdAct == null)
                     return;
+
+                bool hasDoubleBoss = __instance.AscensionManager.HasLevel(
+                    AscensionLevel.DoubleBoss);
+                AssignToFinalBossSlot(
+                    thirdAct,
+                    hasDoubleBoss,
+                    "存档等级校正");
 
                 if (__instance.SavedMapsToLoad == null
                     || !__instance.SavedMapsToLoad.TryGetValue(
@@ -136,10 +184,12 @@ internal static class BlackKnightActThreeBossOverride
                         out SerializableActMap? savedMap))
                     return;
 
-                if (MigrateSavedMap(savedMap))
+                if (MigrateSavedMap(savedMap, hasDoubleBoss))
                 {
-                    BlackKnightLog.Important(
-                        "[BlackKnight] 已为旧存档补齐第三幕第二 Boss 地图节点与连线。");
+                    string action = hasDoubleBoss
+                        ? "补齐第三幕第二 Boss 地图节点与连线"
+                        : "移除 A9 及以下旧档中多余的第二 Boss 节点";
+                    BlackKnightLog.Important($"[BlackKnight] 已{action}。");
                 }
             }
             catch (Exception e)
